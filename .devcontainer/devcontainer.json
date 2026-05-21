@@ -1,7 +1,6 @@
 {
   "name": "SC_Front",
-  "dockerComposeFile": "../docker-compose.yml",
-  "service": "sc_front",
+  "dockerFile": "../Dockerfile",
   "workspaceFolder": "/app",
   "remoteUser": "nuxt",
   "forwardPorts": [3000, 24678],
@@ -38,7 +37,6 @@
         "bierner.markdown-mermaid",
         "yzhang.markdown-all-in-one",
         // IA
-        "anthropic.claude-code",
         "github.copilot",
         "github.copilot-chat",
         // Git
