@@ -1,6 +1,8 @@
 {
   "name": "SC_Front",
-  "dockerFile": "../Dockerfile",
+  "dockerComposeFile": "../../Safe-Campus-back/docker-compose.yml",
+  "service": "sc_front",
+  "runServices": ["sc_front"],
   "workspaceFolder": "/app",
   "remoteUser": "nuxt",
   "forwardPorts": [3000, 24678],

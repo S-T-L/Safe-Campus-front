@@ -4,5 +4,6 @@ set -e
 if [ $# -gt 0 ]; then
     exec "$@"
 else
+    npm install
     exec npm run dev
 fi
