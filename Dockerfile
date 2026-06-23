@@ -18,7 +18,6 @@ RUN apk add --no-cache git bash sudo \
 COPY start-container /usr/local/bin/start-container
 RUN chmod +x /usr/local/bin/start-container
 
-# Port Nuxt dev server + port HMR Vite
-EXPOSE 3000 24678
+EXPOSE 3000
 
 ENTRYPOINT ["start-container"]

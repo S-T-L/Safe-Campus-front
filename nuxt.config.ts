@@ -1,6 +1,8 @@
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
 
+  srcDir: './app',
+
   devtools: { enabled: true },
 
   devServer: {
@@ -19,7 +21,7 @@ export default defineNuxtConfig({
   vite: {
     server: {
       hmr: {
-        port: 24678,
+        port: 3000,
       },
     },
   },
