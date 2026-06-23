@@ -8,17 +8,27 @@ Interface utilisateur du projet SAE501. Construit avec **Nuxt 3** et **Vue 3**.
 
 ## Démarrage
 
-### Via le devcontainer du back (recommandé)
+Deux approches selon ton contexte.
 
-Ouvrir `Safe-Campus-back` dans VS Code → **Dev Containers: Reopen in Container**.
+### 1. Full stack (avec le back) — **Open in Container**
 
-Le container front démarre automatiquement avec le reste du stack. Aucune action manuelle requise.
+1. Ouvrir `Safe-Campus-back` dans VS Code → **Dev Containers: Reopen in Container**
+2. Ça lance back + DB + front + adminer
+3. Ouvrir une nouvelle fenêtre VS Code sur `Safe-Campus-front`
+4. VS Code propose → **Dev Containers: Open in Container**
+5. Lance un nouveau container `sc_front` connecté au stack du back
 
-### Via le devcontainer du front (indépendant)
+Utilise cette approche pour **tester l'intégration API** et **travailler avec le back**.
 
-Ouvrir `Safe-Campus-front` dans VS Code → **Dev Containers: Reopen in Container**.
+### 2. Frontend seul (CSS, composants) — **Attach to Container**
 
-Lance uniquement le container `SC_Front`. Si le back tourne déjà, VS Code se réattache au container existant sans en créer un nouveau.
+1. Ouvrir `Safe-Campus-front` dans VS Code → **Dev Containers: Reopen in Container**
+2. Lance uniquement le container `SC_Front` en isolation (pas de back, pas de DB)
+3. Les endpoints API sont morts, mais tu peux bosser sur **UI, CSS, structure de composants** sans dépendances
+
+Utilise cette approche pour **itérer sur le design et le styling** en solo.
+
+**Note :** Si le back tourne déjà, VS Code se réattache au container existant au lieu d'en créer un nouveau.
 
 ---
 
