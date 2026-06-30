@@ -13,6 +13,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends git bash sudo \
     && groupadd -g $WWWGROUP nuxt \
     && useradd -u 1000 -g nuxt -s /bin/bash -m nuxt \
     && echo 'nuxt ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers \
+    && mkdir -p /tmp/.X11-unix && chmod 1777 /tmp/.X11-unix \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 COPY start-container /usr/local/bin/start-container
