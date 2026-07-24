@@ -2,15 +2,27 @@
   "name": "SC_Front",
   "dockerComposeFile": "../../Safe-Campus-back/docker-compose.yml",
   "service": "sc_front",
-  "runServices": ["sc_front"],
+  "runServices": [
+    "sc_front"
+  ],
   "workspaceFolder": "/app",
   "remoteUser": "nuxt",
-  "forwardPorts": [3000, 24678],
+  "forwardPorts": [
+    3000,
+    24678
+  ],
   "portsAttributes": {
-    "3000": { "label": "Nuxt", "onAutoForward": "openBrowser" },
-    "24678": { "label": "Vite HMR", "onAutoForward": "silent" }
+    "3000": {
+      "label": "Nuxt",
+      "onAutoForward": "openBrowser"
+    },
+    "24678": {
+      "label": "Vite HMR",
+      "onAutoForward": "silent"
+    }
   },
   "postCreateCommand": "bash .devcontainer/setup.sh",
+  "postStartCommand": "sudo chown -R nuxt:nuxt /app",
   "customizations": {
     "vscode": {
       "extensions": [
@@ -54,7 +66,11 @@
           "editor.defaultFormatter": "esbenp.prettier-vscode"
         },
         "typescript.preferences.importModuleSpecifier": "non-relative",
-        "eslint.validate": ["javascript", "typescript", "vue"],
+        "eslint.validate": [
+          "javascript",
+          "typescript",
+          "vue"
+        ],
         "css.validate": false,
         "postcss.validate": false
       }
