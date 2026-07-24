@@ -3,6 +3,10 @@ export default defineNuxtConfig({
 
   srcDir: './app',
 
+  dir: {
+    public: '../public',
+  },
+
   devtools: { enabled: true },
 
   devServer: {
