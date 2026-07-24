@@ -53,7 +53,7 @@
         // Git
         "waderyan.gitblame",
         "mhutchie.git-graph",
-        "vector-of-bool.gitflow",
+        "gitex-flow.gitex-flow-vscode",
         "rturock.gitstash"
       ],
       "settings": {

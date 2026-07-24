@@ -18,7 +18,9 @@ Même méthode dans les deux cas : **Dev Containers: Reopen in Container**.
 4. `Ctrl+Shift+P` → **Dev Containers: Reopen in Container**
 5. VS Code se connecte au container `SC_Front` déjà en cours d'exécution
 
-Utilise cette approche pour **tester l'intégration API** et **travailler avec le back**.
+Utilise cette approche pour **travailler avec le back** en parallèle.
+
+> ⚠️ Aucune route API n'existe encore côté back (`routes/api.php` absent) — pas d'intégration réelle possible pour l'instant, seulement les deux stacks qui tournent en parallèle.
 
 ### 2. Frontend seul (sans le back)
 
