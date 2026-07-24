@@ -24,3 +24,23 @@ import { Link, router } from '@inertiajs/vue3'
 <Link href="/histoires">  <!-- declarative -->
 router.visit('/histoires')  <!-- programmatic -->
 ```
+
+## Git
+
+- Workflow git flow : `feature/*` pour le dev, merge sur `dev` en `--no-ff`. `hotfix/*` créé depuis `main`.
+- Jamais de `Co-Authored-By` dans les messages de commit.
+- Format de message de commit obligatoire :
+
+```
+type(scope): phrase résumé.
+- ajout 1
+- ajout 2
+```
+
+Exemple :
+
+```
+infra(docker): mise a jour de dépendances sur le conteneur.
+- ajout de git
+- installation des dépendances php laravel
+```
