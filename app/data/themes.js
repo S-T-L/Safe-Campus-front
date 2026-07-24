@@ -2,7 +2,9 @@ export const themes = [
   {
     id: 'addiction',
     label: 'Conduites addictives',
-    color: '#1A6FD4',
+    navLabel: 'ADDICTIONS',
+    shortLabel: 'Addictions',
+    color: '#4260e6',
     colorVar: '--color-addiction',
     items: [
       {
@@ -112,7 +114,9 @@ export const themes = [
   {
     id: 'mental',
     label: 'Santé mentale',
-    color: '#F5A623',
+    navLabel: 'SANTÉ MENTALE',
+    shortLabel: 'Santé mentale',
+    color: '#4260e6',
     colorVar: '--color-mental',
     items: [
       {
@@ -222,7 +226,9 @@ export const themes = [
   {
     id: 'violence',
     label: 'Violences',
-    color: '#7B2FBE',
+    navLabel: 'VIOLENCES',
+    shortLabel: 'Violences',
+    color: '#4260e6',
     colorVar: '--color-violence',
     items: [
       {
