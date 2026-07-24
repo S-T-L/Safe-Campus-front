@@ -1,25 +1,21 @@
 <script setup>
-defineProps({
-  theme: {
-    type: Object,
-    required: true,
-  },
+const props = defineProps({
+  theme: { type: Object, required: true },
+  index: { type: Number, required: true },
 })
 
 const emit = defineEmits(['open-card'])
+
+const num = String(props.index).padStart(2, '0')
 </script>
 
 <template>
   <section class="theme-section">
-    <!-- Titre de section -->
     <div class="section-header">
-      <div class="section-pill" :style="{ background: theme.color + '18', color: theme.color }">
-        <span class="section-dot" :style="{ background: theme.color }" />
-        {{ theme.label }}
-      </div>
+      <span class="section-num" :style="{ color: theme.color }">{{ num }}</span>
+      <h2 class="section-title">{{ theme.shortLabel }}</h2>
     </div>
 
-    <!-- Slider de cards -->
     <CardSlider :items="theme.items" :color="theme.color" :themeId="theme.id"
       @open-card="emit('open-card', { ...$event, themeColor: theme.color })" />
   </section>

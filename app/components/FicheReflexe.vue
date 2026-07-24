@@ -1,17 +1,8 @@
 <script setup>
-import { onMounted, onUnmounted, ref, computed } from 'vue'
-import L from 'leaflet'
+import { onMounted, onUnmounted, ref, nextTick } from 'vue'
 import 'leaflet/dist/leaflet.css'
 
-import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png'
-import markerIcon from 'leaflet/dist/images/marker-icon.png'
-import markerShadow from 'leaflet/dist/images/marker-shadow.png'
-delete L.Icon.Default.prototype._getIconUrl
-L.Icon.Default.mergeOptions({
-  iconUrl: markerIcon,
-  iconRetinaUrl: markerIcon2x,
-  shadowUrl: markerShadow,
-})
+let L = null
 
 const props = defineProps({
   item: { type: Object, required: true },
@@ -20,118 +11,67 @@ const props = defineProps({
 
 const emit = defineEmits(['close'])
 
+const featured = props.item.contacts[0]
+const others = props.item.contacts.slice(1)
+
+const mapOpen = ref(false)
 const mapContainer = ref(null)
-const geoStatus = ref('idle')
-const nearestContact = ref(null)
-
 let map = null
-let userMarker = null
-const localMarkers = []
 
-const localContacts = computed(() =>
-  props.item.contacts.filter(c => c.lat && c.lng)
-)
-
-function haversine(lat1, lng1, lat2, lng2) {
-  const R = 6371
-  const dLat = ((lat2 - lat1) * Math.PI) / 180
-  const dLng = ((lng2 - lng1) * Math.PI) / 180
-  const a =
-    Math.sin(dLat / 2) ** 2 +
-    Math.cos((lat1 * Math.PI) / 180) *
-    Math.cos((lat2 * Math.PI) / 180) *
-    Math.sin(dLng / 2) ** 2
-  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+function badgeLabel(hours) {
+  const h = hours.toLowerCase()
+  if (h.includes('urgence') || h.includes('24h')) return 'Urgences 24h/24'
+  if (h.includes('rendez-vous')) return 'Sur RDV'
+  return hours.split('·')[0].trim()
 }
 
-function initMap() {
-  if (!mapContainer.value || localContacts.value.length === 0) return
+function telHref(phone) {
+  return phone.includes('@') ? `mailto:${phone}` : `tel:${phone.replace(/\s/g, '')}`
+}
 
-  const first = localContacts.value[0]
-  map = L.map(mapContainer.value, { zoomControl: true, scrollWheelZoom: false }).setView(
-    [first.lat, first.lng], 14
-  )
+async function initMap() {
+  if (map || !mapContainer.value) return
+  const located = props.item.contacts.filter(c => c.lat && c.lng)
+  if (located.length === 0) return
 
-  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-    attribution: '© Esri, Maxar, Earthstar Geographics',
+  if (!L) {
+    L = (await import('leaflet')).default
+  }
+
+  map = L.map(mapContainer.value, { zoomControl: true, scrollWheelZoom: false })
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap',
     maxZoom: 19,
   }).addTo(map)
 
-  localContacts.value.forEach(contact => {
-    const marker = L.marker([contact.lat, contact.lng])
+  located.forEach(contact => {
+    const dotColor = contact === featured ? '#E8314A' : '#4260E6'
+    const icon = L.divIcon({
+      className: '',
+      html: `<div style="width:16px;height:16px;background:${dotColor};border:3px solid #fff;border-radius:50%;box-shadow:0 2px 8px rgba(0,0,0,0.35);"></div>`,
+      iconSize: [16, 16],
+      iconAnchor: [8, 8],
+    })
+    L.marker([contact.lat, contact.lng], { icon })
       .addTo(map)
       .bindPopup(`<strong>${contact.name}</strong><br>${contact.phone}`)
-    localMarkers.push({ marker, contact })
   })
 
-  if (localContacts.value.length > 1) {
-    const bounds = L.latLngBounds(localContacts.value.map(c => [c.lat, c.lng]))
-    map.fitBounds(bounds, { padding: [32, 32] })
+  if (located.length > 1) {
+    map.fitBounds(L.latLngBounds(located.map(c => [c.lat, c.lng])), { padding: [32, 32] })
+  } else {
+    map.setView([located[0].lat, located[0].lng], 14)
   }
+
+  setTimeout(() => map.invalidateSize(), 320)
 }
 
-function geolocate() {
-  if (!navigator.geolocation) { geoStatus.value = 'error'; return }
-  geoStatus.value = 'loading'
-  navigator.geolocation.getCurrentPosition(
-    position => {
-      const { latitude, longitude } = position.coords
-
-      const userIcon = L.divIcon({
-        className: '',
-        html: `<div style="
-          width:16px;height:16px;
-          background:${props.color};
-          border:3px solid #fff;
-          border-radius:50%;
-          box-shadow:0 2px 8px rgba(0,0,0,0.35);
-        "></div>`,
-        iconSize: [16, 16],
-        iconAnchor: [8, 8],
-      })
-
-      if (userMarker) userMarker.remove()
-      userMarker = L.marker([latitude, longitude], { icon: userIcon })
-        .addTo(map)
-        .bindPopup('Vous êtes ici')
-        .openPopup()
-
-      let minDist = Infinity
-      let nearest = null
-      localContacts.value.forEach(contact => {
-        const d = haversine(latitude, longitude, contact.lat, contact.lng)
-        if (d < minDist) { minDist = d; nearest = contact }
-      })
-      nearestContact.value = nearest
-
-      localMarkers.forEach(({ marker, contact }) => {
-        if (contact === nearest) {
-          const nearIcon = L.divIcon({
-            className: '',
-            html: `<div style="
-              width:22px;height:22px;
-              background:${props.color};
-              border:3px solid #fff;
-              border-radius:50%;
-              box-shadow:0 3px 12px rgba(0,0,0,0.4);
-            "></div>`,
-            iconSize: [22, 22],
-            iconAnchor: [11, 11],
-          })
-          marker.setIcon(nearIcon)
-          marker.openPopup()
-        }
-      })
-
-      map.fitBounds(
-        L.latLngBounds([[latitude, longitude], [nearest.lat, nearest.lng]]),
-        { padding: [48, 48] }
-      )
-      geoStatus.value = 'done'
-    },
-    () => { geoStatus.value = 'error' },
-    { timeout: 10000 }
-  )
+function toggleMap() {
+  mapOpen.value = !mapOpen.value
+  if (mapOpen.value) {
+    nextTick(() => setTimeout(initMap, 50))
+  }
 }
 
 function onKeyDown(e) {
@@ -141,7 +81,6 @@ function onKeyDown(e) {
 onMounted(() => {
   document.addEventListener('keydown', onKeyDown)
   document.body.style.overflow = 'hidden'
-  setTimeout(initMap, 100)
 })
 
 onUnmounted(() => {
@@ -152,102 +91,81 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="fiche-overlay" role="dialog" aria-modal="true" :aria-label="`Fiche — ${item.title}`">
-    <div class="fiche-panel" :style="{ '--theme-color': color }">
+  <div class="cp-overlay" role="dialog" aria-modal="true" :aria-label="`Contacts — ${item.title}`">
+    <div class="cp-page">
 
-      <!-- Header -->
-      <header class="fiche-header">
-        <button class="btn-back" @click="emit('close')" aria-label="Retour">
-          <span class="back-icon">←</span>
-          <span>Retour</span>
+      <!-- Zone 1 — Header dégradé -->
+      <header class="cp-header">
+        <button class="btn-back" @click="emit('close')">
+          <span>←</span> Retour
         </button>
-        <div class="header-title-wrap">
-          <span class="header-tag">{{ item.subtitle }}</span>
-          <h2 class="header-title">{{ item.title }}</h2>
-        </div>
+        <p class="cp-subtitle">{{ item.subtitle }}</p>
+        <h1 class="cp-title">{{ item.title.toUpperCase() }}</h1>
       </header>
 
-      <!-- Contenu scrollable -->
-      <div class="fiche-scroll">
-
-        <!-- Carte -->
-        <section v-if="localContacts.length > 0" class="map-card">
-          <div class="map-card-header">
-            <div class="map-card-title-group">
-              <span class="map-card-icon" :style="{ background: color + '1a', color }">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
-                  <circle cx="12" cy="9" r="2.5"/>
-                </svg>
-              </span>
-              <div>
-                <p class="map-card-label">Localisation</p>
-                <p class="map-card-sub">{{ localContacts.length }} lieu{{ localContacts.length > 1 ? 'x' : '' }} à proximité</p>
-              </div>
-            </div>
-            <button
-              class="btn-geo-pill"
-              :class="{ active: geoStatus === 'done', loading: geoStatus === 'loading', error: geoStatus === 'error' }"
-              :style="geoStatus === 'done' ? { background: color, borderColor: color } : {}"
-              :disabled="geoStatus === 'loading' || geoStatus === 'done'"
-              @click="geolocate"
-              :aria-label="geoStatus === 'done' ? 'Contact le plus proche affiché' : 'Me localiser'"
-            >
-              <span class="geo-icon">
-                <svg v-if="geoStatus === 'idle' || geoStatus === 'error'" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/>
-                </svg>
-                <svg v-else-if="geoStatus === 'loading'" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="spin">
-                  <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
-                </svg>
-                <svg v-else width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
-              </span>
-              <span class="geo-label">
-                <span v-if="geoStatus === 'idle'">Me localiser</span>
-                <span v-else-if="geoStatus === 'loading'">Recherche…</span>
-                <span v-else-if="geoStatus === 'done'">Localisé</span>
-                <span v-else>Réessayer</span>
-              </span>
-            </button>
+      <div class="cp-scroll">
+        <!-- Zone 2 — Carte contact principal -->
+        <div class="featured-card">
+          <div class="featured-bar" />
+          <div class="featured-content">
+            <span class="featured-badge">{{ badgeLabel(featured.hours) }}</span>
+            <h2 class="featured-title">{{ featured.name }}</h2>
+            <p class="featured-address">
+              <svg class="pin-icon" viewBox="0 0 24 24" fill="none" stroke="#E8314A" stroke-width="2">
+                <path d="M12 21s-7-6.1-7-11a7 7 0 0 1 14 0c0 4.9-7 11-7 11z" />
+                <circle cx="12" cy="10" r="2.5" />
+              </svg>
+              {{ featured.address }}
+            </p>
+            <p class="featured-label">Numéro direct</p>
+            <p class="featured-number">{{ featured.phone }}</p>
+            <a class="btn-call" :href="telHref(featured.phone)">
+              <svg class="phone-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path
+                  d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
+              </svg>
+              Appeler maintenant
+            </a>
           </div>
-          <div class="map-wrapper">
+        </div>
+
+        <!-- Zone 3 — Autres contacts -->
+        <section v-if="others.length" class="others-section">
+          <p class="section-label">Autres contacts</p>
+          <div class="others-list">
+            <div v-for="contact in others" :key="contact.name" class="other-item">
+              <div class="other-info">
+                <p class="other-name">{{ contact.name }}</p>
+                <p class="other-phone">{{ contact.phone }}</p>
+                <p class="other-hours">{{ contact.hours }}</p>
+              </div>
+              <a class="btn-call-sm" :href="telHref(contact.phone)">Appeler</a>
+            </div>
+          </div>
+        </section>
+
+        <!-- Zone 4 — Accordéon carte -->
+        <section class="map-accordion">
+          <button class="map-header" @click="toggleMap" :aria-expanded="mapOpen">
+            <div class="map-icon-wrap">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#4260E6" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6" />
+                <line x1="8" y1="2" x2="8" y2="18" />
+                <line x1="16" y1="6" x2="16" y2="22" />
+              </svg>
+            </div>
+            <div class="map-text">
+              <p class="map-title">Voir sur la carte</p>
+              <p class="map-subtitle">{{ item.contacts.length }} lieux à Nouméa</p>
+            </div>
+            <span class="chevron" :class="{ open: mapOpen }">⌄</span>
+          </button>
+          <div class="map-collapse" :class="{ open: mapOpen }">
             <div ref="mapContainer" class="map-container" />
-            <div v-if="nearestContact" class="map-nearest-chip" :style="{ background: color }">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg>
-              {{ nearestContact.name }}
-            </div>
           </div>
         </section>
-
-        <!-- Contacts -->
-        <section class="section">
-          <h3 class="section-label">Contacts & ressources</h3>
-          <div class="contacts-list">
-            <div
-              v-for="contact in item.contacts"
-              :key="contact.name"
-              class="contact-card"
-              :class="{ nearest: nearestContact === contact }"
-            >
-              <div v-if="nearestContact === contact" class="contact-top">
-                <span class="nearest-badge" :style="{ color }">✦ Le plus proche</span>
-              </div>
-              <p class="contact-name">{{ contact.name }}</p>
-              <a
-                :href="contact.phone.includes('@') ? `mailto:${contact.phone}` : `tel:${contact.phone.replace(/\s/g, '')}`"
-                class="contact-phone"
-                :style="{ color }"
-              >
-                {{ contact.phone.includes('@') ? '✉ ' : '📞 ' }}{{ contact.phone }}
-              </a>
-              <p class="contact-hours">{{ contact.hours }}</p>
-              <p v-if="contact.address" class="contact-address">📍 {{ contact.address }}</p>
-            </div>
-          </div>
-        </section>
-
       </div>
     </div>
   </div>
