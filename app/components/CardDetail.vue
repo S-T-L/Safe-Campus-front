@@ -27,23 +27,19 @@ onUnmounted(() => {
   <div class="modal-overlay" role="dialog" aria-modal="true" :aria-label="item.title" @click.self="emit('close')">
     <div class="modal-panel" :style="{ '--theme-color': color }">
 
+      <!-- Hero coloré avec titre -->
       <div class="modal-hero">
         <button class="btn-close" @click="emit('close')" aria-label="Fermer">✕</button>
+        <h2 class="hero-title">{{ item.title }}</h2>
+        <img :src="item.ninja" :alt="item.title" class="hero-ninja" />
       </div>
-
-      <img :src="item.ninja" :alt="item.title" class="hero-ninja" />
 
       <!-- Contenu -->
       <div class="modal-scroll">
-        <div class="modal-header">
-          <span class="modal-tag">{{ item.subtitle }}</span>
-          <h2 class="modal-title">{{ item.title }}</h2>
-        </div>
-
         <p class="modal-description">{{ item.description }}</p>
 
         <button class="btn-resources" @click="emit('more-info')">
-          Voir les ressources
+          Voir toutes les ressources
           <span class="btn-arrow">→</span>
         </button>
       </div>
