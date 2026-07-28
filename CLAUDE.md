@@ -2,7 +2,9 @@
 
 **Stack:** Nuxt 3 · Vue 3 · TypeScript · Vite 7 · CSS (BEM + variables)
 
-👉 See [README](README.md) for setup, commands, and devcontainer workflow (Open vs Attach).
+👉 See [README](README.md) for setup and commands.
+
+> Le code s'édite sur l'hôte, les commandes s'exécutent dans le container via `docker compose exec sc_front <cmd>` (compose du back).
 
 ---
 
