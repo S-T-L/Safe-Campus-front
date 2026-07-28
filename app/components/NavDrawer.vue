@@ -6,7 +6,7 @@ defineProps({
   modelValue: Boolean,
 })
 
-const emit = defineEmits(['update:modelValue', 'open-card'])
+const emit = defineEmits(['update:modelValue'])
 
 const activeTheme = ref(null)
 
@@ -29,7 +29,7 @@ function scrollToTheme(themeId) {
 }
 
 function openItem(theme, item) {
-  emit('open-card', { ...item, themeColor: theme.color })
+  navigateTo(`/ressources/${theme.id}/${item.id}`)
   close()
 }
 

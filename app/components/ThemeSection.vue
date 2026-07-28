@@ -4,8 +4,6 @@ const props = defineProps({
   index: { type: Number, required: true },
 })
 
-const emit = defineEmits(['open-card'])
-
 const num = String(props.index).padStart(2, '0')
 </script>
 
@@ -16,7 +14,6 @@ const num = String(props.index).padStart(2, '0')
       <h2 class="section-title">{{ theme.shortLabel }}</h2>
     </div>
 
-    <CardSlider :items="theme.items" :color="theme.color" :themeId="theme.id"
-      @open-card="emit('open-card', { ...$event, themeColor: theme.color })" />
+    <CardSlider :items="theme.items" :color="theme.color" :themeId="theme.id" />
   </section>
 </template>

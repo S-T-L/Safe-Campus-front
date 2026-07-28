@@ -7,8 +7,6 @@ const props = defineProps({
   themeId: { type: String, required: true },
 })
 
-const emit = defineEmits(['open-card'])
-
 const currentIndex = ref(0)
 const sliderEl = ref(null)
 
@@ -82,8 +80,7 @@ onMounted(async () => {
       <!-- Espaceur gauche pour permettre le centrage de la première carte -->
       <div class="slider-ghost" aria-hidden="true" />
 
-      <CardItem v-for="item in items" :key="item.id" :item="item" :color="color" :themeId="themeId"
-        @open="emit('open-card', $event)" />
+      <CardItem v-for="item in items" :key="item.id" :item="item" :color="color" :themeId="themeId" />
 
       <!-- Espaceur droit -->
       <div class="slider-ghost" aria-hidden="true" />
