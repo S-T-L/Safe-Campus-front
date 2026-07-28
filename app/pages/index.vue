@@ -6,26 +6,7 @@ import universImg from '~/assets/images/univers.png'
 
 definePageMeta({ layout: 'default' })
 
-const activeCard = ref(null)
-const activeFiche = ref(null)
 const menuOpen = ref(false)
-
-function openCard(cardData) {
-  activeCard.value = cardData
-}
-
-function closeCard() {
-  activeCard.value = null
-}
-
-function openFiche() {
-  activeFiche.value = activeCard.value
-  activeCard.value = null
-}
-
-function closeFiche() {
-  activeFiche.value = null
-}
 </script>
 
 <template>
@@ -70,7 +51,6 @@ function closeFiche() {
         :key="theme.id"
         :theme="theme"
         :index="i + 1"
-        @open-card="openCard"
       />
     </main>
 
@@ -79,15 +59,8 @@ function closeFiche() {
       <p>© 2025 Université de Nouvelle-Calédonie</p>
     </footer>
 
-    <!-- Modales -->
-    <Teleport to="body">
-      <CardDetail v-if="activeCard" :item="activeCard" :color="activeCard.themeColor" @close="closeCard"
-        @more-info="openFiche" />
-      <FicheReflexe v-if="activeFiche" :item="activeFiche" :color="activeFiche.themeColor" @close="closeFiche" />
-    </Teleport>
-
     <!-- Menu drawer -->
-    <NavDrawer v-model="menuOpen" :themes="themes" @open-card="openCard" />
+    <NavDrawer v-model="menuOpen" :themes="themes" />
 
   </div>
 </template>
