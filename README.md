@@ -8,29 +8,43 @@ Interface utilisateur du projet SAE501. Construit avec **Nuxt 3** et **Vue 3**.
 
 ## Démarrage
 
-Même méthode dans les deux cas : **Dev Containers: Reopen in Container**.
+Le stack est orchestré par le `docker-compose.yml` du back. Le code s'édite sur l'hôte, les commandes s'exécutent dans le container.
 
 ### 1. Full stack (avec le back)
 
-1. Ouvrir `Safe-Campus-back` dans VS Code → `Ctrl+Shift+P` → **Dev Containers: Reopen in Container**
-2. Démarre back + DB + front + adminer
-3. Ouvrir une **nouvelle fenêtre** VS Code sur `Safe-Campus-front`
-4. `Ctrl+Shift+P` → **Dev Containers: Reopen in Container**
-5. VS Code se connecte au container `SC_Front` déjà en cours d'exécution
+```bash
+cd ../Safe-Campus-back
+docker compose up -d
+```
 
-Utilise cette approche pour **travailler avec le back** en parallèle.
+Démarre `SC_Back`, `SC_Front`, `SC_Postgres` et `SC_Adminer`. Voir le [README du back](../Safe-Campus-back/README.md) pour le `.env` requis.
 
 > ⚠️ Aucune route API n'existe encore côté back (`routes/api.php` absent) — pas d'intégration réelle possible pour l'instant, seulement les deux stacks qui tournent en parallèle.
 
 ### 2. Frontend seul (sans le back)
 
-1. Ouvrir `Safe-Campus-front` dans VS Code → `Ctrl+Shift+P` → **Dev Containers: Reopen in Container**
-2. Démarre uniquement `SC_Front` (pas de back, pas de DB)
-3. Les endpoints API sont morts, mais tu peux bosser sur **UI, CSS, composants** sans dépendances
+```bash
+cd ../Safe-Campus-back
+docker compose up -d sc_front
+```
 
-Utilise cette approche pour **itérer sur le design et le styling** en solo.
+Démarre uniquement `SC_Front`. Les endpoints API sont morts, mais tu peux bosser sur **UI, CSS, composants** sans dépendances.
 
-> "Attach to Running Container" ne fonctionne pas pour ce container — utiliser exclusivement **Reopen in Container**.
+### Exécuter les commandes dans le container
+
+`SC_Front` lance `npm install` puis `npm run dev` au démarrage. Pour le reste :
+
+```bash
+docker compose exec sc_front npm run lint
+```
+
+Ouvrir le code : `code .` depuis WSL, à la racine de ce repo.
+
+### Logs
+
+```bash
+docker compose logs -f sc_front
+```
 
 ---
 
@@ -45,13 +59,13 @@ Utilise cette approche pour **itérer sur le design et le styling** en solo.
 
 ## Variables d'environnement
 
-Copier `.env.example` en `.env` (fait automatiquement par le `setup.sh` au premier démarrage) :
+Copier `.env.example` en `.env` :
 
 | Variable | Défaut | Description |
 |---|---|---|
 | `NUXT_PUBLIC_API_BASE` | `http://localhost:8000` | URL de l'API Laravel |
 
-> En devcontainer, `NUXT_PUBLIC_API_BASE` est injecté via le `docker-compose.yml` du back.
+> Dans le stack Docker, `NUXT_PUBLIC_API_BASE` est injecté par le `docker-compose.yml` du back.
 
 ---
 
@@ -66,7 +80,7 @@ Safe-Campus-front/
 ├── assets/css/     Styles globaux
 ├── public/         Fichiers statiques
 ├── nuxt.config.ts  Configuration Nuxt
-└── .devcontainer/  Config VS Code devcontainer
+└── Dockerfile      Image Node 22
 ```
 
 ---
