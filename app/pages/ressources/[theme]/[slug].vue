@@ -9,7 +9,7 @@ const route = useRoute()
 const router = useRouter()
 
 const theme = themes.find(t => t.id === route.params.theme)
-const item = theme?.items.find(i => String(i.id) === route.params.id)
+const item = theme?.items.find(i => i.slug === route.params.slug)
 
 if (!theme || !item) {
   throw createError({ statusCode: 404, statusMessage: 'Ressource introuvable' })
