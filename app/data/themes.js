@@ -9,6 +9,8 @@ export const themes = [
     items: [
       {
         id: 1,
+        slug: 'alcool',
+        hook: 'Tu as dit que c\'était ton dernier verre hier. Ça fait la troisième fois que tu essaies d\'arrêter.',
         title: 'Alcool',
         ninja: '/assets/ninja_alcool.png',
         subtitle: 'COMPORTEMENT ADDICTIF N°1',
@@ -17,7 +19,10 @@ export const themes = [
         contacts: [
           {
             name: 'CSAPA — Nouméa',
+            role: 'Consultations en addictologie, accueil libre et anonyme sur simple présentation',
             phone: '+687 28 12 34',
+            tollFree: false,
+            email: 'csapa@example.com',
             hours: 'Lun–Ven · 8h–16h30',
             address: '12 Rue du Général Mangin, Nouméa',
             lat: -22.2758,
@@ -25,7 +30,10 @@ export const themes = [
           },
           {
             name: 'Service Addictologie — CHT Gaston Bourret',
+            role: 'Prise en charge hospitalière des addictions, urgences et sevrage',
             phone: '+687 25 66 66',
+            tollFree: true,
+            email: 'addictologie@example.com',
             hours: 'Urgences 24h/24',
             address: '7 Avenue Paul Doumer, Nouméa',
             lat: -22.2711,
@@ -33,7 +41,10 @@ export const themes = [
           },
           {
             name: 'Médecin universitaire',
+            role: 'Consultation médicale générale, orientation vers les spécialistes du SSU',
             phone: '+687 26 58 00',
+            tollFree: false,
+            email: 'medecin-universitaire@example.com',
             hours: 'Sur rendez-vous · Lun–Ven',
             address: '145 Avenue James Cook, Nouméa',
             lat: -22.2735,
@@ -43,6 +54,8 @@ export const themes = [
       },
       {
         id: 2,
+        slug: 'tabac',
+        hook: 'Entre deux cours, la clope est devenue un réflexe plus qu\'un plaisir. Tu aimerais pouvoir t\'en passer.',
         title: 'Tabac',
         ninja: '/assets/ninja_cigarette.png',
         subtitle: 'COMPORTEMENT ADDICTIF N°2',
@@ -51,7 +64,10 @@ export const themes = [
         contacts: [
           {
             name: 'Consultation tabacologie — CHT',
+            role: 'Accompagnement au sevrage tabagique, substituts nicotiniques',
             phone: '+687 25 66 66',
+            tollFree: false,
+            email: 'tabacologie@example.com',
             hours: 'Sur rendez-vous',
             address: '7 Avenue Paul Doumer, Nouméa',
             lat: -22.2711,
@@ -59,7 +75,10 @@ export const themes = [
           },
           {
             name: 'Médecin universitaire',
+            role: 'Consultation médicale générale, orientation vers les spécialistes du SSU',
             phone: '+687 26 58 00',
+            tollFree: false,
+            email: 'medecin-universitaire@example.com',
             hours: 'Sur rendez-vous · Lun–Ven',
             address: '145 Avenue James Cook, Nouméa',
             lat: -22.2735,
@@ -67,7 +86,10 @@ export const themes = [
           },
           {
             name: 'CSAPA — Nouméa',
+            role: 'Consultations en addictologie, accueil libre et anonyme sur simple présentation',
             phone: '+687 28 12 34',
+            tollFree: false,
+            email: 'csapa@example.com',
             hours: 'Lun–Ven · 8h–16h30',
             address: '12 Rue du Général Mangin, Nouméa',
             lat: -22.2758,
@@ -77,6 +99,8 @@ export const themes = [
       },
       {
         id: 3,
+        slug: 'drogues',
+        hook: 'Tu ne sais plus vraiment dire non quand on t\'en propose. Une partie de toi voudrait pouvoir revenir en arrière.',
         title: 'Drogues',
         ninja: '/assets/ninja_drogue.png',
         subtitle: 'COMPORTEMENT ADDICTIF N°3',
@@ -85,7 +109,10 @@ export const themes = [
         contacts: [
           {
             name: 'CSAPA — Nouméa',
+            role: 'Consultations en addictologie, accueil libre et anonyme sur simple présentation',
             phone: '+687 28 12 34',
+            tollFree: false,
+            email: 'csapa@example.com',
             hours: 'Lun–Ven · 8h–16h30',
             address: '12 Rue du Général Mangin, Nouméa',
             lat: -22.2758,
@@ -93,7 +120,10 @@ export const themes = [
           },
           {
             name: 'CAARUD Nouvelle-Calédonie',
+            role: 'Réduction des risques, matériel de prévention, accueil anonyme',
             phone: '+687 27 45 00',
+            tollFree: false,
+            email: 'caarud@example.com',
             hours: 'Lun–Ven · 9h–17h',
             address: '5 Rue de Verdun, Nouméa',
             lat: -22.2742,
@@ -101,7 +131,10 @@ export const themes = [
           },
           {
             name: 'Service Addictologie — CHT Gaston Bourret',
+            role: 'Prise en charge hospitalière des addictions, urgences et sevrage',
             phone: '+687 25 66 66',
+            tollFree: true,
+            email: 'addictologie@example.com',
             hours: 'Urgences 24h/24',
             address: '7 Avenue Paul Doumer, Nouméa',
             lat: -22.2711,
@@ -121,6 +154,8 @@ export const themes = [
     items: [
       {
         id: 1,
+        slug: 'anxiete',
+        hook: 'Certains matins, l\'idée d\'aller en cours te serre déjà la gorge avant même de sortir du lit.',
         title: 'Anxiété',
         ninja: '/assets/ninja_cigarette.png',
         subtitle: 'SANTÉ MENTALE N°1',
@@ -129,7 +164,10 @@ export const themes = [
         contacts: [
           {
             name: 'Service Santé Étudiante',
+            role: 'Écoute, orientation et suivi psychologique pour les étudiants',
             phone: '+687 26 58 00',
+            tollFree: false,
+            email: 'sante-etudiante@example.com',
             hours: 'Sur rendez-vous · Lun–Ven',
             address: '145 Avenue James Cook, Nouméa',
             lat: -22.2735,
@@ -137,7 +175,10 @@ export const themes = [
           },
           {
             name: 'CMP — Centre Médico-Psychologique',
+            role: 'Consultations psychiatriques et psychologiques, prise en charge du secteur',
             phone: '+687 27 11 00',
+            tollFree: false,
+            email: 'cmp@example.com',
             hours: 'Lun–Ven · 8h30–17h',
             address: '10 Rue Jules Ferry, Nouméa',
             lat: -22.2769,
@@ -145,7 +186,10 @@ export const themes = [
           },
           {
             name: 'CHT — Service Psychiatrie',
+            role: 'Urgences psychiatriques et hospitalisation',
             phone: '+687 25 66 66',
+            tollFree: true,
+            email: 'psychiatrie-cht@example.com',
             hours: 'Urgences 24h/24',
             address: '7 Avenue Paul Doumer, Nouméa',
             lat: -22.2711,
@@ -155,6 +199,8 @@ export const themes = [
       },
       {
         id: 2,
+        slug: 'depression',
+        hook: 'Ça fait des semaines que rien ne te fait vraiment plaisir, même ce que tu aimais avant.',
         title: 'Dépression',
         ninja: '/assets/ninja_cigarette.png',
         subtitle: 'SANTÉ MENTALE N°2',
@@ -163,7 +209,10 @@ export const themes = [
         contacts: [
           {
             name: 'Service Santé Étudiante',
+            role: 'Écoute, orientation et suivi psychologique pour les étudiants',
             phone: '+687 26 58 00',
+            tollFree: false,
+            email: 'sante-etudiante@example.com',
             hours: 'Sur rendez-vous · Lun–Ven',
             address: '145 Avenue James Cook, Nouméa',
             lat: -22.2735,
@@ -171,7 +220,10 @@ export const themes = [
           },
           {
             name: 'CMP — Centre Médico-Psychologique',
+            role: 'Consultations psychiatriques et psychologiques, prise en charge du secteur',
             phone: '+687 27 11 00',
+            tollFree: false,
+            email: 'cmp@example.com',
             hours: 'Lun–Ven · 8h30–17h',
             address: '10 Rue Jules Ferry, Nouméa',
             lat: -22.2769,
@@ -179,7 +231,10 @@ export const themes = [
           },
           {
             name: 'CHT — Service Psychiatrie',
+            role: 'Urgences psychiatriques et hospitalisation',
             phone: '+687 25 66 66',
+            tollFree: true,
+            email: 'psychiatrie-cht@example.com',
             hours: 'Urgences 24h/24',
             address: '7 Avenue Paul Doumer, Nouméa',
             lat: -22.2711,
@@ -189,6 +244,8 @@ export const themes = [
       },
       {
         id: 3,
+        slug: 'burn-out',
+        hook: 'Même les week-ends de repos ne suffisent plus à te faire retrouver de l\'énergie.',
         title: 'Burn-out',
         ninja: '/assets/ninja_cigarette.png',
         subtitle: 'SANTÉ MENTALE N°3',
@@ -197,7 +254,10 @@ export const themes = [
         contacts: [
           {
             name: 'Médecin universitaire',
+            role: 'Consultation médicale générale, orientation vers les spécialistes du SSU',
             phone: '+687 26 58 00',
+            tollFree: false,
+            email: 'medecin-universitaire@example.com',
             hours: 'Sur rendez-vous · Lun–Ven',
             address: '145 Avenue James Cook, Nouméa',
             lat: -22.2735,
@@ -205,7 +265,10 @@ export const themes = [
           },
           {
             name: 'CMP — Centre Médico-Psychologique',
+            role: 'Consultations psychiatriques et psychologiques, prise en charge du secteur',
             phone: '+687 27 11 00',
+            tollFree: false,
+            email: 'cmp@example.com',
             hours: 'Lun–Ven · 8h30–17h',
             address: '10 Rue Jules Ferry, Nouméa',
             lat: -22.2769,
@@ -213,7 +276,10 @@ export const themes = [
           },
           {
             name: 'CHT — Service Psychiatrie',
+            role: 'Urgences psychiatriques et hospitalisation',
             phone: '+687 25 66 66',
+            tollFree: true,
+            email: 'psychiatrie-cht@example.com',
             hours: 'Urgences 24h/24',
             address: '7 Avenue Paul Doumer, Nouméa',
             lat: -22.2711,
@@ -233,6 +299,8 @@ export const themes = [
     items: [
       {
         id: 1,
+        slug: 'violences-sexistes',
+        hook: 'On t\'a encore dit que tu exagérais. Toi, tu sais ce que tu as ressenti.',
         title: 'Violences sexistes',
         ninja: '/assets/ninja_vsexiste.png',
         subtitle: 'VIOLENCE N°1',
@@ -241,7 +309,10 @@ export const themes = [
         contacts: [
           {
             name: 'Référente Égalité',
-            phone: 'egalite@unc.nc',
+            role: 'Signalement et accompagnement des situations de discrimination ou de violence, contact confidentiel',
+            phone: null,
+            tollFree: false,
+            email: 'egalite@unc.nc',
             hours: 'Contact par email',
             address: '145 Avenue James Cook, Nouméa',
             lat: -22.2735,
@@ -249,7 +320,10 @@ export const themes = [
           },
           {
             name: 'DAFE — Droits des femmes NC',
+            role: 'Accompagnement juridique et social des femmes victimes de violences',
             phone: '+687 27 33 52',
+            tollFree: true,
+            email: 'dafe@example.com',
             hours: 'Lun–Ven · 8h–17h',
             address: '19 Avenue du Maréchal Foch, Nouméa',
             lat: -22.2748,
@@ -257,7 +331,10 @@ export const themes = [
           },
           {
             name: 'CHT — Urgences',
+            role: 'Urgences médicales générales',
             phone: '+687 25 66 66',
+            tollFree: false,
+            email: 'urgences-cht@example.com',
             hours: '24h/24',
             address: '7 Avenue Paul Doumer, Nouméa',
             lat: -22.2711,
@@ -267,6 +344,8 @@ export const themes = [
       },
       {
         id: 2,
+        slug: 'violences-sexuelles',
+        hook: 'Tu te repasses la soirée en boucle, en cherchant ce que tu aurais dû faire différemment. Rien ne justifiait ce qui t\'est arrivé.',
         title: 'Violences sexuelles',
         ninja: '/assets/ninja_consentement.png',
         subtitle: 'VIOLENCE N°2',
@@ -275,7 +354,10 @@ export const themes = [
         contacts: [
           {
             name: 'CRIAVS NC — Violences sexuelles',
+            role: 'Accompagnement spécialisé des victimes de violences sexuelles',
             phone: '+687 25 66 66',
+            tollFree: true,
+            email: 'criavs@example.com',
             hours: 'Via le CHT · Urgences 24h/24',
             address: '7 Avenue Paul Doumer, Nouméa',
             lat: -22.2711,
@@ -283,7 +365,10 @@ export const themes = [
           },
           {
             name: 'Référente Égalité',
-            phone: 'egalite@unc.nc',
+            role: 'Signalement et accompagnement des situations de discrimination ou de violence, contact confidentiel',
+            phone: null,
+            tollFree: false,
+            email: 'egalite@unc.nc',
             hours: 'Contact par email',
             address: '145 Avenue James Cook, Nouméa',
             lat: -22.2735,
@@ -291,7 +376,10 @@ export const themes = [
           },
           {
             name: 'DAFE — Droits des femmes NC',
+            role: 'Accompagnement juridique et social des femmes victimes de violences',
             phone: '+687 27 33 52',
+            tollFree: true,
+            email: 'dafe@example.com',
             hours: 'Lun–Ven · 8h–17h',
             address: '19 Avenue du Maréchal Foch, Nouméa',
             lat: -22.2748,
@@ -301,6 +389,8 @@ export const themes = [
       },
       {
         id: 3,
+        slug: 'harcelement',
+        hook: 'Les messages ne s\'arrêtent pas, même quand tu ne réponds plus. Tu appréhendes d\'ouvrir ton téléphone.',
         title: 'Harcèlement',
         ninja: '/assets/ninja_violence.png',
         subtitle: 'VIOLENCE N°3',
@@ -309,7 +399,10 @@ export const themes = [
         contacts: [
           {
             name: 'Référente Égalité',
-            phone: 'egalite@unc.nc',
+            role: 'Signalement et accompagnement des situations de discrimination ou de violence, contact confidentiel',
+            phone: null,
+            tollFree: false,
+            email: 'egalite@unc.nc',
             hours: 'Contact par email',
             address: '145 Avenue James Cook, Nouméa',
             lat: -22.2735,
@@ -317,7 +410,10 @@ export const themes = [
           },
           {
             name: 'Service Médiation',
+            role: 'Médiation et résolution des conflits au sein de l\'université',
             phone: '+687 26 58 00',
+            tollFree: false,
+            email: 'mediation@example.com',
             hours: 'Sur rendez-vous · Lun–Ven',
             address: '145 Avenue James Cook, Nouméa',
             lat: -22.2735,
@@ -325,7 +421,10 @@ export const themes = [
           },
           {
             name: 'DAFE — Droits des femmes NC',
+            role: 'Accompagnement juridique et social des femmes victimes de violences',
             phone: '+687 27 33 52',
+            tollFree: true,
+            email: 'dafe@example.com',
             hours: 'Lun–Ven · 8h–17h',
             address: '19 Avenue du Maréchal Foch, Nouméa',
             lat: -22.2748,

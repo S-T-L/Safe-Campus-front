@@ -46,11 +46,10 @@ const menuOpen = ref(false)
     <!-- Sections thématiques -->
     <main class="home-sections">
       <ThemeSection
-        v-for="(theme, i) in themes"
+        v-for="theme in themes"
         :id="`theme-${theme.id}`"
         :key="theme.id"
         :theme="theme"
-        :index="i + 1"
       />
     </main>
 
