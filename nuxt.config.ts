@@ -1,11 +1,7 @@
 export default defineNuxtConfig({
-  compatibilityDate: '2024-11-01',
+  compatibilityDate: '2026-07-31',
 
-  srcDir: './app',
-
-  dir: {
-    public: '../public',
-  },
+  modules: ['@nuxt/eslint'],
 
   devtools: { enabled: true },
 
@@ -34,7 +30,7 @@ export default defineNuxtConfig({
 
   vite: {
     server: {
-      hmr: {
+      ws: {
         port: 3000,
       },
     },

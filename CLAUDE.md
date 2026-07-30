@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-**Stack:** Nuxt 3 · Vue 3 · TypeScript · Vite 7 · CSS (BEM + variables)
+**Stack:** Nuxt 4 · Vue 3 · TypeScript · Vite 8 · CSS (BEM + variables)
 
 👉 See [README](README.md) for setup and commands.
 
@@ -30,6 +30,8 @@ router.visit('/histoires')  <!-- programmatic -->
 ## Git
 
 - Workflow git flow : `feature/*` pour le dev, merge sur `dev` en `--no-ff`. `hotfix/*` créé depuis `main`.
+- Une fois une `feature/*` mergée dans `dev` et poussée sur `origin/dev`, supprimer la branche locale (`git branch -d`). Ne pas laisser de branches `feature/*` locales après clôture.
+- Avant de merger une branche `feature/*`, `bugfix/*`, `hotfix/*` ou autre sur `dev` ou `main` : proposer à l'utilisateur un dernier commit dédié, en fin de branche, à la vérification `typecheck` + `lint` (et aux correctifs de qualité de code que ça implique). Ne jamais merger sans avoir proposé ce commit.
 - Jamais de `Co-Authored-By` dans les messages de commit.
 - Format de message de commit obligatoire :
 

@@ -1,6 +1,6 @@
 # Safe Campus — Front
 
-Interface utilisateur du projet SAE501. Construit avec **Nuxt 3** et **Vue 3**.
+Interface utilisateur du projet SAE501. Construit avec **Nuxt 4** et **Vue 3**.
 
 > Ce repo fonctionne en binôme avec [Safe-Campus-back](../Safe-Campus-back). Les deux doivent être dans le même dossier parent — le `docker-compose.yml` du back référence ce repo via `../Safe-Campus-front`.
 
@@ -73,11 +73,12 @@ Copier `.env.example` en `.env` :
 
 ```
 Safe-Campus-front/
-├── pages/          Pages Nuxt (une page = une route)
-├── components/     Composants Vue réutilisables
-├── composables/    Composables useXxx()
-├── layouts/        Layouts Nuxt
-├── assets/css/     Styles globaux
+├── app/
+│   ├── pages/          Pages Nuxt (une page = une route)
+│   ├── components/     Composants Vue réutilisables
+│   ├── composables/    Composables useXxx()
+│   ├── layouts/        Layouts Nuxt
+│   └── assets/css/     Styles globaux
 ├── public/         Fichiers statiques
 ├── nuxt.config.ts  Configuration Nuxt
 └── Dockerfile      Image Node 22

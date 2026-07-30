@@ -7,10 +7,10 @@ defineProps({
 <template>
   <section class="theme-section">
     <div class="section-header">
-      <span class="section-bar" :style="{ backgroundColor: theme.color }"></span>
+      <span class="section-bar" :style="{ backgroundColor: theme.color }"/>
       <h2 class="section-title">{{ theme.shortLabel }}</h2>
     </div>
 
-    <CardSlider :items="theme.items" :color="theme.color" :themeId="theme.id" />
+    <CardSlider :items="theme.items" :color="theme.color" :theme-id="theme.id" />
   </section>
 </template>

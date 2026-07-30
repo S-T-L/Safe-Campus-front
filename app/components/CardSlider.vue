@@ -75,19 +75,21 @@ onMounted(async () => {
 
 <template>
   <div class="slider-wrapper">
-    <div ref="sliderEl" class="slider-track" @touchstart.passive="onTouchStart" @touchend.passive="onTouchEnd"
+    <div
+ref="sliderEl" class="slider-track" @touchstart.passive="onTouchStart" @touchend.passive="onTouchEnd"
       @scroll.passive="onScroll">
       <!-- Espaceur gauche pour permettre le centrage de la première carte -->
       <div class="slider-ghost" aria-hidden="true" />
 
-      <CardItem v-for="item in items" :key="item.id" :item="item" :color="color" :themeId="themeId" />
+      <CardItem v-for="item in items" :key="item.id" :item="item" :color="color" :theme-id="themeId" />
 
       <!-- Espaceur droit -->
       <div class="slider-ghost" aria-hidden="true" />
     </div>
 
     <div class="slider-dots" role="tablist" :aria-label="`Navigation ${themeId}`">
-      <button v-for="(item, i) in items" :key="item.id" class="dot" :class="{ active: i === currentIndex }"
+      <button
+v-for="(item, i) in items" :key="item.id" class="dot" :class="{ active: i === currentIndex }"
         :style="i === currentIndex ? { background: color } : {}" role="tab" :aria-selected="i === currentIndex"
         :aria-label="`Carte ${i + 1} sur ${items.length}`" @click="goTo(i)" />
     </div>
