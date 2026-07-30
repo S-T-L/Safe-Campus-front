@@ -3,12 +3,6 @@ export default defineNuxtConfig({
 
   modules: ['@nuxt/eslint'],
 
-  srcDir: './app',
-
-  dir: {
-    public: '../public',
-  },
-
   devtools: { enabled: true },
 
   devServer: {
@@ -36,7 +30,7 @@ export default defineNuxtConfig({
 
   vite: {
     server: {
-      hmr: {
+      ws: {
         port: 3000,
       },
     },
