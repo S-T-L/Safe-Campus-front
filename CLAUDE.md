@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-**Stack:** Nuxt 3 · Vue 3 · TypeScript · Vite 7 · CSS (BEM + variables)
+**Stack:** Nuxt 4 · Vue 3 · TypeScript · Vite 8 · CSS (BEM + variables)
 
 👉 See [README](README.md) for setup and commands.
 
