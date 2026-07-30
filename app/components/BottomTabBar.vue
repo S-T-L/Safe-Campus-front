@@ -23,6 +23,7 @@ function navigate(themeId) {
       :style="{ '--c': theme.color }"
       @click="navigate(theme.id)"
     >
+      <!-- eslint-disable-next-line vue/no-v-html -- icones SVG statiques codees en dur ci-dessus, aucune entree utilisateur -->
       <span class="tab-icon" v-html="icons[theme.id]" />
       <span class="tab-label">{{ theme.shortLabel }}</span>
     </button>

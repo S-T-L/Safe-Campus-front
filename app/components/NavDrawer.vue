@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 
 defineProps({
-  themes: Array,
+  themes: { type: Array, default: () => [] },
   modelValue: Boolean,
 })
 
@@ -60,7 +60,7 @@ function scrollToIntro() {
             <span v-else key="title" class="drawer-title">MENU</span>
           </Transition>
 
-          <button class="drawer-close" @click="close" aria-label="Fermer le menu">
+          <button class="drawer-close" aria-label="Fermer le menu" @click="close">
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
               <path d="M2 2l14 14M16 2L2 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
             </svg>

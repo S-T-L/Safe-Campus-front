@@ -167,7 +167,7 @@ onUnmounted(() => {
     <!-- Hero -->
     <section class="cp-hero">
       <div class="cp-hero-ninja-wrap">
-        <img :src="item.ninja" :alt="item.title" class="cp-hero-ninja" />
+        <img :src="item.ninja" :alt="item.title" class="cp-hero-ninja" >
       </div>
       <span class="cp-tag">{{ theme.shortLabel }}</span>
       <h1 class="cp-title">{{ item.title }}</h1>
@@ -186,7 +186,8 @@ onUnmounted(() => {
         <div class="cp-location-head">
           <span class="cp-location-title">Où trouver de l'aide près de chez vous</span>
           <button type="button" class="btn-locate" :disabled="geoLoading" @click="locateMe">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            <svg
+viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
               stroke-linejoin="round">
               <circle cx="12" cy="12" r="3" />
               <path d="M12 2v3M12 19v3M2 12h3M19 12h3" />
@@ -202,7 +203,8 @@ onUnmounted(() => {
       <section class="cp-contacts">
         <p class="section-label">Contact</p>
         <div class="cp-contacts-grid">
-          <ContactCard v-for="contact in item.contacts" :key="contact.name" :contact="contact" :color="theme.color"
+          <ContactCard
+v-for="contact in item.contacts" :key="contact.name" :contact="contact" :color="theme.color"
             :is-nearest="contact.name === nearestContactName" />
         </div>
       </section>

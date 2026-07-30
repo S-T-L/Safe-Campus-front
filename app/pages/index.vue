@@ -27,14 +27,14 @@ const menuOpen = ref(false)
       </header>
 
       <div class="home-hero">
-        <img :src="universImg" alt="Campus UNC" class="hero-img" />
+        <img :src="universImg" alt="Campus UNC" class="hero-img" >
         <div class="hero-overlay" />
       </div>
     </div>
 
     <!-- Section intro -->
     <section class="home-intro">
-      <img :src="logoSf" alt="Logo Safe Campus" class="intro-logo" />
+      <img :src="logoSf" alt="Logo Safe Campus" class="intro-logo" >
       <p class="intro-subtitle">C'est quoi&nbsp;?</p>
       <p class="intro-body">
         Safe Campus, c'est une application pensée pour les étudiants de l'Université de Nouvelle-Calédonie.
