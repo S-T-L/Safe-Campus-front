@@ -1,5 +1,7 @@
 export default defineNuxtConfig({
-  compatibilityDate: '2024-11-01',
+  compatibilityDate: '2026-07-31',
+
+  modules: ['@nuxt/eslint'],
 
   srcDir: './app',
 
