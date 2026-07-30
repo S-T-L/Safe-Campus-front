@@ -1,16 +1,13 @@
 <script setup>
-const props = defineProps({
+defineProps({
   theme: { type: Object, required: true },
-  index: { type: Number, required: true },
 })
-
-const num = String(props.index).padStart(2, '0')
 </script>
 
 <template>
   <section class="theme-section">
     <div class="section-header">
-      <span class="section-num" :style="{ color: theme.color }">{{ num }}</span>
+      <span class="section-bar" :style="{ backgroundColor: theme.color }"></span>
       <h2 class="section-title">{{ theme.shortLabel }}</h2>
     </div>
 
