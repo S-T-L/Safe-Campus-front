@@ -19,23 +19,32 @@ useHead({ title: item.title })
 
 let L: any = null
 
-const featured = item.contacts[0]
-const others = item.contacts.slice(1)
 const locatedContacts = item.contacts.filter(c => c.lat && c.lng)
 const hasLocated = locatedContacts.length > 0
 
 const mapContainer = ref<HTMLElement | null>(null)
 let map: any = null
+let userMarker: any = null
 
-function badgeLabel(hours: string) {
-  const h = hours.toLowerCase()
-  if (h.includes('urgence') || h.includes('24h')) return 'Urgences 24h/24'
-  if (h.includes('rendez-vous')) return 'Sur RDV'
-  return hours.split('·')[0].trim()
+const nearestContactName = ref<string | null>(null)
+const geoError = ref<string | null>(null)
+const geoLoading = ref(false)
+
+function distanceKm(lat1: number, lng1: number, lat2: number, lng2: number) {
+  const R = 6371
+  const dLat = (lat2 - lat1) * Math.PI / 180
+  const dLng = (lng2 - lng1) * Math.PI / 180
+  const a = Math.sin(dLat / 2) ** 2
+    + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLng / 2) ** 2
+  return 2 * R * Math.asin(Math.sqrt(a))
 }
 
-function telHref(phone: string) {
-  return phone.includes('@') ? `mailto:${phone}` : `tel:${phone.replace(/\s/g, '')}`
+function goBack() {
+  if (window.history.state?.back) {
+    router.back()
+  } else {
+    navigateTo('/')
+  }
 }
 
 async function initMap() {
@@ -53,16 +62,15 @@ async function initMap() {
   }).addTo(map)
 
   locatedContacts.forEach(contact => {
-    const dotColor = contact === featured ? '#E8314A' : theme.color
     const icon = L.divIcon({
       className: '',
-      html: `<div style="width:16px;height:16px;background:${dotColor};border:3px solid #fff;border-radius:50%;box-shadow:0 2px 8px rgba(0,0,0,0.35);"></div>`,
+      html: `<div style="width:16px;height:16px;background:${theme.color};border:3px solid #fff;border-radius:50%;box-shadow:0 2px 8px rgba(0,0,0,0.35);"></div>`,
       iconSize: [16, 16],
       iconAnchor: [8, 8],
     })
     L.marker([contact.lat, contact.lng], { icon })
       .addTo(map)
-      .bindPopup(`<strong>${contact.name}</strong><br>${contact.phone}`)
+      .bindPopup(`<strong>${contact.name}</strong><br>${contact.phone ?? contact.email ?? ''}`)
   })
 
   if (locatedContacts.length > 1) {
@@ -74,12 +82,57 @@ async function initMap() {
   setTimeout(() => map.invalidateSize(), 350)
 }
 
-function goBack() {
-  if (window.history.state?.back) {
-    router.back()
-  } else {
-    navigateTo('/')
+function locateMe() {
+  geoError.value = null
+
+  if (!navigator.geolocation) {
+    geoError.value = "La géolocalisation n'est pas disponible sur cet appareil."
+    return
   }
+
+  geoLoading.value = true
+
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      geoLoading.value = false
+      if (!map || !L) return
+
+      const { latitude, longitude } = position.coords
+
+      let nearest = locatedContacts[0]
+      let minDist = distanceKm(latitude, longitude, nearest.lat, nearest.lng)
+      for (const contact of locatedContacts.slice(1)) {
+        const dist = distanceKm(latitude, longitude, contact.lat, contact.lng)
+        if (dist < minDist) { minDist = dist; nearest = contact }
+      }
+      nearestContactName.value = nearest.name
+
+      if (userMarker) {
+        userMarker.setLatLng([latitude, longitude])
+      } else {
+        const userIcon = L.divIcon({
+          className: '',
+          html: '<div style="width:16px;height:16px;background:#1E466B;border:3px solid #fff;border-radius:50%;box-shadow:0 0 0 6px rgba(30,70,107,0.25);"></div>',
+          iconSize: [16, 16],
+          iconAnchor: [8, 8],
+        })
+        userMarker = L.marker([latitude, longitude], { icon: userIcon }).addTo(map).bindPopup('Votre position')
+      }
+
+      map.fitBounds(L.latLngBounds([[latitude, longitude], [nearest.lat, nearest.lng]]), { padding: [48, 48] })
+    },
+    (err) => {
+      geoLoading.value = false
+      if (err.code === err.PERMISSION_DENIED) {
+        geoError.value = 'Accès à la position refusé. Autorise la géolocalisation pour voir le contact le plus proche.'
+      } else if (err.code === err.TIMEOUT) {
+        geoError.value = 'La localisation a pris trop de temps, réessaie.'
+      } else {
+        geoError.value = 'Impossible de récupérer ta position pour le moment.'
+      }
+    },
+    { enableHighAccuracy: true, timeout: 10000 },
+  )
 }
 
 onMounted(() => {
@@ -103,68 +156,49 @@ onUnmounted(() => {
       </button>
     </div>
 
-    <div class="cp-scroll">
-      <!-- Intitulé -->
-      <div class="cp-intro">
-        <span class="cp-tag">{{ item.subtitle }}</span>
-        <h1 class="cp-title">{{ item.title }}</h1>
+    <!-- Hero -->
+    <section class="cp-hero">
+      <div class="cp-hero-ninja-wrap">
+        <img :src="item.ninja" :alt="item.title" class="cp-hero-ninja" />
       </div>
+      <span class="cp-tag">{{ theme.shortLabel }}</span>
+      <h1 class="cp-title">{{ item.title }}</h1>
+      <p class="cp-description">{{ item.description }}</p>
+      <div class="cp-hero-actions">
+        <button type="button" class="btn-story" disabled title="Bientôt disponible">
+          Suivre l'histoire
+        </button>
+      </div>
+    </section>
 
-      <!-- Zone 1 — Contact principal -->
-      <section class="cp-primary">
-        <div class="cp-primary-head">
-          <span class="featured-badge">{{ badgeLabel(featured.hours) }}</span>
-          <h2 class="cp-primary-name">{{ featured.name }}</h2>
-          <p class="cp-primary-address">
-            <svg class="pin-icon" viewBox="0 0 24 24" fill="none" stroke="#E8314A" stroke-width="2">
-              <path d="M12 21s-7-6.1-7-11a7 7 0 0 1 14 0c0 4.9-7 11-7 11z" />
-              <circle cx="12" cy="10" r="2.5" />
-            </svg>
-            {{ featured.address }}
-          </p>
-        </div>
+    <div class="cp-content">
 
-        <div class="cp-primary-call">
-          <div class="cp-primary-number-block">
-            <span class="cp-primary-label">Numéro direct</span>
-            <span class="cp-primary-number">{{ featured.phone }}</span>
-          </div>
-          <a class="btn-call" :href="telHref(featured.phone)">
-            <svg class="phone-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-              stroke-linecap="round" stroke-linejoin="round">
-              <path
-                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
-            </svg>
-            Appeler
-          </a>
-        </div>
-      </section>
-
-      <!-- Zone 2 — Localisation (carte toujours visible) -->
+      <!-- Localisation -->
       <section v-if="hasLocated" class="cp-location">
         <div class="cp-location-head">
-          <span class="cp-location-title">Où nous trouver</span>
-          <span class="cp-location-count">{{ locatedContacts.length }} lieu{{ locatedContacts.length > 1 ? 'x' : '' }} à Nouméa</span>
+          <span class="cp-location-title">Où trouver de l'aide près de chez vous</span>
+          <button type="button" class="btn-locate" :disabled="geoLoading" @click="locateMe">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3" />
+              <path d="M12 2v3M12 19v3M2 12h3M19 12h3" />
+            </svg>
+            {{ geoLoading ? 'Recherche…' : 'Me géolocaliser' }}
+          </button>
         </div>
         <div ref="mapContainer" class="cp-location-map" />
+        <p v-if="geoError" class="cp-geo-error">{{ geoError }}</p>
       </section>
 
-      <!-- Zone 3 — Autres contacts -->
-      <section v-if="others.length" class="cp-others">
-        <p class="section-label">Autres contacts</p>
-        <div class="cp-others-grid">
-          <div v-for="contact in others" :key="contact.name" class="cp-other-card">
-            <div class="cp-other-top">
-              <p class="other-name">{{ contact.name }}</p>
-              <p class="other-hours">{{ contact.hours }}</p>
-            </div>
-            <div class="cp-other-bottom">
-              <p class="other-phone">{{ contact.phone }}</p>
-              <a class="btn-call-sm" :href="telHref(contact.phone)">Appeler</a>
-            </div>
-          </div>
+      <!-- Contacts -->
+      <section class="cp-contacts">
+        <p class="section-label">Contact</p>
+        <div class="cp-contacts-grid">
+          <ContactCard v-for="contact in item.contacts" :key="contact.name" :contact="contact" :color="theme.color"
+            :is-nearest="contact.name === nearestContactName" />
         </div>
       </section>
+
     </div>
   </div>
 </template>
