@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref, nextTick } from 'vue'
+import type * as Leaflet from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { themes } from '~/data/themes.js'
 
@@ -17,14 +18,16 @@ if (!theme || !item) {
 
 useHead({ title: item.title })
 
-let L: any = null
+const themeColor = theme.color
+
+let L: typeof Leaflet | null = null
 
 const locatedContacts = item.contacts.filter(c => c.lat && c.lng)
 const hasLocated = locatedContacts.length > 0
 
 const mapContainer = ref<HTMLElement | null>(null)
-let map: any = null
-let userMarker: any = null
+let map: Leaflet.Map | null = null
+let userMarker: Leaflet.Marker | null = null
 
 const nearestContactName = ref<string | null>(null)
 const geoError = ref<string | null>(null)
@@ -54,32 +57,34 @@ async function initMap() {
     L = (await import('leaflet')).default
   }
 
-  map = L.map(mapContainer.value, { zoomControl: true, scrollWheelZoom: false })
+  const leaflet = L
+  const currentMap = leaflet.map(mapContainer.value, { zoomControl: true, scrollWheelZoom: false })
+  map = currentMap
 
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  leaflet.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap',
     maxZoom: 19,
-  }).addTo(map)
+  }).addTo(currentMap)
 
   locatedContacts.forEach(contact => {
-    const icon = L.divIcon({
+    const icon = leaflet.divIcon({
       className: '',
-      html: `<div style="width:16px;height:16px;background:${theme.color};border:3px solid #fff;border-radius:50%;box-shadow:0 2px 8px rgba(0,0,0,0.35);"></div>`,
+      html: `<div style="width:16px;height:16px;background:${themeColor};border:3px solid #fff;border-radius:50%;box-shadow:0 2px 8px rgba(0,0,0,0.35);"></div>`,
       iconSize: [16, 16],
       iconAnchor: [8, 8],
     })
-    L.marker([contact.lat, contact.lng], { icon })
-      .addTo(map)
+    leaflet.marker([contact.lat, contact.lng], { icon })
+      .addTo(currentMap)
       .bindPopup(`<strong>${contact.name}</strong><br>${contact.phone ?? contact.email ?? ''}`)
   })
 
   if (locatedContacts.length > 1) {
-    map.fitBounds(L.latLngBounds(locatedContacts.map(c => [c.lat, c.lng])), { padding: [32, 32] })
-  } else {
-    map.setView([locatedContacts[0].lat, locatedContacts[0].lng], 14)
+    currentMap.fitBounds(leaflet.latLngBounds(locatedContacts.map(c => [c.lat, c.lng])), { padding: [32, 32] })
+  } else if (locatedContacts[0]) {
+    currentMap.setView([locatedContacts[0].lat, locatedContacts[0].lng], 14)
   }
 
-  setTimeout(() => map.invalidateSize(), 350)
+  setTimeout(() => currentMap.invalidateSize(), 350)
 }
 
 function locateMe() {
@@ -99,7 +104,10 @@ function locateMe() {
 
       const { latitude, longitude } = position.coords
 
-      let nearest = locatedContacts[0]
+      const firstContact = locatedContacts[0]
+      if (!firstContact) return
+
+      let nearest = firstContact
       let minDist = distanceKm(latitude, longitude, nearest.lat, nearest.lng)
       for (const contact of locatedContacts.slice(1)) {
         const dist = distanceKm(latitude, longitude, contact.lat, contact.lng)
