@@ -10,7 +10,7 @@ export const themes = [
       {
         id: 1,
         slug: 'alcool',
-        hook: 'Tu as dit que c\'était ton dernier verre hier. Ça fait la troisième fois que tu essaies d\'arrêter.',
+        hook: 'Tu as dit que c\'était ton dernier verre hier. ',
         title: 'Alcool',
         ninja: '/assets/ninja_alcool.png',
         subtitle: 'COMPORTEMENT ADDICTIF N°1',
@@ -55,7 +55,7 @@ export const themes = [
       {
         id: 2,
         slug: 'tabac',
-        hook: 'Entre deux cours, la clope est devenue un réflexe plus qu\'un plaisir. Tu aimerais pouvoir t\'en passer.',
+        hook: 'La clope est devenue un réflexe plus qu\'un plaisir.',
         title: 'Tabac',
         ninja: '/assets/ninja_cigarette.png',
         subtitle: 'COMPORTEMENT ADDICTIF N°2',
@@ -100,7 +100,7 @@ export const themes = [
       {
         id: 3,
         slug: 'drogues',
-        hook: 'Tu ne sais plus vraiment dire non quand on t\'en propose. Une partie de toi voudrait pouvoir revenir en arrière.',
+        hook: 'Tu ne sais plus vraiment dire non quand on t\'en propose.',
         title: 'Drogues',
         ninja: '/assets/ninja_drogue.png',
         subtitle: 'COMPORTEMENT ADDICTIF N°3',
@@ -155,7 +155,7 @@ export const themes = [
       {
         id: 1,
         slug: 'anxiete',
-        hook: 'Certains matins, l\'idée d\'aller en cours te serre déjà la gorge avant même de sortir du lit.',
+        hook: 'Certains matins, aller en cours te serre déjà la gorge.',
         title: 'Anxiété',
         ninja: '/assets/ninja_cigarette.png',
         subtitle: 'SANTÉ MENTALE N°1',
@@ -200,7 +200,7 @@ export const themes = [
       {
         id: 2,
         slug: 'depression',
-        hook: 'Ça fait des semaines que rien ne te fait vraiment plaisir, même ce que tu aimais avant.',
+        hook: 'Plus rien ne te fait vraiment plaisir depuis des semaines.',
         title: 'Dépression',
         ninja: '/assets/ninja_cigarette.png',
         subtitle: 'SANTÉ MENTALE N°2',
@@ -245,7 +245,7 @@ export const themes = [
       {
         id: 3,
         slug: 'burn-out',
-        hook: 'Même les week-ends de repos ne suffisent plus à te faire retrouver de l\'énergie.',
+        hook: 'Même le week-end ne suffit plus à te redonner de l\'énergie.',
         title: 'Burn-out',
         ninja: '/assets/ninja_cigarette.png',
         subtitle: 'SANTÉ MENTALE N°3',
@@ -300,7 +300,7 @@ export const themes = [
       {
         id: 1,
         slug: 'violences-sexistes',
-        hook: 'On t\'a encore dit que tu exagérais. Toi, tu sais ce que tu as ressenti.',
+        hook: 'On t\'a encore dit que tu exagérais. Toi, tu sais.',
         title: 'Violences sexistes',
         ninja: '/assets/ninja_vsexiste.png',
         subtitle: 'VIOLENCE N°1',
@@ -345,7 +345,7 @@ export const themes = [
       {
         id: 2,
         slug: 'violences-sexuelles',
-        hook: 'Tu te repasses la soirée en boucle, en cherchant ce que tu aurais dû faire différemment. Rien ne justifiait ce qui t\'est arrivé.',
+        hook: 'Tu te repasses la soirée en boucle, encore et encore.',
         title: 'Violences sexuelles',
         ninja: '/assets/ninja_consentement.png',
         subtitle: 'VIOLENCE N°2',
@@ -390,7 +390,7 @@ export const themes = [
       {
         id: 3,
         slug: 'harcelement',
-        hook: 'Les messages ne s\'arrêtent pas, même quand tu ne réponds plus. Tu appréhendes d\'ouvrir ton téléphone.',
+        hook: 'Les messages ne s\'arrêtent pas, même sans réponse.',
         title: 'Harcèlement',
         ninja: '/assets/ninja_violence.png',
         subtitle: 'VIOLENCE N°3',
