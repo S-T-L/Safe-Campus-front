@@ -12,19 +12,16 @@ const menuOpen = ref(false)
 <template>
   <div class="home">
 
-    <!-- Hero + Header superposés -->
+    <!-- Header + recherche + hero -->
     <div class="above-fold">
       <header class="home-header">
-        <nav class="header-nav">
-          <template v-for="(theme, i) in themes" :key="theme.id">
-            <span v-if="i > 0" class="nav-sep">•</span>
-            <a class="nav-item" :href="`#theme-${theme.id}`">{{ theme.navLabel }}</a>
-          </template>
-        </nav>
+        <img :src="logoSf" alt="Safe Campus" class="header-logo" >
         <button class="menu-btn" :class="{ 'menu-btn--open': menuOpen }" aria-label="Menu" @click="menuOpen = true">
           <span /><span /><span />
         </button>
       </header>
+
+      <SearchBar class="home-search" :themes="themes" />
 
       <div class="home-hero">
         <img :src="universImg" alt="Campus UNC" class="hero-img" >
