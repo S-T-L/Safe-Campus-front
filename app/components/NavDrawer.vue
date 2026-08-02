@@ -29,7 +29,7 @@ function scrollToTheme(themeId) {
 }
 
 function openItem(theme, item) {
-  navigateTo(`/ressources/${theme.id}/${item.id}`)
+  navigateTo(`/ressources/${theme.id}/${item.slug}`)
   close()
 }
 
