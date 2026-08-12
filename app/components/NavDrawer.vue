@@ -9,18 +9,27 @@ defineProps({
 const emit = defineEmits(['update:modelValue'])
 
 const activeTheme = ref(null)
+const activeItem = ref(null)
 
 function close() {
   emit('update:modelValue', false)
-  setTimeout(() => { activeTheme.value = null }, 320)
+  setTimeout(() => { activeTheme.value = null; activeItem.value = null }, 320)
 }
 
 function goToTheme(theme) {
   activeTheme.value = theme
 }
 
+function goToItem(item) {
+  activeItem.value = item
+}
+
 function goBack() {
-  activeTheme.value = null
+  if (activeItem.value) {
+    activeItem.value = null
+  } else {
+    activeTheme.value = null
+  }
 }
 
 function scrollToTheme(themeId) {
@@ -28,8 +37,8 @@ function scrollToTheme(themeId) {
   close()
 }
 
-function openItem(theme, item) {
-  navigateTo(`/ressources/${theme.id}/${item.slug}`)
+function openPage(path) {
+  navigateTo(`/${path}/${activeTheme.value.id}/${activeItem.value.slug}`)
   close()
 }
 
@@ -104,7 +113,7 @@ function scrollToIntro() {
             </nav>
 
             <!-- Niveau 2 : sous-thèmes -->
-            <nav v-else key="items">
+            <nav v-else-if="!activeItem" key="items">
               <div class="sublevel-head" :style="{ '--theme-c': activeTheme.color }">
                 <span class="sublevel-label">{{ activeTheme.label }}</span>
               </div>
@@ -114,7 +123,7 @@ function scrollToIntro() {
                   v-for="item in activeTheme.items"
                   :key="item.id"
                   class="drawer-item drawer-item--sub"
-                  @click="openItem(activeTheme, item)"
+                  @click="goToItem(item)"
                 >
                   <div class="sub-item-content">
                     <span class="item-label">{{ item.title }}</span>
@@ -132,6 +141,28 @@ function scrollToIntro() {
                   <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
               </button>
+            </nav>
+
+            <!-- Niveau 3 : Contact ou Ressources -->
+            <nav v-else key="pages">
+              <div class="sublevel-head" :style="{ '--theme-c': activeTheme.color }">
+                <span class="sublevel-label">{{ activeItem.title }}</span>
+              </div>
+
+              <ul class="drawer-list">
+                <li class="drawer-item drawer-item--sub" @click="openPage('contact')">
+                  <span class="item-label">Contact</span>
+                  <svg class="item-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </li>
+                <li class="drawer-item drawer-item--sub" @click="openPage('ressources')">
+                  <span class="item-label">Ressources</span>
+                  <svg class="item-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </li>
+              </ul>
             </nav>
 
           </Transition>

@@ -16,6 +16,14 @@ export const themes = [
         subtitle: 'COMPORTEMENT ADDICTIF N°1',
         description:
           "L'alcool est la substance psychoactive la plus consommée en France. Une consommation excessive peut entraîner des dépendances physiques et psychologiques, affecter les relations sociales et nuire à la santé sur le long terme. On parle de consommation à risque dès 2 verres par jour pour une femme, 3 pour un homme. La dépendance s'installe progressivement, souvent sans qu'on s'en rende compte. Des solutions existent pour t'accompagner.",
+        resources: {
+          intro:
+            "Comprendre sa consommation est la première étape pour reprendre le contrôle. Cette page rassemble des repères simples et des outils pratiques pour t'aider à faire le point, à ton rythme et sans jugement — que tu cherches à réduire ta consommation, à en parler à quelqu'un, ou juste à mieux comprendre ce que tu traverses.",
+          documents: [
+            { title: 'Fiche réflexive — Faire le point sur ma consommation', description: "Un questionnaire simple pour t'aider à évaluer ta relation à l'alcool et identifier les situations à risque." },
+            { title: 'Fiche pratique — Réduire sans se priver', description: 'Des stratégies concrètes pour espacer ou diminuer sa consommation au quotidien, étape par étape.' },
+          ],
+        },
         contacts: [
           {
             name: 'CSAPA — Nouméa',
@@ -61,6 +69,14 @@ export const themes = [
         subtitle: 'COMPORTEMENT ADDICTIF N°2',
         description:
           "Le tabagisme est la première cause de mortalité évitable en France. La nicotine crée une dépendance forte en agissant directement sur les circuits de récompense du cerveau. Les symptômes de manque (irritabilité, anxiété, troubles du sommeil) disparaissent généralement en quelques semaines avec un accompagnement adapté. Chaque tentative d'arrêt rapproche de la réussite définitive — il faut en moyenne 5 à 7 tentatives avant d'arrêter durablement.",
+        resources: {
+          intro:
+            "Arrêter de fumer est un parcours, pas un événement unique. Ces ressources t'accompagnent pour préparer ton arrêt, gérer les envies et tenir sur la durée, avec des méthodes qui ont fait leurs preuves.",
+          documents: [
+            { title: 'Fiche réflexive — Identifier mes déclencheurs', description: 'Repère les moments et émotions qui te poussent à fumer pour mieux les anticiper.' },
+            { title: 'Guide — Les premières semaines sans tabac', description: "Ce à quoi s'attendre physiquement et mentalement, et comment tenir bon." },
+          ],
+        },
         contacts: [
           {
             name: 'Consultation tabacologie — CHT',
@@ -106,6 +122,14 @@ export const themes = [
         subtitle: 'COMPORTEMENT ADDICTIF N°3',
         description:
           "Les drogues illicites (cannabis, cocaïne, MDMA, héroïne…) et certains médicaments détournés peuvent entraîner des addictions sévères aux conséquences physiques, psychologiques et sociales graves. Le cannabis, souvent perçu comme anodin, peut provoquer une dépendance chez 1 usager sur 10, chiffre qui monte à 1 sur 6 pour ceux qui commencent à l'adolescence. Un accompagnement professionnel confidentiel est disponible sans jugement.",
+        resources: {
+          intro:
+            "Que ta consommation soit occasionnelle ou plus régulière, il est utile de connaître les risques réels et les ressources disponibles. Cette page propose des repères neutres, sans jugement, pour t'aider à faire des choix informés.",
+          documents: [
+            { title: 'Fiche réflexive — Mon rapport aux substances', description: "Un outil d'auto-évaluation pour mieux cerner ta consommation et ses effets sur ton quotidien." },
+            { title: 'Fiche info — Réduction des risques', description: 'Des conseils concrets pour limiter les dangers en cas de consommation.' },
+          ],
+        },
         contacts: [
           {
             name: 'CSAPA — Nouméa',
@@ -161,6 +185,14 @@ export const themes = [
         subtitle: 'SANTÉ MENTALE N°1',
         description:
           "L'anxiété est une réaction normale face au stress, mais elle devient problématique quand elle est disproportionnée, persistante et qu'elle interfère avec la vie quotidienne. En période d'examens ou lors de transitions de vie, elle peut se manifester par des palpitations, des tensions musculaires, des troubles du sommeil ou des pensées envahissantes. Des techniques concrètes (respiration, TCC, pleine conscience) et un soutien psychologique peuvent faire une vraie différence.",
+        resources: {
+          intro:
+            "L'anxiété se gère mieux quand on comprend ses mécanismes. Retrouve ici des techniques simples à pratiquer au quotidien et des pistes pour savoir quand consulter.",
+          documents: [
+            { title: 'Fiche réflexive — Cartographier mon anxiété', description: "Identifie les situations, pensées et sensations liées à tes moments d'anxiété." },
+            { title: "Fiche pratique — Exercices de respiration et d'ancrage", description: 'Des techniques rapides à utiliser en cas de montée de stress.' },
+          ],
+        },
         contacts: [
           {
             name: 'Service Santé Étudiante',
@@ -206,6 +238,14 @@ export const themes = [
         subtitle: 'SANTÉ MENTALE N°2',
         description:
           "La dépression est une maladie réelle, pas une faiblesse de caractère. Elle se manifeste par une tristesse profonde et durable, une perte d'intérêt ou de plaisir, une fatigue intense, des troubles du sommeil et de l'appétit, et parfois des pensées sombres. Elle touche environ 1 étudiant sur 5 à un moment donné de son parcours. Sans prise en charge, elle peut s'aggraver — mais avec un accompagnement adapté, la guérison est possible.",
+        resources: {
+          intro:
+            "La dépression se soigne, et en parler est déjà un premier pas. Ces ressources t'aident à reconnaître les signaux et à identifier les appuis autour de toi.",
+          documents: [
+            { title: 'Fiche réflexive — Reconnaître les signaux', description: "Une liste de symptômes courants pour t'aider à mettre des mots sur ce que tu ressens." },
+            { title: 'Fiche pratique — Petits pas au quotidien', description: 'Des actions simples et réalistes à mettre en place quand tout paraît difficile.' },
+          ],
+        },
         contacts: [
           {
             name: 'Service Santé Étudiante',
@@ -251,6 +291,14 @@ export const themes = [
         subtitle: 'SANTÉ MENTALE N°3',
         description:
           "L'épuisement académique (burn-out étudiant) est un syndrome d'épuisement physique et émotionnel lié à une surcharge de travail prolongée. Il diffère de la fatigue passagère : il s'installe progressivement et ne disparaît pas avec quelques nuits de sommeil. Les signaux d'alerte : perte totale de motivation, sentiment d'inefficacité, cynisme vis-à-vis des études, oublis fréquents, isolement. Reconnaître ces signes tôt permet d'éviter l'effondrement complet.",
+        resources: {
+          intro:
+            "L'épuisement académique s'installe progressivement — apprendre à repérer les signaux tôt permet d'éviter l'effondrement. Ces ressources t'aident à faire le point sur ta charge et à identifier des leviers concrets.",
+          documents: [
+            { title: 'Fiche réflexive — Évaluer ma charge mentale', description: 'Un outil pour visualiser tes sources de surcharge et de fatigue.' },
+            { title: 'Fiche pratique — Réorganiser son temps sans culpabiliser', description: 'Des pistes concrètes pour alléger son emploi du temps et souffler.' },
+          ],
+        },
         contacts: [
           {
             name: 'Médecin universitaire',
@@ -306,6 +354,14 @@ export const themes = [
         subtitle: 'VIOLENCE N°1',
         description:
           "Les violences sexistes désignent tout comportement, propos ou pratique fondé sur le genre qui porte atteinte à la dignité d'une personne. Cela inclut les remarques dégradantes, les blagues humiliantes, la remise en question des compétences basée sur le genre, ou encore les comportements intimidants. Ces violences peuvent survenir en cours, en soirée étudiante, en ligne ou dans la vie quotidienne. Elles sont illégales et des recours existent.",
+        resources: {
+          intro:
+            "Reconnaître une situation de violence sexiste est parfois difficile, surtout quand elle est banalisée. Ces ressources t'aident à mettre des mots sur ce que tu vis et à connaître tes droits.",
+          documents: [
+            { title: 'Fiche réflexive — Reconnaître les violences sexistes', description: "Des exemples concrets pour t'aider à identifier les comportements problématiques." },
+            { title: 'Fiche pratique — Réagir et se faire accompagner', description: 'Les étapes possibles pour signaler une situation et obtenir du soutien.' },
+          ],
+        },
         contacts: [
           {
             name: 'Référente Égalité',
@@ -351,6 +407,14 @@ export const themes = [
         subtitle: 'VIOLENCE N°2',
         description:
           "Toute relation ou acte sexuel sans consentement libre et éclairé est une violence. Le viol, l'agression sexuelle et le harcèlement sexuel sont des infractions pénales. Le consentement doit être explicite et peut être retiré à tout moment. La soumission chimique (droguer quelqu'un à son insu) est également un crime. Si tu as vécu une violence sexuelle, tu n'es pas responsable. Des professionnels formés sont disponibles pour t'écouter, sans te juger.",
+        resources: {
+          intro:
+            "Après une violence sexuelle, il est normal de ressentir de la confusion ou de la culpabilité — tu n'es pas responsable. Ces ressources expliquent tes droits et les démarches possibles, à ton rythme.",
+          documents: [
+            { title: 'Fiche réflexive — Comprendre le consentement', description: "Des repères clairs sur ce qu'est (et n'est pas) le consentement." },
+            { title: 'Fiche pratique — Les démarches après une agression', description: "Un panorama des options (médicales, juridiques, psychologiques) sans obligation d'agir tout de suite." },
+          ],
+        },
         contacts: [
           {
             name: 'CRIAVS NC — Violences sexuelles',
@@ -396,6 +460,14 @@ export const themes = [
         subtitle: 'VIOLENCE N°3',
         description:
           "Le harcèlement moral est défini par sa répétition : ce sont des agissements répétés qui dégradent les conditions de vie ou de travail d'une personne. Le cyberharcèlement (via réseaux sociaux, SMS, messageries) touche de plus en plus d'étudiants et peut avoir des conséquences sévères sur la santé mentale. Que tu sois victime ou témoin, des recours concrets existent. Documenter les faits (captures d'écran, dates, témoins) facilite les démarches.",
+        resources: {
+          intro:
+            "Le harcèlement se caractérise par la répétition — que tu sois victime ou témoin, il existe des moyens concrets d'agir. Ces ressources t'aident à documenter les faits et à connaître tes recours.",
+          documents: [
+            { title: 'Fiche réflexive — Documenter une situation de harcèlement', description: 'Un guide pour consigner les faits (dates, messages, témoins) utile en cas de signalement.' },
+            { title: 'Fiche pratique — Agir en tant que témoin', description: 'Des conseils pour soutenir une personne harcelée sans se mettre en danger.' },
+          ],
+        },
         contacts: [
           {
             name: 'Référente Égalité',

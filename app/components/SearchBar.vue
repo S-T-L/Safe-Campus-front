@@ -26,7 +26,7 @@ const searchIndex = computed(() => {
         label: item.title,
         subtitle: item.subtitle,
         searchText: `${item.title} ${item.hook} ${item.subtitle}`,
-        href: `/ressources/${theme.id}/${item.slug}`,
+        href: `/contact/${theme.id}/${item.slug}`,
       })
 
       for (const contact of item.contacts ?? []) {
@@ -36,7 +36,7 @@ const searchIndex = computed(() => {
           label: contact.name,
           subtitle: contact.role,
           searchText: `${contact.name} ${contact.role}`,
-          href: `/ressources/${theme.id}/${item.slug}`,
+          href: `/contact/${theme.id}/${item.slug}`,
         })
       }
     }
