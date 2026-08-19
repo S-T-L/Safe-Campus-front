@@ -1,63 +1,112 @@
 <script setup>
+import { ref } from 'vue'
+
 defineProps({
   contact: { type: Object, required: true },
   color: { type: String, required: true },
   isNearest: { type: Boolean, default: false },
 })
 
+const expanded = ref(false)
+const copiedField = ref(null)
+
+function initials(name) {
+  const words = name.split(/[\s—-]+/).filter(w => /^[A-Za-zÀ-ÿ]/.test(w))
+  return words.slice(0, 2).map(w => w[0].toUpperCase()).join('')
+}
+
+function toggleExpanded() {
+  expanded.value = !expanded.value
+}
+
 function telHref(phone) {
   return `tel:${phone.replace(/\s/g, '')}`
+}
+
+async function copy(text, field) {
+  await navigator.clipboard.writeText(text)
+  copiedField.value = field
+  setTimeout(() => {
+    if (copiedField.value === field) copiedField.value = null
+  }, 1500)
 }
 </script>
 
 <template>
-  <div class="contact-card" :class="{ 'contact-card--nearest': isNearest }" :style="{ '--theme-color': color }">
-    <div class="contact-card__top">
-      <div class="contact-card__avatar" aria-hidden="true" />
-      <div class="contact-card__identity">
-        <p class="contact-card__name">
-          {{ contact.name }}
-          <span v-if="isNearest" class="contact-card__nearest-tag">Le plus proche</span>
-        </p>
-        <p class="contact-card__role">{{ contact.role }}</p>
+  <div
+    class="contact-card" :class="{ 'contact-card--nearest': isNearest, 'contact-card--expanded': expanded }"
+    :style="{ '--theme-color': color }">
+    <span v-if="isNearest" class="contact-card__nearest-badge">Le plus proche</span>
+
+    <div
+      class="contact-card__row" role="button" tabindex="0" :aria-expanded="expanded"
+      @click="toggleExpanded" @keydown.enter="toggleExpanded" @keydown.space.prevent="toggleExpanded">
+      <div class="contact-card__avatar-init" aria-hidden="true">{{ initials(contact.name) }}</div>
+
+      <div class="contact-card__text">
+        <p class="contact-card__name">{{ contact.name }}</p>
+        <p class="contact-card__meta">{{ contact.role }}</p>
       </div>
-    </div>
 
-    <p class="contact-card__hours">
-      <svg
-class="clock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-        stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="9" />
-        <path d="M12 7v5l3 3" />
-      </svg>
-      {{ contact.hours }}
-    </p>
-
-    <div class="contact-card__actions">
-      <a v-if="contact.phone" class="contact-pill contact-pill--phone" :href="telHref(contact.phone)">
-        <svg
-class="phone-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round">
-          <path
-            d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
-        </svg>
-        {{ contact.phone }}
-        <span v-if="contact.tollFree" class="toll-free-badge" title="Numéro vert — appel gratuit">
-          <svg viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 2l2.39 6.94H21l-5.6 4.07L17.6 20 12 15.93 6.4 20l2.2-7-5.6-4.07h6.61z" />
+      <div class="contact-card__icon-actions">
+        <a
+          v-if="contact.phone" class="contact-card__icon-btn contact-card__icon-btn--phone"
+          :href="telHref(contact.phone)" :aria-label="`Appeler ${contact.name}`" @click.stop>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path
+              d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
           </svg>
-        </span>
-      </a>
+        </a>
+        <a
+          v-if="contact.email" class="contact-card__icon-btn contact-card__icon-btn--email"
+          :href="`mailto:${contact.email}`" :aria-label="`Envoyer un email à ${contact.name}`" @click.stop>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="4" width="20" height="16" rx="2" />
+            <path d="m22 6-10 7L2 6" />
+          </svg>
+        </a>
+      </div>
 
-      <a v-if="contact.email" class="contact-pill contact-pill--email" :href="`mailto:${contact.email}`">
-        <svg
-class="email-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round">
-          <rect x="2" y="4" width="20" height="16" rx="2" />
-          <path d="m22 6-10 7L2 6" />
-        </svg>
-        {{ contact.email }}
-      </a>
+      <svg
+class="contact-card__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="m6 9 6 6 6-6" />
+      </svg>
     </div>
+
+    <Transition name="cc-fade">
+      <div v-if="expanded" class="contact-card__detail">
+        <p class="contact-card__detail-hours">
+          <svg
+class="clock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="9" />
+            <path d="M12 7v5l3 3" />
+          </svg>
+          {{ contact.hours }}
+        </p>
+
+        <div v-if="contact.phone" class="contact-card__detail-row">
+          <span class="contact-card__detail-value">
+            {{ contact.phone }}
+            <span v-if="contact.tollFree" class="contact-card__toll-free" title="Numéro vert — appel gratuit">Numéro vert</span>
+          </span>
+          <button
+type="button" class="contact-card__copy-btn" :class="{ 'contact-card__copy-btn--copied': copiedField === 'phone' }"
+            @click.stop="copy(contact.phone, 'phone')">
+            {{ copiedField === 'phone' ? 'Copié' : 'Copier' }}
+          </button>
+        </div>
+
+        <div v-if="contact.email" class="contact-card__detail-row">
+          <span class="contact-card__detail-value">{{ contact.email }}</span>
+          <button
+type="button" class="contact-card__copy-btn" :class="{ 'contact-card__copy-btn--copied': copiedField === 'email' }"
+            @click.stop="copy(contact.email, 'email')">
+            {{ copiedField === 'email' ? 'Copié' : 'Copier' }}
+          </button>
+        </div>
+      </div>
+    </Transition>
   </div>
 </template>
