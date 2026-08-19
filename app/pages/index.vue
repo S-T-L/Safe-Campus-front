@@ -15,13 +15,25 @@ const menuOpen = ref(false)
     <!-- Header + recherche + hero -->
     <div class="above-fold">
       <header class="home-header">
-        <img :src="logoSf" alt="Safe Campus" class="header-logo" >
+        <div class="home-brand">
+          <img :src="logoSf" alt="Safe Campus" class="header-logo" >
+
+          <span class="home-brand__divider" aria-hidden="true" />
+
+          <nav class="home-nav" aria-label="Navigation principale">
+            <a v-for="theme in themes" :key="theme.id" :href="`#theme-${theme.id}`" class="home-nav__link">
+              {{ theme.shortLabel }}
+            </a>
+            <a href="#about" class="home-nav__link">À propos</a>
+          </nav>
+        </div>
+
+        <SearchBar class="home-search" :themes="themes" />
+
         <button class="menu-btn" :class="{ 'menu-btn--open': menuOpen }" aria-label="Menu" @click="menuOpen = true">
           <span /><span /><span />
         </button>
       </header>
-
-      <SearchBar class="home-search" :themes="themes" />
 
       <div class="home-hero">
         <img :src="universImg" alt="Campus UNC" class="hero-img" >
@@ -30,7 +42,7 @@ const menuOpen = ref(false)
     </div>
 
     <!-- Section intro -->
-    <section class="home-intro">
+    <section id="about" class="home-intro">
       <img :src="logoSf" alt="Logo Safe Campus" class="intro-logo" >
       <p class="intro-subtitle">C'est quoi&nbsp;?</p>
       <p class="intro-body">

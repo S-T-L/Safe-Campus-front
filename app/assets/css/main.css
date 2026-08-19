@@ -105,8 +105,24 @@ button {
 .home-header {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   justify-content: space-between;
   padding: 14px 20px;
+}
+
+.home-brand {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  order: 1;
+}
+
+.home-brand__divider {
+  display: none;
+  width: 1px;
+  height: 22px;
+  background: rgba(13, 13, 13, 0.1);
+  flex-shrink: 0;
 }
 
 .header-logo {
@@ -123,6 +139,7 @@ button {
   padding: 8px 10px;
   border: none;
   flex-shrink: 0;
+  order: 2;
 }
 
 .menu-btn span {
@@ -138,9 +155,30 @@ button {
 .menu-btn--open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
 .menu-btn--open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-/* ── Barre de recherche (avant le hero) ── */
+/* ── Navigation desktop (remplace le menu tiroir sur grand écran) ── */
+.home-nav {
+  display: none;
+}
+
+.home-nav__link {
+  font-family: var(--font-heading);
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--color-text);
+  text-decoration: none;
+  letter-spacing: 0.1px;
+  transition: color var(--transition-base);
+}
+
+.home-nav__link:hover {
+  color: var(--color-primary-light);
+}
+
+/* ── Barre de recherche (dans le header) ── */
 .home-search {
-  padding: 0 20px 20px;
+  order: 3;
+  flex-basis: 100%;
+  margin: 16px 0 4px;
 }
 
 /* ── Hero image ── */
@@ -233,7 +271,7 @@ button {
   }
 
   .home-search {
-    padding: 0 48px 24px;
+    margin: 18px 0 6px;
   }
 
   .home-hero {
@@ -252,6 +290,88 @@ button {
 
   .home-footer {
     padding: 28px 48px;
+  }
+}
+
+/* ── Grand écran : la coquille mobile centrée laisse place à une mise en page qui remplit la largeur ── */
+@media (min-width: 1200px) {
+  .home {
+    max-width: 1680px;
+    box-shadow: none;
+    border-left: none;
+    border-right: none;
+  }
+
+  .home-header {
+    padding: 24px 64px;
+    flex-wrap: nowrap;
+  }
+
+  .home-brand__divider {
+    display: block;
+  }
+
+  .home-nav {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+  }
+
+  .menu-btn {
+    display: none;
+  }
+
+  .home-search {
+    order: 2;
+    flex: 0 0 320px;
+    margin: 0;
+  }
+
+  .home-search .search-bar__field {
+    padding: 10px 16px;
+    box-shadow: none;
+    border: 1px solid rgba(13, 13, 13, 0.08);
+  }
+
+  .home-search .search-bar__input {
+    font-size: 0.82rem;
+  }
+
+  .home-hero {
+    height: 440px;
+    margin: 0 64px;
+    border-radius: 28px;
+  }
+
+  .home-intro {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 48px 20px;
+    background: transparent;
+    border-bottom: none;
+  }
+
+  .home-sections {
+    padding: 64px 0 80px;
+    gap: 64px;
+  }
+
+  .theme-section {
+    max-width: 1040px;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .section-header {
+    padding: 0 20px;
+  }
+
+  .slider-track {
+    padding: 72px 20px 8px;
+  }
+
+  .home-footer {
+    padding: 28px 64px;
   }
 }
 
