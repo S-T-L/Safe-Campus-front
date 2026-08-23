@@ -2,18 +2,64 @@
 import { onMounted, onUnmounted, ref, nextTick } from 'vue'
 import type * as Leaflet from 'leaflet'
 import 'leaflet/dist/leaflet.css'
-import { themes } from '~/data/themes.js'
+import { sousThemeNinjas, themePresentation } from '~/data/presentation'
+import type { ContactApi, SousThemeDetailApi } from '~/types/annuaire'
+
+interface DisplayContact {
+  ref: string
+  name: string
+  role: string | null
+  email: string | null
+  hours: string | null
+  telephones: ContactApi['telephones']
+  lat: number | null
+  lng: number | null
+}
+
+interface LocatedContact extends Omit<DisplayContact, 'lat' | 'lng'> {
+  lat: number
+  lng: number
+}
+
+function isLocated(contact: DisplayContact): contact is LocatedContact {
+  return contact.lat !== null && contact.lng !== null
+}
 
 definePageMeta({ layout: 'default' })
 
 const route = useRoute()
 const router = useRouter()
 
-const theme = themes.find(t => t.id === route.params.theme)
-const item = theme?.items.find(i => i.slug === route.params.slug)
+const apiBase = useApiBase()
+const { data: response, error: fetchError } = await useFetch<{ data: SousThemeDetailApi }>(
+  `${apiBase}/api/sous-themes/${route.params.slug}`,
+)
 
-if (!theme || !item) {
+if (fetchError.value || !response.value?.data) {
   throw createError({ statusCode: 404, statusMessage: 'Ressource introuvable' })
+}
+
+const sousTheme = response.value.data
+
+const theme = {
+  color: themePresentation[sousTheme.theme.ref]?.color ?? '#4260e6',
+  shortLabel: sousTheme.theme.libelle_court,
+}
+
+const item = {
+  title: sousTheme.libelle,
+  description: sousTheme.article,
+  ninja: sousThemeNinjas[sousTheme.ref],
+  contacts: sousTheme.contacts.map(contact => ({
+    ref: contact.ref,
+    name: contact.prenom ? `${contact.prenom} ${contact.nom}` : contact.nom,
+    role: contact.remarques,
+    email: contact.mail,
+    hours: contact.horaires,
+    telephones: contact.telephones,
+    lat: contact.latitude,
+    lng: contact.longitude,
+  })),
 }
 
 useHead({ title: item.title })
@@ -22,7 +68,7 @@ const themeColor = theme.color
 
 let L: typeof Leaflet | null = null
 
-const locatedContacts = item.contacts.filter(c => c.lat && c.lng)
+const locatedContacts = item.contacts.filter(isLocated)
 const hasLocated = locatedContacts.length > 0
 
 const mapContainer = ref<HTMLElement | null>(null)
@@ -75,7 +121,7 @@ async function initMap() {
     })
     leaflet.marker([contact.lat, contact.lng], { icon })
       .addTo(currentMap)
-      .bindPopup(`<strong>${contact.name}</strong><br>${contact.phone ?? contact.email ?? ''}`)
+      .bindPopup(`<strong>${contact.name}</strong><br>${contact.telephones[0]?.numero ?? contact.email ?? ''}`)
   })
 
   if (locatedContacts.length > 1) {
@@ -204,7 +250,7 @@ viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-li
         <p class="section-label">Contact</p>
         <div class="cp-contacts-grid">
           <ContactCard
-v-for="contact in item.contacts" :key="contact.name" :contact="contact" :color="theme.color"
+v-for="contact in item.contacts" :key="contact.ref" :contact="contact" :color="theme.color"
             :is-nearest="contact.name === nearestContactName" />
         </div>
       </section>

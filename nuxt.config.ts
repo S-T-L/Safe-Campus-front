@@ -23,7 +23,12 @@ export default defineNuxtConfig({
   },
 
   runtimeConfig: {
+    // Serveur uniquement (SSR) : hostname Docker interne, injecte par
+    // docker-compose.yml du back. Jamais expose au client.
+    apiBaseInternal: process.env.NUXT_API_BASE_INTERNAL ?? process.env.NUXT_PUBLIC_API_BASE ?? 'http://localhost:8000',
     public: {
+      // Navigateur : doit etre joignable depuis l'hote, jamais un hostname
+      // Docker interne (le reseau bridge n'existe pas hors des conteneurs).
       apiBase: process.env.NUXT_PUBLIC_API_BASE ?? 'http://localhost:8000',
     },
   },

@@ -1,16 +1,33 @@
 <script setup lang="ts">
-import { themes } from '~/data/themes.js'
+import { sousThemeNinjas, themePresentation } from '~/data/presentation'
+import type { SousThemeDetailApi } from '~/types/annuaire'
 
 definePageMeta({ layout: 'default' })
 
 const route = useRoute()
 const router = useRouter()
 
-const theme = themes.find(t => t.id === route.params.theme)
-const item = theme?.items.find(i => i.slug === route.params.slug)
+const apiBase = useApiBase()
+const { data: response, error: fetchError } = await useFetch<{ data: SousThemeDetailApi }>(
+  `${apiBase}/api/sous-themes/${route.params.slug}`,
+)
 
-if (!theme || !item || !item.resources) {
+if (fetchError.value || !response.value?.data) {
   throw createError({ statusCode: 404, statusMessage: 'Ressource introuvable' })
+}
+
+const sousTheme = response.value.data
+
+const theme = {
+  color: themePresentation[sousTheme.theme.ref]?.color ?? '#4260e6',
+  shortLabel: sousTheme.theme.libelle_court,
+}
+
+const item = {
+  title: sousTheme.libelle,
+  ninja: sousThemeNinjas[sousTheme.ref],
+  intro: sousTheme.intro_ressources,
+  documents: sousTheme.documents,
 }
 
 useHead({ title: `${item.title} — Ressources` })
@@ -41,7 +58,7 @@ function goBack() {
       </div>
       <span class="cp-tag">{{ theme.shortLabel }}</span>
       <h1 class="cp-title">{{ item.title }}</h1>
-      <p class="cp-description">{{ item.resources.intro }}</p>
+      <p class="cp-description">{{ item.intro }}</p>
     </section>
 
     <div class="cp-content">
@@ -50,7 +67,7 @@ function goBack() {
       <section class="rp-documents">
         <p class="section-label">Fiches réflectives</p>
         <div class="rp-documents-grid">
-          <div v-for="doc in item.resources.documents" :key="doc.title" class="rp-document-card">
+          <div v-for="doc in item.documents" :key="doc.libelle" class="rp-document-card">
             <div class="rp-document-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
@@ -58,7 +75,7 @@ function goBack() {
               </svg>
             </div>
             <div class="rp-document-body">
-              <p class="rp-document-title">{{ doc.title }}</p>
+              <p class="rp-document-title">{{ doc.libelle }}</p>
               <p class="rp-document-desc">{{ doc.description }}</p>
             </div>
             <button type="button" class="btn-download" disabled title="Bientôt disponible">
