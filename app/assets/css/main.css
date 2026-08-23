@@ -15,9 +15,9 @@
   --color-addiction: #4260e6;
   --color-mental: #4260e6;
   --color-violence: #4260e6;
-  --color-bg: #FAFAFA;
+  --color-bg: #F2EEDF;
   --color-text: #0D0D0D;
-  --color-card-bg: #FFFFFF;
+  --color-card-bg: #F2EEDF;
   --color-muted: #6B7A99;
 
   --font-display: 'Almost Textual', 'Bebas Neue', sans-serif;
@@ -873,7 +873,7 @@ button {
 
 /* ── Localisation ── */
 .cp-location {
-  background: #FFFFFF;
+  background: var(--color-card-bg);
   border-radius: var(--radius-card);
   box-shadow: var(--shadow-card);
   overflow: hidden;
@@ -955,7 +955,7 @@ button {
 
 .contact-card {
   position: relative;
-  background: #FFFFFF;
+  background: var(--color-card-bg);
   border-radius: 16px;
   box-shadow: var(--shadow-card);
   transition: background var(--transition-base), box-shadow var(--transition-base);
@@ -1168,7 +1168,7 @@ button {
 .rp-documents-grid {
   display: flex;
   flex-direction: column;
-  background: #FFFFFF;
+  background: var(--color-card-bg);
   border-radius: var(--radius-card);
   box-shadow: var(--shadow-card);
   overflow: hidden;
