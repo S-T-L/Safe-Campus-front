@@ -1,12 +1,31 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { themes } from '../data/themes.js'
+import { computed, ref } from 'vue'
+import { sousThemeNinjas, themePresentation } from '../data/presentation'
 import logoSf from '~/assets/images/logoSf.svg'
 import universImg from '~/assets/images/univers.png'
+import type { ThemeApi } from '~/types/annuaire'
 
 definePageMeta({ layout: 'default' })
 
 const menuOpen = ref(false)
+
+const config = useRuntimeConfig()
+const { data: response } = await useFetch<{ data: ThemeApi[] }>(`${config.public.apiBase}/api/themes`)
+
+const themes = computed(() => (response.value?.data ?? []).map(theme => ({
+  id: theme.ref,
+  label: theme.libelle,
+  shortLabel: theme.libelle_court,
+  color: themePresentation[theme.ref]?.color ?? '#4260e6',
+  items: theme.sous_themes.map((sousTheme, index) => ({
+    id: index + 1,
+    slug: sousTheme.ref,
+    title: sousTheme.libelle,
+    hook: sousTheme.resume,
+    ninja: sousThemeNinjas[sousTheme.ref],
+    subtitle: `${themePresentation[theme.ref]?.prefixe ?? ''} N°${index + 1}`,
+  })),
+})))
 </script>
 
 <template>
