@@ -7,9 +7,9 @@ definePageMeta({ layout: 'default' })
 const route = useRoute()
 const router = useRouter()
 
-const config = useRuntimeConfig()
+const apiBase = useApiBase()
 const { data: response, error: fetchError } = await useFetch<{ data: SousThemeDetailApi }>(
-  `${config.public.apiBase}/api/sous-themes/${route.params.slug}`,
+  `${apiBase}/api/sous-themes/${route.params.slug}`,
 )
 
 if (fetchError.value || !response.value?.data) {

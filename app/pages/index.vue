@@ -9,8 +9,8 @@ definePageMeta({ layout: 'default' })
 
 const menuOpen = ref(false)
 
-const config = useRuntimeConfig()
-const { data: response } = await useFetch<{ data: ThemeApi[] }>(`${config.public.apiBase}/api/themes`)
+const apiBase = useApiBase()
+const { data: response } = await useFetch<{ data: ThemeApi[] }>(`${apiBase}/api/themes`)
 
 const themes = computed(() => (response.value?.data ?? []).map(theme => ({
   id: theme.ref,
