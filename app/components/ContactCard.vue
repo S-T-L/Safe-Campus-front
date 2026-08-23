@@ -19,8 +19,9 @@ function toggleExpanded() {
   expanded.value = !expanded.value
 }
 
-function telHref(phone) {
-  return `tel:${phone.replace(/\s/g, '')}`
+function telephoneHref(telephone) {
+  const numero = telephone.numero.replace(/\s/g, '')
+  return telephone.type === 'sms' ? `sms:${numero}` : `tel:${numero}`
 }
 
 async function copy(text, field) {
@@ -50,8 +51,8 @@ async function copy(text, field) {
 
       <div class="contact-card__icon-actions">
         <a
-          v-if="contact.phone" class="contact-card__icon-btn contact-card__icon-btn--phone"
-          :href="telHref(contact.phone)" :aria-label="`Appeler ${contact.name}`" @click.stop>
+          v-if="contact.telephones?.[0]" class="contact-card__icon-btn contact-card__icon-btn--phone"
+          :href="telephoneHref(contact.telephones[0])" :aria-label="`Appeler ${contact.name}`" @click.stop>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path
               d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
@@ -86,15 +87,19 @@ class="clock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-
           {{ contact.hours }}
         </p>
 
-        <div v-if="contact.phone" class="contact-card__detail-row">
+        <div
+v-for="telephone in contact.telephones" :key="telephone.numero"
+          class="contact-card__detail-row">
           <span class="contact-card__detail-value">
-            {{ contact.phone }}
-            <span v-if="contact.tollFree" class="contact-card__toll-free" title="Numéro vert — appel gratuit">Numéro vert</span>
+            {{ telephone.numero }}
+            <span v-if="telephone.libelle" class="contact-card__toll-free">{{ telephone.libelle }}</span>
+            <span v-if="telephone.numero_vert" class="contact-card__toll-free" title="Numéro vert — appel gratuit">Numéro vert</span>
           </span>
           <button
-type="button" class="contact-card__copy-btn" :class="{ 'contact-card__copy-btn--copied': copiedField === 'phone' }"
-            @click.stop="copy(contact.phone, 'phone')">
-            {{ copiedField === 'phone' ? 'Copié' : 'Copier' }}
+type="button" class="contact-card__copy-btn"
+            :class="{ 'contact-card__copy-btn--copied': copiedField === telephone.numero }"
+            @click.stop="copy(telephone.numero, telephone.numero)">
+            {{ copiedField === telephone.numero ? 'Copié' : 'Copier' }}
           </button>
         </div>
 
