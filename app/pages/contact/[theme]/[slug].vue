@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref, nextTick } from 'vue'
+import { computed, onMounted, onUnmounted, ref, nextTick } from 'vue'
 import type * as Leaflet from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { sousThemeNinjas, themePresentation } from '~/data/presentation'
@@ -75,9 +75,17 @@ const mapContainer = ref<HTMLElement | null>(null)
 let map: Leaflet.Map | null = null
 let userMarker: Leaflet.Marker | null = null
 
-const nearestContactName = ref<string | null>(null)
+const nearestContactRef = ref<string | null>(null)
 const geoError = ref<string | null>(null)
 const geoLoading = ref(false)
+const userLocated = ref(false)
+
+const sortedContacts = computed(() => {
+  if (!nearestContactRef.value) return item.contacts
+  const nearest = item.contacts.find(c => c.ref === nearestContactRef.value)
+  if (!nearest) return item.contacts
+  return [nearest, ...item.contacts.filter(c => c.ref !== nearestContactRef.value)]
+})
 
 function distanceKm(lat1: number, lng1: number, lat2: number, lng2: number) {
   const R = 6371
@@ -124,13 +132,19 @@ async function initMap() {
       .bindPopup(`<strong>${contact.name}</strong><br>${contact.telephones[0]?.numero ?? contact.email ?? ''}`)
   })
 
-  if (locatedContacts.length > 1) {
-    currentMap.fitBounds(leaflet.latLngBounds(locatedContacts.map(c => [c.lat, c.lng])), { padding: [32, 32] })
-  } else if (locatedContacts[0]) {
-    currentMap.setView([locatedContacts[0].lat, locatedContacts[0].lng], 14)
-  }
+  fitToContacts()
 
   setTimeout(() => currentMap.invalidateSize(), 350)
+}
+
+function fitToContacts() {
+  if (!L || !map) return
+
+  if (locatedContacts.length > 1) {
+    map.fitBounds(L.latLngBounds(locatedContacts.map(c => [c.lat, c.lng])), { padding: [32, 32] })
+  } else if (locatedContacts[0]) {
+    map.setView([locatedContacts[0].lat, locatedContacts[0].lng], 14)
+  }
 }
 
 function locateMe() {
@@ -159,7 +173,8 @@ function locateMe() {
         const dist = distanceKm(latitude, longitude, contact.lat, contact.lng)
         if (dist < minDist) { minDist = dist; nearest = contact }
       }
-      nearestContactName.value = nearest.name
+      nearestContactRef.value = nearest.ref
+      userLocated.value = true
 
       if (userMarker) {
         userMarker.setLatLng([latitude, longitude])
@@ -187,6 +202,19 @@ function locateMe() {
     },
     { enableHighAccuracy: true, timeout: 10000 },
   )
+}
+
+function resetGeoloc() {
+  geoError.value = null
+  userLocated.value = false
+  nearestContactRef.value = null
+
+  if (userMarker) {
+    userMarker.remove()
+    userMarker = null
+  }
+
+  fitToContacts()
 }
 
 onMounted(() => {
@@ -231,14 +259,22 @@ onUnmounted(() => {
       <section v-if="hasLocated" class="cp-location">
         <div class="cp-location-head">
           <span class="cp-location-title">Où trouver de l'aide près de chez vous</span>
-          <button type="button" class="btn-locate" :disabled="geoLoading" @click="locateMe">
+          <button
+type="button" class="btn-locate" :class="{ 'btn-locate--active': userLocated }" :disabled="geoLoading"
+            @click="userLocated ? resetGeoloc() : locateMe()">
             <svg
-viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-              stroke-linejoin="round">
+v-if="!userLocated" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
               <circle cx="12" cy="12" r="3" />
               <path d="M12 2v3M12 19v3M2 12h3M19 12h3" />
             </svg>
-            {{ geoLoading ? 'Recherche…' : 'Me géolocaliser' }}
+            <svg
+v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="M3 12a9 9 0 1 0 3-6.7" />
+              <path d="M3 4v5h5" />
+            </svg>
+            {{ geoLoading ? 'Recherche…' : (userLocated ? 'Réinitialiser' : 'Me géolocaliser') }}
           </button>
         </div>
         <div ref="mapContainer" class="cp-location-map" />
@@ -250,8 +286,8 @@ viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-li
         <p class="section-label">Contact</p>
         <div class="cp-contacts-grid">
           <ContactCard
-v-for="contact in item.contacts" :key="contact.ref" :contact="contact" :color="theme.color"
-            :is-nearest="contact.name === nearestContactName" />
+v-for="contact in sortedContacts" :key="contact.ref" :contact="contact" :color="theme.color"
+            :is-nearest="contact.ref === nearestContactRef" />
         </div>
       </section>
 
