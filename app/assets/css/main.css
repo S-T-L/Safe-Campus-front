@@ -872,8 +872,10 @@ button {
 }
 
 /* ── Localisation ── */
+/* Fond blanc pur (pas le blanc ceruse du reste du site) : la carte de localisation
+   et les cartes de contact tranchent mieux sur le degrade colore de .cp-page. */
 .cp-location {
-  background: var(--color-card-bg);
+  background: #FFFFFF;
   border-radius: var(--radius-card);
   box-shadow: var(--shadow-card);
   overflow: hidden;
@@ -964,14 +966,14 @@ button {
 
 .contact-card {
   position: relative;
-  background: var(--color-card-bg);
+  background: #FFFFFF;
   border-radius: 16px;
   box-shadow: var(--shadow-card);
   transition: background var(--transition-base), box-shadow var(--transition-base);
 }
 
 .contact-card--nearest {
-  background: var(--color-card-bg);
+  background: #FFFFFF;
   box-shadow: var(--shadow-card), 0 0 0 2px var(--theme-color, var(--color-primary-light));
 }
 
