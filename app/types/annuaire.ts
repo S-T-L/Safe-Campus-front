@@ -4,7 +4,7 @@
 export interface MediaApi {
   libelle: string
   description: string | null
-  chemin: string
+  url: string | null
   type: 'image' | 'video' | 'audio' | 'document'
 }
 
