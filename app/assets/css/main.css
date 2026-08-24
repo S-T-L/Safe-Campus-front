@@ -1245,6 +1245,11 @@ button {
   font-family: var(--font-body);
   font-size: 12px;
   font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.btn-download:disabled {
   cursor: not-allowed;
   opacity: 0.85;
 }

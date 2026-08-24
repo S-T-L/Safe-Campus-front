@@ -78,7 +78,16 @@ function goBack() {
               <p class="rp-document-title">{{ doc.libelle }}</p>
               <p class="rp-document-desc">{{ doc.description }}</p>
             </div>
-            <button type="button" class="btn-download" disabled title="Bientôt disponible">
+            <a
+              v-if="doc.url"
+              :href="doc.url"
+              target="_blank"
+              rel="noopener"
+              class="btn-download"
+            >
+              Lire
+            </a>
+            <button v-else type="button" class="btn-download" disabled title="Bientôt disponible">
               Télécharger
             </button>
           </div>
