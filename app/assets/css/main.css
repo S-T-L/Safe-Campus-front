@@ -541,7 +541,7 @@ button {
   display: flex;
   gap: 16px;
   overflow-x: auto;
-  padding: 60px 0 8px;
+  padding: 72px 0 8px;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
@@ -595,7 +595,7 @@ button {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     overflow-x: visible;
-    padding: 72px 48px 8px;
+    padding: 88px 48px 8px;
     scroll-snap-type: none;
     cursor: default;
     gap: 24px;
@@ -645,6 +645,27 @@ button {
   display: flex;
   align-items: flex-end;
   justify-content: center;
+}
+
+/* anxiete/depression : le ninja partage le cadre avec un adversaire (scene de
+   combat), il occupe donc une part plus petite du visuel a taille de boite egale.
+   burn_out reutilise ninja_cigarette.png (identique a tabac) et reste donc a la
+   taille par defaut. */
+.card-ninja--anxiete,
+.card-ninja--depression {
+  width: 165px;
+  height: 165px;
+  top: -62px;
+}
+
+/* espace supplementaire sous la boite agrandie ci-dessus, pour que le ninja
+   ne chevauche pas le titre de la carte. burn_out garde son visuel a taille
+   par defaut mais recoit le meme padding pour que son titre reste aligne
+   avec celui des 2 autres cartes de la rangee. */
+.card-item--anxiete,
+.card-item--depression,
+.card-item--burn_out {
+  padding-top: 103px;
 }
 
 .ninja-img {
@@ -719,6 +740,19 @@ button {
     width: 150px;
     height: 150px;
     top: -58px;
+  }
+
+  .card-ninja--anxiete,
+  .card-ninja--depression {
+    width: 178px;
+    height: 178px;
+    top: -69px;
+  }
+
+  .card-item--anxiete,
+  .card-item--depression,
+  .card-item--burn_out {
+    padding-top: 113px;
   }
 
   .card-title {

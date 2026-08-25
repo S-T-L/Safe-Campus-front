@@ -7,8 +7,8 @@ defineProps({
 </script>
 
 <template>
-  <div class="card-item" :style="{ '--theme-color': color }">
-    <div class="card-ninja">
+  <div class="card-item" :class="`card-item--${item.slug}`" :style="{ '--theme-color': color }">
+    <div class="card-ninja" :class="`card-ninja--${item.slug}`">
       <img :src="item.ninja" :alt="item.title" class="ninja-img" >
     </div>
     <h3 class="card-title">{{ item.title }}</h3>
