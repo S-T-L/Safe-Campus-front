@@ -756,12 +756,17 @@ button {
   }
 
   .card-title {
-    font-size: 1.25rem;
+    font-size: 1.4rem;
+    margin-bottom: 16px;
   }
 
   .card-desc {
-    font-size: 0.8rem;
-    min-height: 4.96rem;
+    font-size: 0.9rem;
+    min-height: 5.58rem;
+  }
+
+  .card-actions {
+    margin-top: 14px;
   }
 }
 
