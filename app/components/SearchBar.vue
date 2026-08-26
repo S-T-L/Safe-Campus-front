@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue'
+import IconMagnifyingGlass from '~/assets/icon/magnifying-glass.svg'
 
 const props = defineProps({
   themes: { type: Array, default: () => [] },
@@ -85,10 +86,7 @@ function handleBlur() {
 <template>
   <div class="search-bar">
     <div class="search-bar__field">
-      <svg class="search-bar__icon" width="18" height="18" viewBox="0 0 18 18" fill="none">
-        <circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.6" />
-        <path d="M16 16l-4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
-      </svg>
+      <IconMagnifyingGlass class="search-bar__icon" width="18" height="18" />
       <input
         v-model="query"
         type="text"

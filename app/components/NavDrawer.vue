@@ -1,5 +1,9 @@
 <script setup>
 import { ref } from 'vue'
+import IconArrowLeft from '~/assets/icon/arrow-left.svg'
+import IconXMark from '~/assets/icon/x-mark.svg'
+import IconChevronRight from '~/assets/icon/chevron-right.svg'
+import IconArrowRight from '~/assets/icon/arrow-right.svg'
 
 defineProps({
   themes: { type: Array, default: () => [] },
@@ -61,18 +65,14 @@ function scrollToIntro() {
         <div class="drawer-head">
           <Transition name="head-swap" mode="out-in">
             <button v-if="activeTheme" key="back" class="drawer-back" @click="goBack">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
+              <IconArrowLeft width="16" height="16" />
               Retour
             </button>
             <span v-else key="title" class="drawer-title">MENU</span>
           </Transition>
 
           <button class="drawer-close" aria-label="Fermer le menu" @click="close">
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-              <path d="M2 2l14 14M16 2L2 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            </svg>
+            <IconXMark width="18" height="18" />
           </button>
         </div>
 
@@ -93,9 +93,7 @@ function scrollToIntro() {
                   <span class="item-dot" :style="{ background: theme.color }" />
                   <span class="item-label">{{ theme.label }}</span>
                   <span class="item-count">{{ theme.items.length }}</span>
-                  <svg class="item-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                    <path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
+                  <IconChevronRight class="item-chevron" width="16" height="16" />
                 </li>
               </ul>
 
@@ -105,9 +103,7 @@ function scrollToIntro() {
               <ul class="drawer-list">
                 <li class="drawer-item drawer-item--secondary" @click="scrollToIntro">
                   <span class="item-label">À propos de Safe Campus</span>
-                  <svg class="item-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                    <path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
+                  <IconChevronRight class="item-chevron" width="16" height="16" />
                 </li>
               </ul>
             </nav>
@@ -129,17 +125,13 @@ function scrollToIntro() {
                     <span class="item-label">{{ item.title }}</span>
                     <span class="item-subtitle">{{ item.subtitle }}</span>
                   </div>
-                  <svg class="item-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                    <path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
+                  <IconChevronRight class="item-chevron" width="16" height="16" />
                 </li>
               </ul>
 
               <button class="sublevel-all-btn" @click="scrollToTheme(activeTheme.id)">
                 Voir toute la section
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                  <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
+                <IconArrowRight width="14" height="14" />
               </button>
             </nav>
 
@@ -152,15 +144,11 @@ function scrollToIntro() {
               <ul class="drawer-list">
                 <li class="drawer-item drawer-item--sub" @click="openPage('contact')">
                   <span class="item-label">Contact</span>
-                  <svg class="item-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                    <path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
+                  <IconChevronRight class="item-chevron" width="16" height="16" />
                 </li>
                 <li class="drawer-item drawer-item--sub" @click="openPage('ressources')">
                   <span class="item-label">Ressources</span>
-                  <svg class="item-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                    <path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
+                  <IconChevronRight class="item-chevron" width="16" height="16" />
                 </li>
               </ul>
             </nav>

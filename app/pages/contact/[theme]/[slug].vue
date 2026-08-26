@@ -4,6 +4,8 @@ import type * as Leaflet from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { sousThemeNinjas, themePresentation } from '~/data/presentation'
 import type { ContactApi, SousThemeDetailApi } from '~/types/annuaire'
+import IconViewfinderCircle from '~/assets/icon/viewfinder-circle.svg'
+import IconArrowPath from '~/assets/icon/arrow-path.svg'
 
 interface DisplayContact {
   ref: string
@@ -11,9 +13,23 @@ interface DisplayContact {
   role: string | null
   email: string | null
   hours: string | null
+  address: string | null
+  website: string | null
   telephones: ContactApi['telephones']
   lat: number | null
   lng: number | null
+}
+
+function isWebsiteOnly(contact: ContactApi) {
+  const hasOtherInfo = contact.telephones.length > 0
+    || !!contact.mail?.trim()
+    || !!contact.horaires?.trim()
+    || !!contact.localisation?.trim()
+  return !!contact.site_web?.trim() && !hasOtherInfo
+}
+
+function isTerritoryWide(contact: { address: string | null }) {
+  return !!contact.address?.toLowerCase().includes('tout le territoire')
 }
 
 interface LocatedContact extends Omit<DisplayContact, 'lat' | 'lng'> {
@@ -50,16 +66,18 @@ const item = {
   title: sousTheme.libelle,
   description: sousTheme.article,
   ninja: sousThemeNinjas[sousTheme.ref],
-  contacts: sousTheme.contacts.map(contact => ({
+  contacts: sousTheme.contacts.filter(contact => !isWebsiteOnly(contact)).map(contact => ({
     ref: contact.ref,
     name: contact.prenom ? `${contact.prenom} ${contact.nom}` : contact.nom,
     role: contact.remarques,
     email: contact.mail,
     hours: contact.horaires,
+    address: contact.localisation,
+    website: contact.site_web,
     telephones: contact.telephones,
     lat: contact.latitude,
     lng: contact.longitude,
-  })),
+  })).sort((a, b) => Number(isTerritoryWide(a)) - Number(isTerritoryWide(b))),
 }
 
 useHead({ title: item.title })
@@ -79,6 +97,11 @@ const nearestContactRef = ref<string | null>(null)
 const geoError = ref<string | null>(null)
 const geoLoading = ref(false)
 const userLocated = ref(false)
+const expandedContactRef = ref<string | null>(null)
+
+function toggleExpandedContact(ref: string) {
+  expandedContactRef.value = expandedContactRef.value === ref ? null : ref
+}
 
 const sortedContacts = computed(() => {
   if (!nearestContactRef.value) return item.contacts
@@ -262,18 +285,8 @@ onUnmounted(() => {
           <button
 type="button" class="btn-locate" :class="{ 'btn-locate--active': userLocated }" :disabled="geoLoading"
             @click="userLocated ? resetGeoloc() : locateMe()">
-            <svg
-v-if="!userLocated" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-              stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="3" />
-              <path d="M12 2v3M12 19v3M2 12h3M19 12h3" />
-            </svg>
-            <svg
-v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-              stroke-linejoin="round">
-              <path d="M3 12a9 9 0 1 0 3-6.7" />
-              <path d="M3 4v5h5" />
-            </svg>
+            <IconViewfinderCircle v-if="!userLocated" />
+            <IconArrowPath v-else />
             {{ geoLoading ? 'Recherche…' : (userLocated ? 'Réinitialiser' : 'Me géolocaliser') }}
           </button>
         </div>
@@ -287,7 +300,8 @@ v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" st
         <div class="cp-contacts-grid">
           <ContactCard
 v-for="contact in sortedContacts" :key="contact.ref" :contact="contact" :color="theme.color"
-            :is-nearest="contact.ref === nearestContactRef" />
+            :is-nearest="contact.ref === nearestContactRef" :expanded="contact.ref === expandedContactRef"
+            @toggle="toggleExpandedContact" />
         </div>
       </section>
 
