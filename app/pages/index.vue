@@ -3,7 +3,7 @@ import { computed, ref } from 'vue'
 import { sousThemeNinjas, themePresentation } from '../data/presentation'
 import logoSf from '~/assets/images/logoSf.svg?url'
 import universImg from '~/assets/images/univers.png'
-import type { ThemeApi } from '~/types/annuaire'
+import type { ThemeApi, ThemeView } from '~/types/annuaire'
 
 definePageMeta({ layout: 'default' })
 
@@ -12,7 +12,7 @@ const menuOpen = ref(false)
 const apiBase = useApiBase()
 const { data: response } = await useFetch<{ data: ThemeApi[] }>(`${apiBase}/api/themes`)
 
-const themes = computed(() => (response.value?.data ?? []).map(theme => ({
+const themes = computed<ThemeView[]>(() => (response.value?.data ?? []).map(theme => ({
   id: theme.ref,
   label: theme.libelle,
   shortLabel: theme.libelle_court,

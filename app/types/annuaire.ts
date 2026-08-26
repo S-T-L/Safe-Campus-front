@@ -60,3 +60,35 @@ export interface SousThemeDetailApi {
   contacts: ContactApi[]
   documents: MediaApi[]
 }
+
+// Formes d'affichage front, construites a partir des types API ci-dessus.
+
+export interface ThemeItemView {
+  id: number
+  slug: string
+  title: string
+  hook: string | null
+  ninja: string | undefined
+  subtitle: string
+}
+
+export interface ThemeView {
+  id: string
+  label: string
+  shortLabel: string | null
+  color: string
+  items: ThemeItemView[]
+}
+
+export interface DisplayContact {
+  ref: string
+  name: string
+  role: string | null
+  email: string | null
+  hours: string | null
+  address: string | null
+  website: string | null
+  telephones: ContactApi['telephones']
+  lat: number | null
+  lng: number | null
+}

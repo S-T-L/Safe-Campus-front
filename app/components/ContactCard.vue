@@ -1,5 +1,6 @@
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
+import type { DisplayContact, TelephoneApi } from '~/types/annuaire'
 import IconPhone from '~/assets/icon/phone.svg'
 import IconDevicePhoneMobile from '~/assets/icon/device-phone-mobile.svg'
 import IconChatBubbleOvalLeftEllipsis from '~/assets/icon/chat-bubble-oval-left-ellipsis.svg'
@@ -9,50 +10,53 @@ import IconClock from '~/assets/icon/clock.svg'
 import IconMapPin from '~/assets/icon/map-pin.svg'
 import IconGlobeAlt from '~/assets/icon/globe-alt.svg'
 
-const props = defineProps({
-  contact: { type: Object, required: true },
-  color: { type: String, required: true },
-  isNearest: { type: Boolean, default: false },
-  expanded: { type: Boolean, default: false },
+const props = withDefaults(defineProps<{
+  contact: DisplayContact
+  color: string
+  isNearest?: boolean
+  expanded?: boolean
+}>(), {
+  isNearest: false,
+  expanded: false,
 })
 
-const emit = defineEmits(['toggle'])
+const emit = defineEmits<{ toggle: [ref: string] }>()
 
-const copiedField = ref(null)
+const copiedField = ref<string | null>(null)
 
-const telephoneIcons = {
+const telephoneIcons: Record<string, typeof IconPhone> = {
   mobile: IconDevicePhoneMobile,
   sms: IconChatBubbleOvalLeftEllipsis,
 }
 
-function telephoneIcon(type) {
+function telephoneIcon(type: TelephoneApi['type']) {
   return telephoneIcons[type] ?? IconPhone
 }
 
-function initials(name) {
+function initials(name: string) {
   const words = name.split(/[\s—-]+/).filter(w => /^[A-Za-zÀ-ÿ]/.test(w))
-  return words.slice(0, 2).map(w => w[0].toUpperCase()).join('')
+  return words.slice(0, 2).map(w => w[0]?.toUpperCase() ?? '').join('')
 }
 
 function toggleExpanded() {
   emit('toggle', props.contact.ref)
 }
 
-function telephoneHref(telephone) {
+function telephoneHref(telephone: TelephoneApi) {
   const numero = telephone.numero.replace(/\s/g, '')
   return telephone.type === 'sms' ? `sms:${numero}` : `tel:${numero}`
 }
 
-function websiteHref(url) {
+function websiteHref(url: string) {
   const trimmed = url.trim()
   return /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`
 }
 
-function websiteLabel(url) {
+function websiteLabel(url: string) {
   return websiteHref(url).replace(/^https?:\/\//i, '').replace(/\/$/, '')
 }
 
-async function copy(text, field) {
+async function copy(text: string, field: string) {
   await navigator.clipboard.writeText(text)
   copiedField.value = field
   setTimeout(() => {

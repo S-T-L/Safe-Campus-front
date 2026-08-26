@@ -1,16 +1,28 @@
-<script setup>
+<script setup lang="ts">
 import { ref, computed } from 'vue'
+import type { ThemeView } from '~/types/annuaire'
 import IconMagnifyingGlass from '~/assets/icon/magnifying-glass.svg'
 
-const props = defineProps({
-  themes: { type: Array, default: () => [] },
+interface SearchEntry {
+  type: 'theme' | 'ressource' | 'contact'
+  key: string
+  label: string
+  href: string
+  subtitle?: string | null
+  searchText?: string
+}
+
+const props = withDefaults(defineProps<{
+  themes?: ThemeView[]
+}>(), {
+  themes: () => [],
 })
 
 const query = ref('')
 const isFocused = ref(false)
 
-const searchIndex = computed(() => {
-  const entries = []
+const searchIndex = computed<SearchEntry[]>(() => {
+  const entries: SearchEntry[] = []
 
   for (const theme of props.themes) {
     entries.push({
@@ -29,17 +41,6 @@ const searchIndex = computed(() => {
         searchText: `${item.title} ${item.hook} ${item.subtitle}`,
         href: `/contact/${theme.id}/${item.slug}`,
       })
-
-      for (const contact of item.contacts ?? []) {
-        entries.push({
-          type: 'contact',
-          key: `contact-${item.id}-${contact.name}`,
-          label: contact.name,
-          subtitle: contact.role,
-          searchText: `${contact.name} ${contact.role}`,
-          href: `/contact/${theme.id}/${item.slug}`,
-        })
-      }
     }
   }
 
@@ -67,7 +68,7 @@ const hasResults = computed(() =>
 
 const showPanel = computed(() => isFocused.value && query.value.trim().length > 0)
 
-function selectResult(entry) {
+function selectResult(entry: SearchEntry) {
   if (entry.type === 'theme') {
     document.getElementById(entry.href.slice(1))?.scrollIntoView({ behavior: 'smooth' })
   }

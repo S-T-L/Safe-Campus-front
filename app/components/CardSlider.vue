@@ -1,30 +1,35 @@
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted, nextTick } from 'vue'
+import type { ThemeItemView } from '~/types/annuaire'
 
-const props = defineProps({
-  items: { type: Array, required: true },
-  color: { type: String, required: true },
-  themeId: { type: String, required: true },
-})
+const props = defineProps<{
+  items: ThemeItemView[]
+  color: string
+  themeId: string
+}>()
 
 const currentIndex = ref(0)
-const sliderEl = ref(null)
+const sliderEl = ref<HTMLElement | null>(null)
 
 const touchStartX = ref(0)
 const touchStartY = ref(0)
 const isDragging = ref(false)
 
-function onTouchStart(e) {
-  touchStartX.value = e.touches[0].clientX
-  touchStartY.value = e.touches[0].clientY
+function onTouchStart(e: TouchEvent) {
+  const touch = e.touches[0]
+  if (!touch) return
+  touchStartX.value = touch.clientX
+  touchStartY.value = touch.clientY
   isDragging.value = true
 }
 
-function onTouchEnd(e) {
+function onTouchEnd(e: TouchEvent) {
   if (!isDragging.value) return
   isDragging.value = false
-  const dx = e.changedTouches[0].clientX - touchStartX.value
-  const dy = e.changedTouches[0].clientY - touchStartY.value
+  const touch = e.changedTouches[0]
+  if (!touch) return
+  const dx = touch.clientX - touchStartX.value
+  const dy = touch.clientY - touchStartY.value
   if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 40) {
     if (dx < 0) goNext()
     else goPrev()
@@ -34,7 +39,7 @@ function onTouchEnd(e) {
 function onScroll() {
   if (!sliderEl.value) return
   const containerCenter = sliderEl.value.scrollLeft + sliderEl.value.offsetWidth / 2
-  const cards = sliderEl.value.querySelectorAll('.card-item')
+  const cards = sliderEl.value.querySelectorAll<HTMLElement>('.card-item')
   let closest = 0
   let minDist = Infinity
   cards.forEach((card, i) => {
@@ -45,10 +50,10 @@ function onScroll() {
   currentIndex.value = closest
 }
 
-function goTo(index, behavior = 'smooth') {
+function goTo(index: number, behavior: ScrollBehavior = 'smooth') {
   currentIndex.value = index
   if (!sliderEl.value) return
-  const cards = sliderEl.value.querySelectorAll('.card-item')
+  const cards = sliderEl.value.querySelectorAll<HTMLElement>('.card-item')
   const card = cards[index]
   if (!card) return
   const cardCenter = card.offsetLeft + card.offsetWidth / 2

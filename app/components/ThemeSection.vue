@@ -1,7 +1,9 @@
-<script setup>
-defineProps({
-  theme: { type: Object, required: true },
-})
+<script setup lang="ts">
+import type { ThemeView } from '~/types/annuaire'
+
+defineProps<{
+  theme: ThemeView
+}>()
 </script>
 
 <template>
