@@ -1,14 +1,15 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import type { Component } from 'vue'
 import type { DisplayContact, TelephoneApi } from '~/types/annuaire'
-import IconPhone from '~/assets/icon/phone.svg'
-import IconDevicePhoneMobile from '~/assets/icon/device-phone-mobile.svg'
-import IconChatBubbleOvalLeftEllipsis from '~/assets/icon/chat-bubble-oval-left-ellipsis.svg'
-import IconEnvelope from '~/assets/icon/envelope.svg'
-import IconChevronDown from '~/assets/icon/chevron-down.svg'
-import IconClock from '~/assets/icon/clock.svg'
-import IconMapPin from '~/assets/icon/map-pin.svg'
-import IconGlobeAlt from '~/assets/icon/globe-alt.svg'
+import IconPhone from '~/assets/icon/phone.svg?component'
+import IconDevicePhoneMobile from '~/assets/icon/device-phone-mobile.svg?component'
+import IconChatBubbleOvalLeftEllipsis from '~/assets/icon/chat-bubble-oval-left-ellipsis.svg?component'
+import IconEnvelope from '~/assets/icon/envelope.svg?component'
+import IconChevronDown from '~/assets/icon/chevron-down.svg?component'
+import IconClock from '~/assets/icon/clock.svg?component'
+import IconMapPin from '~/assets/icon/map-pin.svg?component'
+import IconGlobeAlt from '~/assets/icon/globe-alt.svg?component'
 
 const props = withDefaults(defineProps<{
   contact: DisplayContact
@@ -24,7 +25,7 @@ const emit = defineEmits<{ toggle: [ref: string] }>()
 
 const copiedField = ref<string | null>(null)
 
-const telephoneIcons: Record<string, typeof IconPhone> = {
+const telephoneIcons: Record<string, Component> = {
   mobile: IconDevicePhoneMobile,
   sms: IconChatBubbleOvalLeftEllipsis,
 }

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import type { ThemeView } from '~/types/annuaire'
-import IconMagnifyingGlass from '~/assets/icon/magnifying-glass.svg'
+import IconMagnifyingGlass from '~/assets/icon/magnifying-glass.svg?component'
 
 interface SearchEntry {
   type: 'theme' | 'ressource' | 'contact'

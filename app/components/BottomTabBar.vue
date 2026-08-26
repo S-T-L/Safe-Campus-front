@@ -1,14 +1,15 @@
 <script setup lang="ts">
+import type { Component } from 'vue'
 import type { ThemeView } from '~/types/annuaire'
-import IconLinkSlash from '~/assets/icon/link-slash.svg'
-import IconHeart from '~/assets/icon/heart.svg'
-import IconShieldCheck from '~/assets/icon/shield-check.svg'
+import IconLinkSlash from '~/assets/icon/link-slash.svg?component'
+import IconHeart from '~/assets/icon/heart.svg?component'
+import IconShieldCheck from '~/assets/icon/shield-check.svg?component'
 
 defineProps<{
   themes: ThemeView[]
 }>()
 
-const icons: Record<string, typeof IconLinkSlash> = {
+const icons: Record<string, Component> = {
   addiction: IconLinkSlash,
   mental: IconHeart,
   violence: IconShieldCheck,

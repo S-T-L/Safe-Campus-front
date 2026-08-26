@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { sousThemeNinjas, themePresentation } from '~/data/presentation'
 import type { SousThemeDetailApi } from '~/types/annuaire'
-import IconDocumentText from '~/assets/icon/document-text.svg'
+import IconDocumentText from '~/assets/icon/document-text.svg?component'
 
 definePageMeta({ layout: 'default' })
 

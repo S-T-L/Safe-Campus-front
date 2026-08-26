@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import type { ThemeItemView, ThemeView } from '~/types/annuaire'
-import IconArrowLeft from '~/assets/icon/arrow-left.svg'
-import IconXMark from '~/assets/icon/x-mark.svg'
-import IconChevronRight from '~/assets/icon/chevron-right.svg'
-import IconArrowRight from '~/assets/icon/arrow-right.svg'
+import IconArrowLeft from '~/assets/icon/arrow-left.svg?component'
+import IconXMark from '~/assets/icon/x-mark.svg?component'
+import IconChevronRight from '~/assets/icon/chevron-right.svg?component'
+import IconArrowRight from '~/assets/icon/arrow-right.svg?component'
 
 withDefaults(defineProps<{
   themes?: ThemeView[]

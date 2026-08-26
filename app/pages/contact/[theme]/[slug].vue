@@ -4,8 +4,8 @@ import type * as Leaflet from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { sousThemeNinjas, themePresentation } from '~/data/presentation'
 import type { ContactApi, DisplayContact, SousThemeDetailApi } from '~/types/annuaire'
-import IconViewfinderCircle from '~/assets/icon/viewfinder-circle.svg'
-import IconArrowPath from '~/assets/icon/arrow-path.svg'
+import IconViewfinderCircle from '~/assets/icon/viewfinder-circle.svg?component'
+import IconArrowPath from '~/assets/icon/arrow-path.svg?component'
 
 function isWebsiteOnly(contact: ContactApi) {
   const hasOtherInfo = contact.telephones.length > 0
