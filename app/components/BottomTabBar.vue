@@ -1,19 +1,21 @@
-<script setup>
-import IconLinkSlash from '~/assets/icon/link-slash.svg'
-import IconHeart from '~/assets/icon/heart.svg'
-import IconShieldCheck from '~/assets/icon/shield-check.svg'
+<script setup lang="ts">
+import type { Component } from 'vue'
+import type { ThemeView } from '~/types/annuaire'
+import IconLinkSlash from '~/assets/icon/link-slash.svg?component'
+import IconHeart from '~/assets/icon/heart.svg?component'
+import IconShieldCheck from '~/assets/icon/shield-check.svg?component'
 
-defineProps({
-  themes: { type: Array, required: true },
-})
+defineProps<{
+  themes: ThemeView[]
+}>()
 
-const icons = {
+const icons: Record<string, Component> = {
   addiction: IconLinkSlash,
   mental: IconHeart,
   violence: IconShieldCheck,
 }
 
-function navigate(themeId) {
+function navigate(themeId: string) {
   document.getElementById(`theme-${themeId}`)?.scrollIntoView({ behavior: 'smooth' })
 }
 </script>

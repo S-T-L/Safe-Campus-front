@@ -1,30 +1,33 @@
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
-import IconArrowLeft from '~/assets/icon/arrow-left.svg'
-import IconXMark from '~/assets/icon/x-mark.svg'
-import IconChevronRight from '~/assets/icon/chevron-right.svg'
-import IconArrowRight from '~/assets/icon/arrow-right.svg'
+import type { ThemeItemView, ThemeView } from '~/types/annuaire'
+import IconArrowLeft from '~/assets/icon/arrow-left.svg?component'
+import IconXMark from '~/assets/icon/x-mark.svg?component'
+import IconChevronRight from '~/assets/icon/chevron-right.svg?component'
+import IconArrowRight from '~/assets/icon/arrow-right.svg?component'
 
-defineProps({
-  themes: { type: Array, default: () => [] },
-  modelValue: Boolean,
+withDefaults(defineProps<{
+  themes?: ThemeView[]
+  modelValue: boolean
+}>(), {
+  themes: () => [],
 })
 
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits<{ 'update:modelValue': [value: boolean] }>()
 
-const activeTheme = ref(null)
-const activeItem = ref(null)
+const activeTheme = ref<ThemeView | null>(null)
+const activeItem = ref<ThemeItemView | null>(null)
 
 function close() {
   emit('update:modelValue', false)
   setTimeout(() => { activeTheme.value = null; activeItem.value = null }, 320)
 }
 
-function goToTheme(theme) {
+function goToTheme(theme: ThemeView) {
   activeTheme.value = theme
 }
 
-function goToItem(item) {
+function goToItem(item: ThemeItemView) {
   activeItem.value = item
 }
 
@@ -36,12 +39,13 @@ function goBack() {
   }
 }
 
-function scrollToTheme(themeId) {
+function scrollToTheme(themeId: string) {
   document.getElementById(`theme-${themeId}`)?.scrollIntoView({ behavior: 'smooth' })
   close()
 }
 
-function openPage(path) {
+function openPage(path: string) {
+  if (!activeTheme.value || !activeItem.value) return
   navigateTo(`/${path}/${activeTheme.value.id}/${activeItem.value.slug}`)
   close()
 }

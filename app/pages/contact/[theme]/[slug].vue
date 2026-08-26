@@ -3,22 +3,9 @@ import { computed, onMounted, onUnmounted, ref, nextTick } from 'vue'
 import type * as Leaflet from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { sousThemeNinjas, themePresentation } from '~/data/presentation'
-import type { ContactApi, SousThemeDetailApi } from '~/types/annuaire'
-import IconViewfinderCircle from '~/assets/icon/viewfinder-circle.svg'
-import IconArrowPath from '~/assets/icon/arrow-path.svg'
-
-interface DisplayContact {
-  ref: string
-  name: string
-  role: string | null
-  email: string | null
-  hours: string | null
-  address: string | null
-  website: string | null
-  telephones: ContactApi['telephones']
-  lat: number | null
-  lng: number | null
-}
+import type { ContactApi, DisplayContact, SousThemeDetailApi } from '~/types/annuaire'
+import IconViewfinderCircle from '~/assets/icon/viewfinder-circle.svg?component'
+import IconArrowPath from '~/assets/icon/arrow-path.svg?component'
 
 function isWebsiteOnly(contact: ContactApi) {
   const hasOtherInfo = contact.telephones.length > 0
