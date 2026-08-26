@@ -4,3 +4,8 @@ declare module '*.svg' {
   const component: DefineComponent<Record<string, never>>
   export default component
 }
+
+declare module '*.svg?url' {
+  const url: string
+  export default url
+}
