@@ -4,6 +4,8 @@ import type * as Leaflet from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { sousThemeNinjas, themePresentation } from '~/data/presentation'
 import type { ContactApi, SousThemeDetailApi } from '~/types/annuaire'
+import IconViewfinderCircle from '~/assets/icon/viewfinder-circle.svg'
+import IconArrowPath from '~/assets/icon/arrow-path.svg'
 
 interface DisplayContact {
   ref: string
@@ -283,16 +285,8 @@ onUnmounted(() => {
           <button
 type="button" class="btn-locate" :class="{ 'btn-locate--active': userLocated }" :disabled="geoLoading"
             @click="userLocated ? resetGeoloc() : locateMe()">
-            <svg v-if="!userLocated" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              <path
-                stroke-linecap="round" stroke-linejoin="round"
-                d="M7.5 3.75H6A2.25 2.25 0 0 0 3.75 6v1.5M16.5 3.75H18A2.25 2.25 0 0 1 20.25 6v1.5m0 9V18A2.25 2.25 0 0 1 18 20.25h-1.5m-9 0H6A2.25 2.25 0 0 1 3.75 18v-1.5M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-            </svg>
-            <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              <path
-                stroke-linecap="round" stroke-linejoin="round"
-                d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
-            </svg>
+            <IconViewfinderCircle v-if="!userLocated" />
+            <IconArrowPath v-else />
             {{ geoLoading ? 'Recherche…' : (userLocated ? 'Réinitialiser' : 'Me géolocaliser') }}
           </button>
         </div>

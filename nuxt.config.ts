@@ -1,3 +1,5 @@
+import svgLoader from 'vite-svg-loader'
+
 export default defineNuxtConfig({
   compatibilityDate: '2026-07-31',
 
@@ -34,6 +36,7 @@ export default defineNuxtConfig({
   },
 
   vite: {
+    plugins: [svgLoader()],
     server: {
       ws: {
         port: 3000,
