@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { sousThemeNinjas, themePresentation } from '../data/presentation'
-import logoSf from '~/assets/images/logoSf.svg'
+import logoSf from '~/assets/images/logoSf.svg?url'
 import universImg from '~/assets/images/univers.png'
 import type { ThemeApi } from '~/types/annuaire'
 
