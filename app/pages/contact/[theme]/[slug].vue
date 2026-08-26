@@ -150,9 +150,14 @@ async function initMap() {
       iconSize: [16, 16],
       iconAnchor: [8, 8],
     })
+    const popupContent = document.createElement('div')
+    const popupName = document.createElement('strong')
+    popupName.textContent = contact.name
+    popupContent.append(popupName, document.createElement('br'), contact.telephones[0]?.numero ?? contact.email ?? '')
+
     leaflet.marker([contact.lat, contact.lng], { icon })
       .addTo(currentMap)
-      .bindPopup(`<strong>${contact.name}</strong><br>${contact.telephones[0]?.numero ?? contact.email ?? ''}`)
+      .bindPopup(popupContent)
   })
 
   fitToContacts()
