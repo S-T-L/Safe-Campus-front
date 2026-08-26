@@ -61,8 +61,8 @@ function scrollToIntro() {
         <div class="drawer-head">
           <Transition name="head-swap" mode="out-in">
             <button v-if="activeTheme" key="back" class="drawer-back" @click="goBack">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <path d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
               Retour
             </button>
@@ -70,8 +70,8 @@ function scrollToIntro() {
           </Transition>
 
           <button class="drawer-close" aria-label="Fermer le menu" @click="close">
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-              <path d="M2 2l14 14M16 2L2 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <path d="M6 18 18 6M6 6l12 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </button>
         </div>
@@ -93,8 +93,8 @@ function scrollToIntro() {
                   <span class="item-dot" :style="{ background: theme.color }" />
                   <span class="item-label">{{ theme.label }}</span>
                   <span class="item-count">{{ theme.items.length }}</span>
-                  <svg class="item-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                    <path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                  <svg class="item-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                    <path d="m8.25 4.5 7.5 7.5-7.5 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                   </svg>
                 </li>
               </ul>
@@ -105,8 +105,8 @@ function scrollToIntro() {
               <ul class="drawer-list">
                 <li class="drawer-item drawer-item--secondary" @click="scrollToIntro">
                   <span class="item-label">À propos de Safe Campus</span>
-                  <svg class="item-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                    <path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                  <svg class="item-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                    <path d="m8.25 4.5 7.5 7.5-7.5 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                   </svg>
                 </li>
               </ul>
@@ -129,16 +129,16 @@ function scrollToIntro() {
                     <span class="item-label">{{ item.title }}</span>
                     <span class="item-subtitle">{{ item.subtitle }}</span>
                   </div>
-                  <svg class="item-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                    <path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                  <svg class="item-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                    <path d="m8.25 4.5 7.5 7.5-7.5 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                   </svg>
                 </li>
               </ul>
 
               <button class="sublevel-all-btn" @click="scrollToTheme(activeTheme.id)">
                 Voir toute la section
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                  <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                  <path d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
               </button>
             </nav>
@@ -152,14 +152,14 @@ function scrollToIntro() {
               <ul class="drawer-list">
                 <li class="drawer-item drawer-item--sub" @click="openPage('contact')">
                   <span class="item-label">Contact</span>
-                  <svg class="item-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                    <path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                  <svg class="item-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                    <path d="m8.25 4.5 7.5 7.5-7.5 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                   </svg>
                 </li>
                 <li class="drawer-item drawer-item--sub" @click="openPage('ressources')">
                   <span class="item-label">Ressources</span>
-                  <svg class="item-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                    <path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                  <svg class="item-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                    <path d="m8.25 4.5 7.5 7.5-7.5 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                   </svg>
                 </li>
               </ul>

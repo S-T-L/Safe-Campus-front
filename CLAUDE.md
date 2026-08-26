@@ -27,6 +27,8 @@ import { Link, router } from '@inertiajs/vue3'
 router.visit('/histoires')  <!-- programmatic -->
 ```
 
+**Icônes :** [Heroicons](https://heroicons.com/) (style *outline*, 24×24, `stroke-width="1.5"`). SVG inline dans le template (pas de composant/librairie d'icônes), `fill="none" stroke="currentColor"` pour hériter la couleur du parent. Récupérées via le CDN jsDelivr (`https://cdn.jsdelivr.net/npm/heroicons@<version>/24/outline/<nom>.svg`, paquet npm `heroicons`) plutôt que copiées à la main. Sources brutes conservées dans `app/assets/icon/<nom>.svg` (nom = slug Heroicons) pour référence.
+
 ## Git
 
 - Workflow git flow : `feature/*` pour le dev, merge sur `dev` en `--no-ff`. `hotfix/*` créé depuis `main`.

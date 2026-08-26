@@ -11,9 +11,23 @@ interface DisplayContact {
   role: string | null
   email: string | null
   hours: string | null
+  address: string | null
+  website: string | null
   telephones: ContactApi['telephones']
   lat: number | null
   lng: number | null
+}
+
+function isWebsiteOnly(contact: ContactApi) {
+  const hasOtherInfo = contact.telephones.length > 0
+    || !!contact.mail?.trim()
+    || !!contact.horaires?.trim()
+    || !!contact.localisation?.trim()
+  return !!contact.site_web?.trim() && !hasOtherInfo
+}
+
+function isTerritoryWide(contact: { address: string | null }) {
+  return !!contact.address?.toLowerCase().includes('tout le territoire')
 }
 
 interface LocatedContact extends Omit<DisplayContact, 'lat' | 'lng'> {
@@ -50,16 +64,18 @@ const item = {
   title: sousTheme.libelle,
   description: sousTheme.article,
   ninja: sousThemeNinjas[sousTheme.ref],
-  contacts: sousTheme.contacts.map(contact => ({
+  contacts: sousTheme.contacts.filter(contact => !isWebsiteOnly(contact)).map(contact => ({
     ref: contact.ref,
     name: contact.prenom ? `${contact.prenom} ${contact.nom}` : contact.nom,
     role: contact.remarques,
     email: contact.mail,
     hours: contact.horaires,
+    address: contact.localisation,
+    website: contact.site_web,
     telephones: contact.telephones,
     lat: contact.latitude,
     lng: contact.longitude,
-  })),
+  })).sort((a, b) => Number(isTerritoryWide(a)) - Number(isTerritoryWide(b))),
 }
 
 useHead({ title: item.title })
@@ -79,6 +95,11 @@ const nearestContactRef = ref<string | null>(null)
 const geoError = ref<string | null>(null)
 const geoLoading = ref(false)
 const userLocated = ref(false)
+const expandedContactRef = ref<string | null>(null)
+
+function toggleExpandedContact(ref: string) {
+  expandedContactRef.value = expandedContactRef.value === ref ? null : ref
+}
 
 const sortedContacts = computed(() => {
   if (!nearestContactRef.value) return item.contacts
@@ -262,17 +283,15 @@ onUnmounted(() => {
           <button
 type="button" class="btn-locate" :class="{ 'btn-locate--active': userLocated }" :disabled="geoLoading"
             @click="userLocated ? resetGeoloc() : locateMe()">
-            <svg
-v-if="!userLocated" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-              stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="3" />
-              <path d="M12 2v3M12 19v3M2 12h3M19 12h3" />
+            <svg v-if="!userLocated" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path
+                stroke-linecap="round" stroke-linejoin="round"
+                d="M7.5 3.75H6A2.25 2.25 0 0 0 3.75 6v1.5M16.5 3.75H18A2.25 2.25 0 0 1 20.25 6v1.5m0 9V18A2.25 2.25 0 0 1 18 20.25h-1.5m-9 0H6A2.25 2.25 0 0 1 3.75 18v-1.5M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
             </svg>
-            <svg
-v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-              stroke-linejoin="round">
-              <path d="M3 12a9 9 0 1 0 3-6.7" />
-              <path d="M3 4v5h5" />
+            <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path
+                stroke-linecap="round" stroke-linejoin="round"
+                d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
             </svg>
             {{ geoLoading ? 'Recherche…' : (userLocated ? 'Réinitialiser' : 'Me géolocaliser') }}
           </button>
@@ -287,7 +306,8 @@ v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" st
         <div class="cp-contacts-grid">
           <ContactCard
 v-for="contact in sortedContacts" :key="contact.ref" :contact="contact" :color="theme.color"
-            :is-nearest="contact.ref === nearestContactRef" />
+            :is-nearest="contact.ref === nearestContactRef" :expanded="contact.ref === expandedContactRef"
+            @toggle="toggleExpandedContact" />
         </div>
       </section>
 
