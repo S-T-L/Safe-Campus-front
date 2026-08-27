@@ -82,9 +82,7 @@ const themes = computed<ThemeView[]>(() => (response.value?.data ?? []).map(them
     </main>
 
     <!-- Footer -->
-    <footer class="home-footer">
-      <p>© 2025 Université de Nouvelle-Calédonie</p>
-    </footer>
+    <SiteFooter />
 
     <!-- Menu drawer -->
     <NavDrawer v-model="menuOpen" :themes="themes" />

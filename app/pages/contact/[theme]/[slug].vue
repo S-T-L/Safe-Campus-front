@@ -298,5 +298,7 @@ v-for="contact in sortedContacts" :key="contact.ref" :contact="contact" :color="
       </section>
 
     </div>
+
+    <SiteFooter />
   </div>
 </template>

@@ -93,5 +93,7 @@ function goBack() {
       </section>
 
     </div>
+
+    <SiteFooter />
   </div>
 </template>
