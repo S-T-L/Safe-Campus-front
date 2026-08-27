@@ -245,30 +245,27 @@ button {
 
 /* ── Footer ── */
 .home-footer {
-  display: flex;
-  flex-direction: column;
-}
-
-.home-footer__bar {
-  height: 3px;
-  background: var(--color-primary-light);
-  flex-shrink: 0;
+  border-top: 1px solid rgba(13, 13, 13, 0.08);
 }
 
 .home-footer__content {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  padding: 22px 20px;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 28px 20px;
 }
 
-.home-footer__row {
+.home-footer__brand {
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 20px;
+}
+
+.home-footer__links {
+  display: flex;
   flex-wrap: wrap;
-  gap: 14px;
+  gap: 14px 18px;
 }
 
 .home-footer__logo {
@@ -421,7 +418,11 @@ button {
   }
 
   .home-footer__content {
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
     padding: 28px 64px;
+    gap: 20px;
   }
 
   .home-footer__sep {

@@ -11,20 +11,21 @@ const themes = computed(() => response.value?.data ?? [])
 
 <template>
   <footer class="home-footer">
-    <div class="home-footer__bar" aria-hidden="true" />
-
     <div class="home-footer__content">
-      <div class="home-footer__row">
+      <div class="home-footer__brand">
         <img :src="logoSf" alt="Safe Campus" class="home-footer__logo" >
-
         <span class="home-footer__sep" aria-hidden="true" />
+      </div>
 
+      <nav class="home-footer__links">
         <a href="/" class="home-footer__link">Accueil</a>
         <a v-for="theme in themes" :key="theme.ref" :href="`/#theme-${theme.ref}`" class="home-footer__link">
           {{ theme.libelle_court }}
         </a>
         <a href="/#about" class="home-footer__link">À propos</a>
-      </div>
+      </nav>
+
+      <span class="home-footer__sep" aria-hidden="true" />
 
       <p class="home-footer__copyright">© 2025 Université de Nouvelle-Calédonie</p>
     </div>
