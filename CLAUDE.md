@@ -4,7 +4,7 @@
 
 👉 See [README](README.md) for setup and commands.
 
-> Le code s'édite sur l'hôte, les commandes s'exécutent dans le container via `docker compose exec sc_front <cmd>` (compose du back).
+> Le code s'édite sur l'hôte, les commandes s'exécutent dans le container via `docker compose exec sc_front <cmd>`.
 
 ---
 

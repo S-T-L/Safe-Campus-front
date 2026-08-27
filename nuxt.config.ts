@@ -9,7 +9,7 @@ export default defineNuxtConfig({
 
   devServer: {
     host: '0.0.0.0',
-    port: 3000,
+    port: Number(process.env.PORT) || 3000,
   },
 
   css: ['~/assets/css/main.css'],
@@ -39,7 +39,7 @@ export default defineNuxtConfig({
     plugins: [svgLoader()],
     server: {
       ws: {
-        port: 3000,
+        port: Number(process.env.PORT) || 3000,
       },
     },
   },
