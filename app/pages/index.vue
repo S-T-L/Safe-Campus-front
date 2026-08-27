@@ -83,7 +83,23 @@ const themes = computed<ThemeView[]>(() => (response.value?.data ?? []).map(them
 
     <!-- Footer -->
     <footer class="home-footer">
-      <p>© 2025 Université de Nouvelle-Calédonie</p>
+      <div class="home-footer__bar" aria-hidden="true" />
+
+      <div class="home-footer__content">
+        <div class="home-footer__row">
+          <img :src="logoSf" alt="Safe Campus" class="home-footer__logo" >
+
+          <span class="home-footer__sep" aria-hidden="true" />
+
+          <a href="/" class="home-footer__link">Accueil</a>
+          <a v-for="theme in themes" :key="theme.id" :href="`#theme-${theme.id}`" class="home-footer__link">
+            {{ theme.shortLabel }}
+          </a>
+          <a href="#about" class="home-footer__link">À propos</a>
+        </div>
+
+        <p class="home-footer__copyright">© 2025 Université de Nouvelle-Calédonie</p>
+      </div>
     </footer>
 
     <!-- Menu drawer -->
