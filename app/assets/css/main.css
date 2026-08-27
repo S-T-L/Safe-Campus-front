@@ -245,7 +245,7 @@ button {
 
 /* ── Footer ── */
 .home-footer {
-  background: var(--color-bg);
+  background: #FFFFFF;
   border-top: 1px solid rgba(13, 13, 13, 0.08);
   flex-shrink: 0;
 }
