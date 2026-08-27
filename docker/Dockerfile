@@ -20,7 +20,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends git bash sudo \
     && mkdir -p /tmp/.X11-unix && chmod 1777 /tmp/.X11-unix \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-COPY start-container /usr/local/bin/start-container
+COPY docker/start-container /usr/local/bin/start-container
 RUN chmod +x /usr/local/bin/start-container
 
 USER nuxt

@@ -2,7 +2,7 @@ services:
     sc_front:
         build:
             context: .
-            dockerfile: Dockerfile
+            dockerfile: docker/Dockerfile
             args:
                 WWWUSER: '${WWWUSER:-1000}'
                 WWWGROUP: '${WWWGROUP:-1000}'
