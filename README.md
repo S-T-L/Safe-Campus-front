@@ -2,33 +2,40 @@
 
 Interface utilisateur du projet SAE501. Construit avec **Nuxt 4** et **Vue 3**.
 
-> Ce repo fonctionne en binôme avec [Safe-Campus-back](../Safe-Campus-back). Les deux doivent être dans le même dossier parent — le `docker-compose.yml` du back référence ce repo via `../Safe-Campus-front`.
+> Ce repo fonctionne en binôme avec [Safe-Campus-back](../Safe-Campus-back), mais possède son propre `docker-compose.yml` — les deux stacks se lancent indépendamment. Elles se partagent le réseau Docker `scback` (nom fixe, voir `docker-compose.yml`) : si les deux tournent, `sc_front` joint `sc_back` par son nom de conteneur ; sinon `sc_front` démarre quand même, seul le SSR côté API est mort.
 
 ---
 
 ## Démarrage
 
-Le stack est orchestré par le `docker-compose.yml` du back. Le code s'édite sur l'hôte, les commandes s'exécutent dans le container.
+Ce repo a son propre `docker-compose.yml`. Le code s'édite sur l'hôte, les commandes s'exécutent dans le container.
+
+```bash
+cp .env.example .env
+sed -i "s/^WWWUSER=.*/WWWUSER=$(id -u)/" .env
+sed -i "s/^WWWGROUP=.*/WWWGROUP=$(id -g)/" .env
+
+docker compose up -d
+```
 
 ### 1. Full stack (avec le back)
 
 ```bash
-cd ../Safe-Campus-back
-docker compose up -d
+cd ../Safe-Campus-back && docker compose up -d
+cd ../Safe-Campus-front && docker compose up -d
 ```
 
-Démarre `SC_Back`, `SC_Front`, `SC_Postgres` et `SC_Adminer`. Voir le [README du back](../Safe-Campus-back/README.md) pour le `.env` requis.
+Démarre `SC_Back`, `SC_Front`, `SC_Postgres` et `SC_Adminer` (deux stacks compose distinctes, réseau partagé). Voir le [README du back](../Safe-Campus-back/README.md) pour son `.env`.
 
 > ⚠️ Aucune route API n'existe encore côté back (`routes/api.php` absent) — pas d'intégration réelle possible pour l'instant, seulement les deux stacks qui tournent en parallèle.
 
 ### 2. Frontend seul (sans le back)
 
 ```bash
-cd ../Safe-Campus-back
-docker compose up -d sc_front
+docker compose up -d
 ```
 
-Démarre uniquement `SC_Front`. Les endpoints API sont morts, mais tu peux bosser sur **UI, CSS, composants** sans dépendances.
+Démarre uniquement `SC_Front`, sans dépendre du repo back. Les endpoints API sont morts, mais tu peux bosser sur **UI, CSS, composants** sans dépendances.
 
 ### Exécuter les commandes dans le container
 
@@ -65,7 +72,7 @@ Copier `.env.example` en `.env` :
 |---|---|---|
 | `NUXT_PUBLIC_API_BASE` | `http://localhost:8000` | URL de l'API Laravel |
 
-> Dans le stack Docker, `NUXT_PUBLIC_API_BASE` est injecté par le `docker-compose.yml` du back.
+> Dans le stack Docker, `NUXT_PUBLIC_API_BASE` est injecté par le `docker-compose.yml` de ce repo (calculé à partir de `APP_PORT`, qui doit correspondre à la valeur du `.env` du back).
 
 ---
 
@@ -81,7 +88,8 @@ Safe-Campus-front/
 │   └── assets/css/     Styles globaux
 ├── public/         Fichiers statiques
 ├── nuxt.config.ts  Configuration Nuxt
-└── Dockerfile      Image Node 22
+├── Dockerfile      Image Node 22
+└── docker-compose.yml  Orchestration : sc_front (+ reseau partage avec le back)
 ```
 
 ---

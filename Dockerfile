@@ -10,6 +10,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 # memes identifiants, les fichiers ecrits dans le bind mount lui appartiennent.
 ARG WWWUSER=1000
 ARG WWWGROUP=1000
+ARG FRONT_PORT=3000
 
 RUN apt-get update && apt-get install -y --no-install-recommends git bash sudo \
     && userdel node 2>/dev/null || true \
@@ -24,6 +25,6 @@ RUN chmod +x /usr/local/bin/start-container
 
 USER nuxt
 
-EXPOSE 3000
+EXPOSE ${FRONT_PORT}
 
 ENTRYPOINT ["start-container"]
