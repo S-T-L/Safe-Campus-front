@@ -88,9 +88,23 @@ Safe-Campus-front/
 │   └── assets/css/     Styles globaux
 ├── public/         Fichiers statiques
 ├── nuxt.config.ts  Configuration Nuxt
-├── Dockerfile      Image Node 22
-└── docker-compose.yml  Orchestration : sc_front (+ reseau partage avec le back)
+├── docker/
+│   ├── Dockerfile       Image Node 22 (dev)
+│   ├── start-container  npm install puis npm run dev (dev)
+│   └── Dockerfile.prod  Image de prod (multi-stage, buildee par Dockploy)
+├── docker-compose.yml       Orchestration dev : sc_front (+ reseau partage avec le back)
+└── docker-compose.prod.yml  Orchestration prod
 ```
+
+---
+
+## Déploiement (prod)
+
+`docker-compose.prod.yml` + `docker/Dockerfile.prod` — buildé par Dockploy, stack séparée du dev (`SC_Front_Prod`, pas de réseau partagé avec le back).
+
+- Build multi-stage : `npm run build` (Nuxt/Nitro, preset `node-server`) puis image runtime `node:22-slim` qui ne contient que `.output/` — pas de `node_modules` ni de code source à l'exécution.
+- Pas de `NUXT_API_BASE_INTERNAL` en prod (pas de réseau Docker partagé entre les deux stacks Dockploy) : le SSR retombe sur `NUXT_PUBLIC_API_BASE`, qui doit donc pointer vers l'URL **publique** du back.
+- Variables à saisir dans Dockploy : voir [.env.production.example](.env.production.example).
 
 ---
 
