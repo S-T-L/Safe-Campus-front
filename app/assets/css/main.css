@@ -740,6 +740,7 @@ button {
   font-weight: 700;
   color: var(--color-text-light);
   line-height: 1;
+  min-height: 2.5rem;
   margin-bottom: 10px;
   letter-spacing: 0;
   text-align: center;
@@ -815,6 +816,7 @@ button {
 
   .card-title {
     font-size: 1.4rem;
+    min-height: 2.8rem;
     margin-bottom: 16px;
   }
 
