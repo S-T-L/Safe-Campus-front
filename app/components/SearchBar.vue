@@ -20,6 +20,7 @@ const props = withDefaults(defineProps<{
 
 const query = ref('')
 const isFocused = ref(false)
+const inputEl = ref<HTMLInputElement | null>(null)
 
 const searchIndex = computed<SearchEntry[]>(() => {
   const entries: SearchEntry[] = []
@@ -82,6 +83,10 @@ function selectResult(entry: SearchEntry) {
 function handleBlur() {
   setTimeout(() => { isFocused.value = false }, 150)
 }
+
+defineExpose({
+  focus: () => inputEl.value?.focus(),
+})
 </script>
 
 <template>
@@ -89,6 +94,7 @@ function handleBlur() {
     <div class="search-bar__field">
       <IconMagnifyingGlass class="search-bar__icon" width="18" height="18" />
       <input
+        ref="inputEl"
         v-model="query"
         type="text"
         class="search-bar__input"

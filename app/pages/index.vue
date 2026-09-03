@@ -1,31 +1,14 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
-import { sousThemeNinjas, themePresentation } from '../data/presentation'
+import { ref } from 'vue'
 import logoSf from '~/assets/images/logoSf.svg?url'
 import universImg from '~/assets/images/univers.png'
-import type { ThemeApi, ThemeView } from '~/types/annuaire'
 
 definePageMeta({ layout: 'default' })
 
 const menuOpen = ref(false)
 
-const apiBase = useApiBase()
-const { data: response } = await useFetch<{ data: ThemeApi[] }>(`${apiBase}/api/themes`)
-
-const themes = computed<ThemeView[]>(() => (response.value?.data ?? []).map(theme => ({
-  id: theme.ref,
-  label: theme.libelle,
-  shortLabel: theme.libelle_court,
-  color: themePresentation[theme.ref]?.color ?? '#4260e6',
-  items: theme.sous_themes.map((sousTheme, index) => ({
-    id: index + 1,
-    slug: sousTheme.ref,
-    title: sousTheme.libelle,
-    hook: sousTheme.resume,
-    ninja: sousThemeNinjas[sousTheme.ref],
-    subtitle: `${themePresentation[theme.ref]?.prefixe ?? ''} N°${index + 1}`,
-  })),
-})))
+// Requete partagee avec le menu global (layout) : voir composables/useThemes.
+const { themes } = await useThemes()
 </script>
 
 <template>
@@ -36,15 +19,6 @@ const themes = computed<ThemeView[]>(() => (response.value?.data ?? []).map(them
       <header class="home-header">
         <div class="home-brand">
           <img :src="logoSf" alt="Safe Campus" class="header-logo" >
-
-          <span class="home-brand__divider" aria-hidden="true" />
-
-          <nav class="home-nav" aria-label="Navigation principale">
-            <a v-for="theme in themes" :key="theme.id" :href="`#theme-${theme.id}`" class="home-nav__link">
-              {{ theme.shortLabel }}
-            </a>
-            <a href="#about" class="home-nav__link">À propos</a>
-          </nav>
         </div>
 
         <SearchBar class="home-search" :themes="themes" />
