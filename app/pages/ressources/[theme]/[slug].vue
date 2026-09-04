@@ -6,7 +6,6 @@ import IconDocumentText from '~/assets/icon/document-text.svg?component'
 definePageMeta({ layout: 'default' })
 
 const route = useRoute()
-const router = useRouter()
 
 const apiBase = useApiBase()
 // Cle explicite et stable : useApiBase() renvoie une URL differente au SSR
@@ -37,25 +36,10 @@ const item = {
 }
 
 useHead({ title: `${item.title} — Ressources` })
-
-function goBack() {
-  if (window.history.state?.back) {
-    router.back()
-  } else {
-    navigateTo('/')
-  }
-}
 </script>
 
 <template>
   <div class="cp-page" :style="{ '--theme-color': theme.color }">
-
-    <!-- Barre supérieure -->
-    <div class="cp-topbar">
-      <button class="btn-back" @click="goBack">
-        <span>←</span> Retour
-      </button>
-    </div>
 
     <!-- Hero -->
     <section class="cp-hero">

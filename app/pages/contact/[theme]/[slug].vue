@@ -22,7 +22,6 @@ function isLocated(contact: DisplayContact): contact is LocatedContact {
 definePageMeta({ layout: 'default' })
 
 const route = useRoute()
-const router = useRouter()
 
 const apiBase = useApiBase()
 // Cle explicite et stable : useApiBase() renvoie une URL differente au SSR
@@ -82,41 +81,30 @@ const sortedContacts = computed(() => {
   return [nearest, ...item.contacts.filter(c => c.ref !== nearestContactRef.value)]
 })
 
-function goBack() {
-  if (window.history.state?.back) {
-    router.back()
-  } else {
-    navigateTo('/')
-  }
-}
 </script>
 
 <template>
   <div class="cp-page" :style="{ '--theme-color': theme.color }">
 
-    <!-- Barre supérieure -->
-    <div class="cp-topbar">
-      <button class="btn-back" @click="goBack">
-        <span>←</span> Retour
-      </button>
-    </div>
-
-    <!-- Hero -->
+    <!-- Hero : ninja + titre, centrés en haut de page -->
     <section class="cp-hero">
       <div class="cp-hero-ninja-wrap">
         <img :src="item.ninja" :alt="item.title" class="cp-hero-ninja" >
       </div>
       <span class="cp-tag">{{ theme.shortLabel }}</span>
       <h1 class="cp-title">{{ item.title }}</h1>
-      <p class="cp-description">{{ item.description }}</p>
-      <div class="cp-hero-actions">
-        <button type="button" class="btn-story" disabled title="Bientôt disponible">
-          Suivre l'histoire
-        </button>
-      </div>
     </section>
 
-    <div class="cp-content">
+    <!-- Texte (gauche) + carte carrée (droite) sur desktop -->
+    <div class="cp-main">
+      <div class="cp-intro">
+        <p class="cp-description">{{ item.description }}</p>
+        <div class="cp-hero-actions">
+          <button type="button" class="btn-story" disabled title="Bientôt disponible">
+            Suivre l'histoire
+          </button>
+        </div>
+      </div>
 
       <!-- Localisation : carte navigateur uniquement, hors du rendu serveur -->
       <ClientOnly v-if="hasLocated">
@@ -126,11 +114,18 @@ function goBack() {
           :color="theme.color"
         />
         <template #fallback>
-          <section class="cp-location">
-            <div class="cp-location-map" />
-          </section>
+          <div class="cp-location-wrap">
+            <section class="cp-location">
+              <div class="cp-location-body">
+                <div class="cp-location-map" />
+              </div>
+            </section>
+          </div>
         </template>
       </ClientOnly>
+    </div>
+
+    <div class="cp-content">
 
       <!-- Contacts -->
       <section class="cp-contacts">
