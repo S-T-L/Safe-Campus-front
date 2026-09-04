@@ -25,6 +25,16 @@
   --font-heading: 'Syne', sans-serif;
   --font-body: 'Syne', sans-serif;
 
+  /* Echelle typographique unique (mobile-first). Racine a 17px.
+     Plancher a ~12.75px pour tout texte lisible ; les micro-labels
+     (eyebrows, badges, compteurs) ne descendent pas sous --fs-caption. */
+  --fs-caption: 0.75rem;   /* ~13px — eyebrows, badges, compteurs, mentions */
+  --fs-sm: 0.875rem;       /* ~15px — texte secondaire, meta, details, petits boutons */
+  --fs-base: 1rem;         /* ~17px — corps de texte */
+  --fs-lead: 1.2rem;       /* ~20px — chapo, titres de carte, labels de section */
+  --fs-h2: 1.5rem;         /* ~26px — titres de section */
+  --fs-h1: 2rem;           /* ~34px — titre principal de page */
+
   --radius-card: 20px;
   --shadow-card: 0 4px 24px rgba(13, 13, 13, 0.10);
   --transition-base: 0.25s ease;
@@ -132,30 +142,62 @@ button {
   width: auto;
 }
 
-.menu-btn {
+/* Colonne d'actions flottante (mobile / tablette), en haut a droite :
+   retour accueil au-dessus, burger en dessous. Le rail lateral prend le
+   relais a partir de 1200px. Quand le lien accueil est masque (page
+   d'accueil), le burger remonte tout seul en haut de la colonne. */
+.nav-actions {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  z-index: 190;
   display: flex;
   flex-direction: column;
-  gap: 5px;
-  background: transparent;
-  border-radius: 10px;
-  padding: 8px 10px;
-  border: none;
-  flex-shrink: 0;
-  order: 2;
+  gap: 8px;
 }
 
-.menu-btn span {
+.nav-fab,
+.nav-home {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  background: rgba(249, 249, 249, 0.92);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(13, 13, 13, 0.08);
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(13, 13, 13, 0.16);
+}
+
+.nav-home img {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+}
+
+.nav-fab {
+  flex-direction: column;
+  gap: 5px;
+  padding: 0 11px;
+}
+
+.nav-fab span {
   display: block;
-  width: 20px;
+  width: 100%;
   height: 2px;
   background: var(--color-text);
   border-radius: 2px;
   transition: transform 0.25s ease, opacity 0.25s ease;
 }
 
-.menu-btn--open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-.menu-btn--open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
-.menu-btn--open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+.nav-fab--open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-fab--open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.nav-fab--open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+@media (min-width: 1200px) {
+  .nav-actions { display: none; }
+}
 
 /* ── Barre de recherche (dans le header) ── */
 .home-search {
@@ -202,7 +244,7 @@ button {
 
 .intro-subtitle {
   font-family: var(--font-heading);
-  font-size: 1.35rem;
+  font-size: var(--fs-lead);
   font-weight: 400;
   color: var(--color-muted);
   margin: 0;
@@ -210,7 +252,7 @@ button {
 }
 
 .intro-body {
-  font-size: 1.05rem;
+  font-size: var(--fs-base);
   color: var(--color-muted);
   line-height: 1.65;
   margin: 0;
@@ -236,7 +278,7 @@ button {
 }
 
 .home-footer__copyright {
-  font-size: 0.75rem;
+  font-size: var(--fs-caption);
   color: var(--color-muted);
 }
 
@@ -354,7 +396,8 @@ button {
   outline: none;
   background: transparent;
   font-family: var(--font-body);
-  font-size: 0.82rem;
+  /* >= 16px effectif : evite le zoom auto du champ au focus sur iOS. */
+  font-size: var(--fs-base);
   color: var(--color-text);
 }
 
@@ -387,7 +430,7 @@ button {
 
 .search-bar__group-label {
   font-family: var(--font-heading);
-  font-size: 0.68rem;
+  font-size: var(--fs-caption);
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -417,19 +460,19 @@ button {
 
 .search-bar__result-label {
   font-family: var(--font-body);
-  font-size: 0.82rem;
+  font-size: var(--fs-sm);
   font-weight: 600;
   color: var(--color-text);
 }
 
 .search-bar__result-subtitle {
   font-family: var(--font-body);
-  font-size: 0.72rem;
+  font-size: var(--fs-caption);
   color: var(--color-muted);
 }
 
 .search-bar__empty {
-  font-size: 0.78rem;
+  font-size: var(--fs-sm);
   color: var(--color-muted);
   text-align: center;
   margin: 0;
@@ -461,7 +504,7 @@ button {
 
 .section-title {
   font-family: var(--font-heading);
-  font-size: 1.5rem;
+  font-size: var(--fs-h2);
   font-weight: 700;
   color: #000000;
   line-height: 1;
@@ -471,10 +514,6 @@ button {
 @media (min-width: 768px) {
   .section-header {
     padding: 0 48px;
-  }
-
-  .section-title {
-    font-size: 1.5rem;
   }
 }
 
@@ -628,7 +667,7 @@ button {
 
 .card-title {
   font-family: var(--font-heading);
-  font-size: 1.25rem;
+  font-size: var(--fs-lead);
   font-weight: 700;
   color: var(--color-text-light);
   line-height: 1;
@@ -640,7 +679,7 @@ button {
 
 .card-desc {
   font-family: var(--font-body);
-  font-size: 0.75rem;
+  font-size: var(--fs-sm);
   color: rgba(255, 255, 255, 0.8);
   line-height: 1.55;
   min-height: 4.65rem;
@@ -666,7 +705,7 @@ button {
   padding: 8px 10px;
   border-radius: 999px;
   font-family: var(--font-body);
-  font-size: 0.72rem;
+  font-size: var(--fs-sm);
   font-weight: 700;
   color: var(--color-text-light);
   background: rgba(255, 255, 255, 0.16);
@@ -707,13 +746,13 @@ button {
   }
 
   .card-title {
-    font-size: 1.4rem;
+    font-size: var(--fs-h2);
     min-height: 2.8rem;
     margin-bottom: 16px;
   }
 
   .card-desc {
-    font-size: 0.9rem;
+    font-size: var(--fs-base);
     min-height: 5.58rem;
   }
 
@@ -813,7 +852,7 @@ button {
   background: rgba(255, 255, 255, 0.16);
   color: var(--color-text-light);
   font-family: var(--font-heading);
-  font-size: 12.5px;
+  font-size: var(--fs-caption);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1.2px;
@@ -823,7 +862,7 @@ button {
 
 .cp-title {
   font-family: var(--font-heading);
-  font-size: 34px;
+  font-size: var(--fs-h1);
   font-weight: 800;
   color: var(--color-text-light);
   letter-spacing: -0.5px;
@@ -832,7 +871,7 @@ button {
 
 .cp-description {
   font-family: var(--font-body);
-  font-size: 15px;
+  font-size: var(--fs-base);
   line-height: 1.6;
   color: rgba(255, 255, 255, 0.85);
 }
@@ -850,7 +889,7 @@ button {
   border-radius: 100px;
   padding: 12px 22px;
   font-family: var(--font-body);
-  font-size: 15px;
+  font-size: var(--fs-sm);
   font-weight: 700;
   cursor: not-allowed;
   opacity: 0.85;
@@ -913,7 +952,7 @@ button {
 
 .cp-location-title {
   font-family: var(--font-display);
-  font-size: 21px;
+  font-size: var(--fs-lead);
   font-weight: 400;
   color: #1A1A2E;
   line-height: 1.25;
@@ -930,7 +969,7 @@ button {
   border-radius: 100px;
   padding: 8px 14px;
   font-family: var(--font-body);
-  font-size: 13px;
+  font-size: var(--fs-sm);
   font-weight: 700;
   cursor: pointer;
   transition: background var(--transition-base);
@@ -1011,7 +1050,7 @@ button {
 
 .cp-geo-error {
   padding: 0 18px 16px;
-  font-size: 13px;
+  font-size: var(--fs-sm);
   color: #E8314A;
 }
 
@@ -1054,7 +1093,7 @@ button {
 /* ── Contacts ── */
 .section-label {
   font-family: var(--font-heading);
-  font-size: 21px;
+  font-size: var(--fs-lead);
   font-weight: 800;
   color: var(--color-text-light);
   padding-left: 4px;
@@ -1095,7 +1134,7 @@ button {
   background: var(--theme-color, var(--color-primary-light));
   color: var(--color-text-light);
   font-family: var(--font-heading);
-  font-size: 10.5px;
+  font-size: var(--fs-caption);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -1126,7 +1165,7 @@ button {
   align-items: center;
   justify-content: center;
   font-family: var(--font-body);
-  font-size: 13px;
+  font-size: var(--fs-sm);
   font-weight: 700;
   color: var(--theme-color, var(--color-primary-light));
   background: color-mix(in srgb, var(--theme-color, var(--color-primary-light)) 12%, white);
@@ -1139,7 +1178,7 @@ button {
 
 .contact-card__name {
   font-family: var(--font-body);
-  font-size: 14.5px;
+  font-size: var(--fs-sm);
   font-weight: 700;
   color: #1A1A2E;
   white-space: nowrap;
@@ -1203,7 +1242,7 @@ button {
 }
 
 .contact-card__detail-role {
-  font-size: 13.5px;
+  font-size: var(--fs-sm);
   color: #4A4A5E;
   line-height: 1.5;
 }
@@ -1212,7 +1251,7 @@ button {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 13px;
+  font-size: var(--fs-sm);
   color: #6B7A99;
   min-width: 0;
 }
@@ -1259,7 +1298,7 @@ button {
   background: #FAFAFD;
   border-radius: 10px;
   padding: 8px 10px;
-  font-size: 13.5px;
+  font-size: var(--fs-sm);
   color: #1A1A2E;
 }
 
@@ -1284,7 +1323,7 @@ button {
 .contact-card__toll-free {
   margin-left: 6px;
   color: #1E466B;
-  font-size: 11px;
+  font-size: var(--fs-caption);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.4px;
@@ -1297,7 +1336,7 @@ button {
   cursor: pointer;
   padding: 2px 6px;
   font-family: var(--font-body);
-  font-size: 12px;
+  font-size: var(--fs-caption);
   font-weight: 700;
   color: var(--theme-color, var(--color-primary-light));
 }
@@ -1368,7 +1407,7 @@ button {
 
 .rp-document-title {
   font-family: var(--font-body);
-  font-size: 15px;
+  font-size: var(--fs-base);
   font-weight: 700;
   color: #1A1A2E;
   line-height: 1.3;
@@ -1376,7 +1415,7 @@ button {
 
 .rp-document-desc {
   font-family: var(--font-body);
-  font-size: 13px;
+  font-size: var(--fs-sm);
   color: var(--color-muted);
   line-height: 1.5;
   margin-top: 4px;
@@ -1390,7 +1429,7 @@ button {
   border-radius: 100px;
   padding: 8px 14px;
   font-family: var(--font-body);
-  font-size: 13px;
+  font-size: var(--fs-sm);
   font-weight: 700;
   text-decoration: none;
   cursor: pointer;
@@ -1409,7 +1448,7 @@ button {
   }
 
   .cp-title {
-    font-size: 40px;
+    font-size: 2.375rem;
   }
 
   .rp-document-card {
@@ -1436,7 +1475,7 @@ button {
   }
 
   .cp-main .cp-description {
-    font-size: 16px;
+    font-size: var(--fs-lead);
     line-height: 1.75;
   }
 
@@ -1495,7 +1534,7 @@ button {
 
 .drawer-title {
   font-family: var(--font-heading);
-  font-size: 0.72rem;
+  font-size: var(--fs-caption);
   font-weight: 800;
   letter-spacing: 0.2em;
   color: rgba(255, 255, 255, 0.5);
@@ -1509,7 +1548,7 @@ button {
   border: none;
   color: var(--color-text-light);
   font-family: var(--font-heading);
-  font-size: 0.8rem;
+  font-size: var(--fs-sm);
   font-weight: 700;
   letter-spacing: 0.05em;
   cursor: pointer;
@@ -1547,7 +1586,7 @@ button {
 
 .drawer-section-label {
   font-family: var(--font-heading);
-  font-size: 0.65rem;
+  font-size: var(--fs-caption);
   font-weight: 700;
   letter-spacing: 0.15em;
   color: rgba(255, 255, 255, 0.35);
@@ -1610,7 +1649,7 @@ button {
 .item-label {
   flex: 1;
   font-family: var(--font-heading);
-  font-size: 0.9rem;
+  font-size: var(--fs-base);
   font-weight: 700;
   color: var(--color-text-light);
   line-height: 1.2;
@@ -1618,7 +1657,7 @@ button {
 
 .item-count {
   font-family: var(--font-heading);
-  font-size: 0.7rem;
+  font-size: var(--fs-caption);
   font-weight: 600;
   color: rgba(255, 255, 255, 0.4);
   background: rgba(255, 255, 255, 0.08);
@@ -1645,7 +1684,7 @@ button {
 
 .item-subtitle {
   font-family: var(--font-body);
-  font-size: 0.65rem;
+  font-size: var(--fs-caption);
   font-weight: 400;
   color: rgba(255, 255, 255, 0.4);
   letter-spacing: 0.04em;
@@ -1667,7 +1706,7 @@ button {
 
 .sublevel-label {
   font-family: var(--font-heading);
-  font-size: 1rem;
+  font-size: var(--fs-lead);
   font-weight: 800;
   color: var(--color-text-light);
   line-height: 1;
@@ -1684,7 +1723,7 @@ button {
   border-radius: 12px;
   color: #8fa8f8;
   font-family: var(--font-heading);
-  font-size: 0.8rem;
+  font-size: var(--fs-sm);
   font-weight: 700;
   cursor: pointer;
   transition: background var(--transition-base), color var(--transition-base);
@@ -1703,7 +1742,7 @@ button {
 }
 .drawer-footer span {
   font-family: var(--font-body);
-  font-size: 0.68rem;
+  font-size: var(--fs-caption);
   color: rgba(255, 255, 255, 0.25);
 }
 
@@ -1870,7 +1909,7 @@ button {
   background: var(--color-primary);
   color: var(--color-text-light);
   font-family: var(--font-heading);
-  font-size: 0.72rem;
+  font-size: var(--fs-caption);
   font-weight: 700;
   letter-spacing: 0.02em;
   white-space: nowrap;
@@ -1920,7 +1959,7 @@ button {
   background: #fff;
 }
 .sidenav__search .search-bar__input {
-  font-size: 0.8rem;
+  font-size: var(--fs-sm);
 }
 
 .sidenav__scroll {
@@ -1932,7 +1971,7 @@ button {
 
 .sidenav__label {
   font-family: var(--font-heading);
-  font-size: 0.62rem;
+  font-size: var(--fs-caption);
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -1968,7 +2007,7 @@ button {
   text-align: left;
   color: var(--color-text);
   font-family: var(--font-heading);
-  font-size: 0.86rem;
+  font-size: var(--fs-base);
   font-weight: 600;
 }
 .sidenav__rowmain--solo {
@@ -2028,7 +2067,7 @@ button {
   text-align: left;
   color: var(--color-muted);
   font-family: var(--font-heading);
-  font-size: 0.8rem;
+  font-size: var(--fs-sm);
   font-weight: 600;
 }
 .sidenav__row--sub .sidenav__rowlabel {
@@ -2050,7 +2089,7 @@ button {
   text-align: left;
   color: var(--color-primary);
   font-family: var(--font-heading);
-  font-size: 0.78rem;
+  font-size: var(--fs-sm);
   font-weight: 700;
   transition: background var(--transition-base);
 }
@@ -2063,7 +2102,7 @@ button {
   padding: 12px 18px;
   border-top: 1px solid rgba(13, 13, 13, 0.07);
   font-family: var(--font-body);
-  font-size: 0.66rem;
+  font-size: var(--fs-caption);
   color: var(--color-muted);
 }
 

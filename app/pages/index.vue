@@ -1,11 +1,8 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import logoSf from '~/assets/images/logoSf.svg?url'
 import universImg from '~/assets/images/univers.png'
 
 definePageMeta({ layout: 'default' })
-
-const menuOpen = ref(false)
 
 // Requete partagee avec le menu global (layout) : voir composables/useThemes.
 const { themes } = await useThemes()
@@ -22,10 +19,6 @@ const { themes } = await useThemes()
         </div>
 
         <SearchBar class="home-search" :themes="themes" />
-
-        <button class="menu-btn" :class="{ 'menu-btn--open': menuOpen }" aria-label="Menu" @click="menuOpen = true">
-          <span /><span /><span />
-        </button>
       </header>
 
       <div class="home-hero">
@@ -57,9 +50,6 @@ const { themes } = await useThemes()
 
     <!-- Footer -->
     <SiteFooter />
-
-    <!-- Menu drawer -->
-    <NavDrawer v-model="menuOpen" :themes="themes" />
 
   </div>
 </template>
