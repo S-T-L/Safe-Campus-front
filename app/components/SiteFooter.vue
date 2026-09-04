@@ -1,12 +1,8 @@
 <script setup lang="ts">
-import { computed } from 'vue'
 import logoSf from '~/assets/images/logoSf.svg?url'
-import type { ThemeApi } from '~/types/annuaire'
 
-const apiBase = useApiBase()
-const { data: response } = await useFetch<{ data: ThemeApi[] }>(`${apiBase}/api/themes`)
-
-const themes = computed(() => response.value?.data ?? [])
+// Requete /api/themes partagee (cle 'themes') avec le layout et la page d'accueil.
+const { themes } = await useThemes()
 </script>
 
 <template>
@@ -19,8 +15,8 @@ const themes = computed(() => response.value?.data ?? [])
 
       <nav class="home-footer__links">
         <a href="/" class="home-footer__link">Accueil</a>
-        <a v-for="theme in themes" :key="theme.ref" :href="`/#theme-${theme.ref}`" class="home-footer__link">
-          {{ theme.libelle_court }}
+        <a v-for="theme in themes" :key="theme.id" :href="`/#theme-${theme.id}`" class="home-footer__link">
+          {{ theme.shortLabel }}
         </a>
         <a href="/#about" class="home-footer__link">À propos</a>
       </nav>

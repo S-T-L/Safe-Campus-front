@@ -92,3 +92,10 @@ export interface DisplayContact {
   lat: number | null
   lng: number | null
 }
+
+// Contact dont la position est connue : partage entre la page contact
+// (filtrage) et <ContactMap> (marqueurs, geolocalisation).
+export interface LocatedContact extends Omit<DisplayContact, 'lat' | 'lng'> {
+  lat: number
+  lng: number
+}

@@ -37,6 +37,12 @@ export default defineNuxtConfig({
 
   vite: {
     plugins: [svgLoader()],
+    // Leaflet n'est tire que par la page contact (import dynamique). Le pre-bundler
+    // au demarrage evite que Vite le decouvre et re-optimise ses deps pendant une
+    // requete SSR (course qui renvoyait un 500 sur F5 de /contact/...).
+    optimizeDeps: {
+      include: ['leaflet'],
+    },
     server: {
       ws: {
         port: Number(process.env.PORT) || 3000,
