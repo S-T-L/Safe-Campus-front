@@ -795,32 +795,6 @@ button {
   flex-direction: column;
 }
 
-/* ── Barre supérieure ── */
-.cp-topbar {
-  flex-shrink: 0;
-  padding: 16px 20px 4px;
-}
-
-.cp-topbar .btn-back {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: rgba(255, 255, 255, 0.16);
-  border: none;
-  border-radius: 100px;
-  padding: 7px 14px;
-  font-family: var(--font-heading);
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--color-text-light);
-  cursor: pointer;
-  transition: background var(--transition-base);
-}
-
-.cp-topbar .btn-back:hover {
-  background: rgba(255, 255, 255, 0.28);
-}
-
 /* ── Contenu ── */
 .cp-content {
   width: 100%;
@@ -829,7 +803,27 @@ button {
   display: flex;
   flex-direction: column;
   gap: 32px;
-  padding: 8px 20px 48px;
+  padding: 8px 20px 72px;
+}
+
+/* Texte + carte : empiles en mobile, cote a cote en desktop (voir media query).
+   Le titre et le ninja restent au-dessus, dans .cp-hero. */
+.cp-main {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 40px 20px 56px;
+}
+
+.cp-intro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
 }
 
 .cp-contacts {
@@ -925,11 +919,47 @@ button {
 /* ── Localisation ── */
 /* Fond blanc pur (pas le blanc ceruse du reste du site) : la carte de localisation
    et les cartes de contact tranchent mieux sur le degrade colore de .cp-page. */
+/* Enveloppe : colonne normale dans le flux, hote plein ecran une fois la
+   carte agrandie (position: fixed -> retiree du flux, .cp-main intact). */
+.cp-location-wrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.cp-location-wrap--expanded {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  padding: clamp(16px, 4vw, 48px);
+}
+
+.cp-location-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(13, 13, 13, 0.6);
+}
+
 .cp-location {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
   background: #FFFFFF;
   border-radius: var(--radius-card);
   box-shadow: var(--shadow-card);
   overflow: hidden;
+}
+
+.cp-location-wrap--expanded {
+  align-items: center;
+  justify-content: center;
+}
+
+.cp-location--expanded {
+  z-index: 1;
+  width: min(1100px, 100%);
+  height: 100%;
+  margin: auto;
 }
 
 .cp-location-head {
@@ -989,9 +1019,54 @@ button {
   background: color-mix(in srgb, var(--theme-color, var(--color-primary-light)) 85%, #0D0D0D);
 }
 
+.cp-location-body {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+}
+
 .cp-location-map {
   width: 100%;
   height: 260px;
+}
+
+.cp-location--expanded .cp-location-body {
+  min-height: 0;
+}
+
+.cp-location--expanded .cp-location-map {
+  height: 100%;
+}
+
+/* Icone d'agrandissement, en surimpression dans un coin libre de la carte
+   (le zoom Leaflet occupe le coin haut-gauche). */
+.cp-map-expand {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 500;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  background: #FFFFFF;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(13, 13, 13, 0.25);
+  color: #1A1A2E;
+  cursor: pointer;
+  transition: background var(--transition-base);
+}
+
+.cp-map-expand:hover {
+  background: #F0F0F5;
+}
+
+.cp-map-expand svg {
+  width: 18px;
+  height: 18px;
 }
 
 .cp-geo-error {
@@ -1354,19 +1429,56 @@ button {
 @media (min-width: 1024px) {
   .cp-hero {
     max-width: 760px;
-    padding-top: 16px;
+    padding-top: 32px;
   }
 
   .cp-title {
     font-size: 38px;
   }
 
-  .cp-location-map {
-    height: 220px;
-  }
-
   .rp-document-card {
     padding: 18px 22px;
+  }
+
+  /* Texte a gauche, carte rectangulaire a droite, meme hauteur (align-items:
+     stretch) pour que les deux colonnes soient alignees haut et bas. */
+  .cp-main {
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: center;
+    gap: 56px;
+    padding: 96px 20px 96px;
+  }
+
+  .cp-main .cp-intro {
+    flex: 1 1 52%;
+    max-width: 560px;
+    align-items: flex-start;
+    justify-content: center;
+    text-align: left;
+    gap: 20px;
+  }
+
+  .cp-main .cp-description {
+    font-size: 15px;
+    line-height: 1.75;
+  }
+
+  /* La carte agrandie est teleportee hors de .cp-main : ces regles ne
+     s'appliquent plus, .cp-location--expanded prend le relais. */
+  .cp-main .cp-location-wrap {
+    flex: 1 1 48%;
+    max-width: 600px;
+    min-height: 340px;
+    max-height: 520px;
+  }
+
+  .cp-main .cp-location {
+    flex: 1;
+  }
+
+  .cp-main .cp-location-map {
+    height: 100%;
   }
 }
 

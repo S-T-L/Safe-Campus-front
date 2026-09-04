@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref, nextTick } from 'vue'
+import { onMounted, onUnmounted, ref, nextTick, watch } from 'vue'
 import type * as Leaflet from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import type { LocatedContact } from '~/types/annuaire'
 import IconViewfinderCircle from '~/assets/icon/viewfinder-circle.svg?component'
 import IconArrowPath from '~/assets/icon/arrow-path.svg?component'
+import IconArrowsPointingOut from '~/assets/icon/arrows-pointing-out.svg?component'
+import IconXMark from '~/assets/icon/x-mark.svg?component'
 
 const props = defineProps<{
   contacts: LocatedContact[]
@@ -18,6 +20,8 @@ const mapContainer = ref<HTMLElement | null>(null)
 const geoError = ref<string | null>(null)
 const geoLoading = ref(false)
 const userLocated = ref(false)
+// Carte affichee en plein ecran (overlay) plutot que dans la colonne de droite.
+const expanded = ref(false)
 
 let L: typeof Leaflet | null = null
 let map: Leaflet.Map | null = null
@@ -150,28 +154,69 @@ function resetGeoloc() {
   fitToContacts()
 }
 
+function toggleExpanded() {
+  expanded.value = !expanded.value
+}
+
+function onKeydown(e: KeyboardEvent) {
+  if (e.key === 'Escape' && expanded.value) toggleExpanded()
+}
+
+// Le conteneur change de taille (colonne -> plein ecran) : Leaflet doit
+// recalculer ses dimensions une fois la transition CSS terminee.
+watch(expanded, async (open) => {
+  if (import.meta.client) document.body.style.overflow = open ? 'hidden' : ''
+  await nextTick()
+  setTimeout(() => {
+    map?.invalidateSize()
+    fitToContacts()
+  }, 260)
+})
+
 onMounted(() => {
+  window.addEventListener('keydown', onKeydown)
   nextTick(() => setTimeout(initMap, 350))
 })
 
 onUnmounted(() => {
+  window.removeEventListener('keydown', onKeydown)
+  document.body.style.overflow = ''
   if (map) { map.remove(); map = null }
 })
 </script>
 
 <template>
-  <section class="cp-location">
-    <div class="cp-location-head">
-      <span class="cp-location-title">Où trouver de l'aide près de chez vous</span>
-      <button
-        type="button" class="btn-locate" :class="{ 'btn-locate--active': userLocated }" :disabled="geoLoading"
-        @click="userLocated ? resetGeoloc() : locateMe()">
-        <IconViewfinderCircle v-if="!userLocated" />
-        <IconArrowPath v-else />
-        {{ geoLoading ? 'Recherche…' : (userLocated ? 'Réinitialiser' : 'Me géolocaliser') }}
-      </button>
+  <!-- Teleporte en plein ecran quand la carte est agrandie ; conserve le
+       meme noeud DOM (et donc l'instance Leaflet) grace a :disabled. -->
+  <Teleport to="body" :disabled="!expanded">
+    <div class="cp-location-wrap" :class="{ 'cp-location-wrap--expanded': expanded }">
+      <div v-if="expanded" class="cp-location-backdrop" @click="toggleExpanded" />
+
+      <section class="cp-location" :class="{ 'cp-location--expanded': expanded }">
+        <div class="cp-location-head">
+          <span class="cp-location-title">Où trouver de l'aide près de chez vous</span>
+          <button
+            type="button" class="btn-locate" :class="{ 'btn-locate--active': userLocated }" :disabled="geoLoading"
+            @click="userLocated ? resetGeoloc() : locateMe()">
+            <IconViewfinderCircle v-if="!userLocated" />
+            <IconArrowPath v-else />
+            {{ geoLoading ? 'Recherche…' : (userLocated ? 'Réinitialiser' : 'Me géolocaliser') }}
+          </button>
+        </div>
+
+        <div class="cp-location-body">
+          <div ref="mapContainer" class="cp-location-map" />
+          <button
+            type="button" class="cp-map-expand"
+            :aria-label="expanded ? 'Réduire la carte' : 'Agrandir la carte'"
+            @click="toggleExpanded">
+            <IconArrowsPointingOut v-if="!expanded" />
+            <IconXMark v-else />
+          </button>
+        </div>
+
+        <p v-if="geoError" class="cp-geo-error">{{ geoError }}</p>
+      </section>
     </div>
-    <div ref="mapContainer" class="cp-location-map" />
-    <p v-if="geoError" class="cp-geo-error">{{ geoError }}</p>
-  </section>
+  </Teleport>
 </template>
