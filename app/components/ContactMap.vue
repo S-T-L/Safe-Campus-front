@@ -116,9 +116,12 @@ function locateMe() {
       if (userMarker) {
         userMarker.setLatLng([latitude, longitude])
       } else {
+        // Couleur et forme volontairement distinctes des marqueurs contacts
+        // (qui reprennent la couleur du theme, un bleu proche) : halo pulsant
+        // + pastille rose. Styles dans main.css (.user-marker).
         const userIcon = L.divIcon({
-          className: '',
-          html: '<div style="width:16px;height:16px;background:#1E466B;border:3px solid #fff;border-radius:50%;box-shadow:0 0 0 6px rgba(30,70,107,0.25);"></div>',
+          className: 'user-marker',
+          html: '<span class="user-marker__pulse"></span><span class="user-marker__dot"></span>',
           iconSize: [16, 16],
           iconAnchor: [8, 8],
         })

@@ -1075,6 +1075,42 @@ button {
   color: #E8314A;
 }
 
+/* Marqueur "Votre position" : forme et couleur distinctes des marqueurs
+   contacts (bleu du theme) -> pastille rose + halo pulsant. */
+.user-marker__dot {
+  position: absolute;
+  inset: 0;
+  width: 16px;
+  height: 16px;
+  background: #F0157F;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(13, 13, 13, 0.45);
+}
+
+.user-marker__pulse {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 16px;
+  height: 16px;
+  margin: -8px 0 0 -8px;
+  border-radius: 50%;
+  background: rgba(240, 21, 127, 0.35);
+  animation: user-marker-pulse 2s ease-out infinite;
+}
+
+@keyframes user-marker-pulse {
+  0% { transform: scale(1); opacity: 0.7; }
+  100% { transform: scale(3); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .user-marker__pulse {
+    animation: none;
+  }
+}
+
 /* ── Contacts ── */
 .section-label {
   font-family: var(--font-heading);
