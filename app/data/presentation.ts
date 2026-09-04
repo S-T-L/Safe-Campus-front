@@ -20,8 +20,8 @@ export const sousThemeNinjas: Record<string, string> = {
   drogue: '/assets/ninja_drogue.png',
   anxiete: '/assets/ninja-anxiete.png',
   depression: '/assets/ninja-depression.png',
-  burn_out: '/assets/ninja_cigarette.png',
-  violences_sexistes: '/assets/ninja_vsexiste.png',
-  violences_sexuelles: '/assets/ninja_consentement.png',
-  harcelement: '/assets/ninja_violence.png',
+  burn_out: '/assets/ninja_burnout.png',
+  violences_sexistes: '/assets/ninja_violenceSexiste.png',
+  violences_sexuelles: '/assets/ninja_violenceSexuelles.png',
+  harcelement: '/assets/ninja_harcelement.png',
 }
