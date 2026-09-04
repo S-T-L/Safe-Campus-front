@@ -9,8 +9,13 @@ const route = useRoute()
 const router = useRouter()
 
 const apiBase = useApiBase()
+// Cle explicite et stable : useApiBase() renvoie une URL differente au SSR
+// (sc_back) et au client (localhost), donc la cle auto-generee par useFetch
+// differerait entre les deux -> le payload SSR ne serait pas reutilise a
+// l'hydratation, provoquant un refetch client et un mismatch d'hydratation.
 const { data: response, error: fetchError } = await useFetch<{ data: SousThemeDetailApi }>(
   `${apiBase}/api/sous-themes/${route.params.slug}`,
+  { key: `sous-theme:${route.params.slug}` },
 )
 
 if (fetchError.value || !response.value?.data) {
