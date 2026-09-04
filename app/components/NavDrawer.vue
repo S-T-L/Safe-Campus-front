@@ -15,6 +15,8 @@ withDefaults(defineProps<{
 
 const emit = defineEmits<{ 'update:modelValue': [value: boolean] }>()
 
+const route = useRoute()
+
 const activeTheme = ref<ThemeView | null>(null)
 const activeItem = ref<ThemeItemView | null>(null)
 
@@ -39,9 +41,29 @@ function goBack() {
   }
 }
 
-function scrollToTheme(themeId: string) {
-  document.getElementById(`theme-${themeId}`)?.scrollIntoView({ behavior: 'smooth' })
+// Le drawer est disponible sur toutes les pages : si on n'est pas sur
+// l'accueil, on y navigue d'abord puis on attend que la section soit rendue.
+function scrollWhenReady(selector: string, tries = 25) {
+  const el = document.querySelector(selector)
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth' })
+    return
+  }
+  if (tries > 0) {
+    requestAnimationFrame(() => scrollWhenReady(selector, tries - 1))
+  }
+}
+
+async function scrollToSection(selector: string) {
   close()
+  if (route.path !== '/') {
+    await navigateTo('/')
+  }
+  scrollWhenReady(selector)
+}
+
+function scrollToTheme(themeId: string) {
+  scrollToSection(`#theme-${themeId}`)
 }
 
 function openPage(path: string) {
@@ -51,8 +73,7 @@ function openPage(path: string) {
 }
 
 function scrollToIntro() {
-  document.querySelector('.home-intro')?.scrollIntoView({ behavior: 'smooth' })
-  close()
+  scrollToSection('.home-intro')
 }
 </script>
 
