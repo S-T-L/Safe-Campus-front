@@ -25,3 +25,18 @@ export const sousThemeNinjas: Record<string, string> = {
   violences_sexuelles: '/assets/ninja_violenceSexuelles.png',
   harcelement: '/assets/ninja_harcelement.png',
 }
+
+// Synonymes/mots-cles par sous-theme (`ref` backend), pour que la recherche
+// (SearchBar.vue) retrouve un sous-theme via un terme familier ou proche
+// qui n'apparait pas dans son libelle/resume backend.
+export const sousThemeSynonyms: Record<string, string[]> = {
+  alcool: ['biere', 'vin', 'alcoolisme', 'ivresse', 'alcoolique', 'binge drinking'],
+  tabac: ['cigarette', 'cigarettes', 'clope', 'clopes', 'nicotine', 'vapotage', 'vape', 'e-cigarette', 'fumer'],
+  drogue: ['cannabis', 'weed', 'shit', 'beuh', 'joint', 'stupefiant', 'stupefiants', 'drogues', 'cocaine', 'ecstasy', 'mdma'],
+  anxiete: ['stress', 'angoisse', 'panique', 'crise d\'angoisse'],
+  depression: ['deprime', 'moral', 'tristesse', 'mal-etre'],
+  burn_out: ['burnout', 'epuisement', 'surmenage', 'fatigue'],
+  violences_sexistes: ['sexisme', 'discrimination', 'inegalites', 'sexiste'],
+  violences_sexuelles: ['viol', 'agression sexuelle', 'attouchements', 'consentement'],
+  harcelement: ['harcelement scolaire', 'cyberharcelement', 'bullying', 'intimidation'],
+}

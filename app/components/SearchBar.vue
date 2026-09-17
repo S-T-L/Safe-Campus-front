@@ -1,7 +1,16 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import type { ThemeView } from '~/types/annuaire'
+import { sousThemeSynonyms } from '~/data/presentation'
 import IconMagnifyingGlass from '~/assets/icon/magnifying-glass.svg?component'
+
+// Retire accents/casse pour que "depression" retrouve "dépression".
+function normalize(text: string) {
+  return text
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+}
 
 interface SearchEntry {
   type: 'theme' | 'ressource' | 'contact'
@@ -34,12 +43,13 @@ const searchIndex = computed<SearchEntry[]>(() => {
     })
 
     for (const item of theme.items) {
+      const synonyms = sousThemeSynonyms[item.slug] ?? []
       entries.push({
         type: 'ressource',
         key: `item-${item.id}`,
         label: item.title,
-        subtitle: item.subtitle,
-        searchText: `${item.title} ${item.hook} ${item.subtitle}`,
+        subtitle: theme.label,
+        searchText: `${item.title} ${item.hook} ${item.subtitle} ${synonyms.join(' ')}`,
         href: `/contact/${theme.id}/${item.slug}`,
       })
     }
@@ -49,11 +59,11 @@ const searchIndex = computed<SearchEntry[]>(() => {
 })
 
 const results = computed(() => {
-  const term = query.value.trim().toLowerCase()
+  const term = normalize(query.value.trim())
   if (!term) return { theme: [], ressource: [], contact: [] }
 
   const matches = searchIndex.value.filter(entry =>
-    (entry.searchText ?? entry.label).toLowerCase().includes(term),
+    normalize(entry.searchText ?? entry.label).includes(term),
   )
 
   return {
