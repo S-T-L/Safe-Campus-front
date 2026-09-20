@@ -33,6 +33,7 @@ const item = {
   description: sousTheme.article,
   ninja: sousThemeNinjas[sousTheme.ref],
   contacts: toDisplayContacts(sousTheme.contacts),
+  histoires: sousTheme.histoires,
 }
 
 useHead({ title: item.title })
@@ -72,10 +73,15 @@ const sortedContacts = computed(() => {
     <div class="cp-main">
       <div class="cp-intro">
         <p class="cp-description">{{ item.description }}</p>
-        <div class="cp-hero-actions">
-          <button type="button" class="btn-story" disabled title="Bientôt disponible">
-            Suivre l'histoire
-          </button>
+        <div v-if="item.histoires.length" class="cp-hero-actions">
+          <NuxtLink
+            v-for="histoire in item.histoires"
+            :key="histoire.ref"
+            :to="{ path: `/histoire/${histoire.ref}`, query: { retour: route.path } }"
+            class="btn-story"
+          >
+            {{ item.histoires.length === 1 ? "Suivre l'histoire" : histoire.titre }}
+          </NuxtLink>
         </div>
       </div>
 
