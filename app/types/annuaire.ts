@@ -48,6 +48,36 @@ export interface ThemeApi {
   sous_themes: SousThemeSummaryApi[]
 }
 
+export interface HistoireSummaryApi {
+  ref: string
+  titre: string
+}
+
+export interface ChoixApi {
+  id: number
+  text_choix: string
+  // null = sortie du parcours, qualifiee par `issue`.
+  next_scene_id: number | null
+  issue: 'favorable' | 'defavorable' | null
+  // Present uniquement sur un choix defavorable : contacts deja resolus par le back.
+  contacts?: ContactApi[]
+}
+
+export interface SceneApi {
+  id: number
+  dialogue_text: string
+  media: MediaApi | null
+  choix: ChoixApi[]
+}
+
+// GET /api/histoires/{ref} : le graphe complet, joue localement sans nouvel appel.
+export interface HistoireApi {
+  ref: string
+  titre: string
+  scene_initiale_id: number | null
+  scenes: SceneApi[]
+}
+
 export interface SousThemeDetailApi {
   ref: string
   libelle: string
@@ -59,6 +89,7 @@ export interface SousThemeDetailApi {
   }
   contacts: ContactApi[]
   documents: MediaApi[]
+  histoires: HistoireSummaryApi[]
 }
 
 // Formes d'affichage front, construites a partir des types API ci-dessus.
