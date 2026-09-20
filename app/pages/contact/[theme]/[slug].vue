@@ -1,23 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { sousThemeNinjas, themePresentation } from '~/data/presentation'
-import type { ContactApi, DisplayContact, LocatedContact, SousThemeDetailApi } from '~/types/annuaire'
-
-function isWebsiteOnly(contact: ContactApi) {
-  const hasOtherInfo = contact.telephones.length > 0
-    || !!contact.mail?.trim()
-    || !!contact.horaires?.trim()
-    || !!contact.localisation?.trim()
-  return !!contact.site_web?.trim() && !hasOtherInfo
-}
-
-function isTerritoryWide(contact: { address: string | null }) {
-  return !!contact.address?.toLowerCase().includes('tout le territoire')
-}
-
-function isLocated(contact: DisplayContact): contact is LocatedContact {
-  return contact.lat !== null && contact.lng !== null
-}
+import type { SousThemeDetailApi } from '~/types/annuaire'
 
 definePageMeta({ layout: 'default' })
 
@@ -48,18 +32,7 @@ const item = {
   title: sousTheme.libelle,
   description: sousTheme.article,
   ninja: sousThemeNinjas[sousTheme.ref],
-  contacts: sousTheme.contacts.filter(contact => !isWebsiteOnly(contact)).map(contact => ({
-    ref: contact.ref,
-    name: contact.prenom ? `${contact.prenom} ${contact.nom}` : contact.nom,
-    role: contact.remarques,
-    email: contact.mail,
-    hours: contact.horaires,
-    address: contact.localisation,
-    website: contact.site_web,
-    telephones: contact.telephones,
-    lat: contact.latitude,
-    lng: contact.longitude,
-  })).sort((a, b) => Number(isTerritoryWide(a)) - Number(isTerritoryWide(b))),
+  contacts: toDisplayContacts(sousTheme.contacts),
 }
 
 useHead({ title: item.title })
