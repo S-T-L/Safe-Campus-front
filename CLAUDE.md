@@ -10,7 +10,11 @@
 
 ## Code Conventions
 
-**No `<style>` blocks** — all CSS in `assets/css/main.css`.
+**No `<style>` blocks** — all CSS in `app/assets/css/` :
+- `main.css` : base globale (polices, variables, reset, animations, layout) + `@import` des autres fichiers.
+- `components/<nom-kebab>.css` : un fichier par composant (`CardItem.vue` → `card-item.css`).
+- `pages/<page>.css` : styles propres à une page.
+- Nouveau fichier → l'ajouter aux `@import` de `main.css`, en respectant l'ordre (la cascade en dépend).
 
 **BEM naming:** `.bloc__element--modificateur`
 
