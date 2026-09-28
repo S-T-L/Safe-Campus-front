@@ -33,6 +33,7 @@ const item = {
   ninja: sousThemeNinjas[sousTheme.ref],
   intro: sousTheme.intro_ressources,
   documents: sousTheme.documents,
+  histoires: sousTheme.histoires,
 }
 
 useHead({ title: `${item.title} — Ressources` })
@@ -49,6 +50,14 @@ useHead({ title: `${item.title} — Ressources` })
       <span class="cp-tag">{{ theme.shortLabel }}</span>
       <h1 class="cp-title">{{ item.title }}</h1>
       <p class="cp-description">{{ item.intro }}</p>
+      <div v-if="item.histoires.length" class="cp-hero-actions">
+        <NuxtLink
+          :to="{ path: `/histoire/${route.params.theme}/${route.params.slug}`, query: { retour: route.path } }"
+          class="btn-story"
+        >
+          Suivre l'histoire
+        </NuxtLink>
+      </div>
     </section>
 
     <div class="cp-content">

@@ -75,12 +75,10 @@ const sortedContacts = computed(() => {
         <p class="cp-description">{{ item.description }}</p>
         <div v-if="item.histoires.length" class="cp-hero-actions">
           <NuxtLink
-            v-for="histoire in item.histoires"
-            :key="histoire.ref"
-            :to="{ path: `/histoire/${histoire.ref}`, query: { retour: route.path } }"
+            :to="{ path: `/histoire/${route.params.theme}/${route.params.slug}`, query: { retour: route.path } }"
             class="btn-story"
           >
-            {{ item.histoires.length === 1 ? "Suivre l'histoire" : histoire.titre }}
+            Suivre l'histoire
           </NuxtLink>
         </div>
       </div>

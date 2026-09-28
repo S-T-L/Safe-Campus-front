@@ -24,6 +24,7 @@ export async function useThemes() {
       hook: sousTheme.resume,
       ninja: sousThemeNinjas[sousTheme.ref],
       subtitle: `${themePresentation[theme.ref]?.prefixe ?? ''} N°${index + 1}`,
+      histoireRef: sousTheme.histoire_ref,
     })),
   })))
 

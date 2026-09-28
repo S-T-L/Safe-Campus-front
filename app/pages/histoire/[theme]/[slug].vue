@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import type { ChoixApi, HistoireApi } from '~/types/annuaire'
+import type { ChoixApi, HistoireApi, SousThemeDetailApi } from '~/types/annuaire'
+import type { HistoirePageState } from '~/types/histoire'
 import IconArrowLeft from '~/assets/icon/arrow-left.svg?component'
 import IconArrowPath from '~/assets/icon/arrow-path.svg?component'
 
@@ -9,22 +10,38 @@ definePageMeta({ layout: 'default' })
 const route = useRoute()
 const apiBase = useApiBase()
 
-// Cle explicite et stable : meme raison que la page contact (URL de l'API
-// differente au SSR et au client, donc cle auto-generee differente).
-const { data: response, error: fetchError } = await useFetch<{ data: HistoireApi }>(
-  `${apiBase}/api/histoires/${route.params.ref}`,
-  { key: `histoire:${route.params.ref}` },
+// Meme endpoint que /contact et /ressources : la page navigue par theme/slug de
+// sous-theme, pas par ref d'histoire, pour rester coherente avec le reste du site.
+const { data: sousThemeResponse, error: sousThemeError } = await useFetch<{ data: SousThemeDetailApi }>(
+  `${apiBase}/api/sous-themes/${route.params.slug}`,
+  { key: `histoire-page:sous-theme:${route.params.slug}` },
 )
 
-if (fetchError.value || !response.value?.data) {
-  throw createError({ statusCode: 404, statusMessage: 'Histoire introuvable' })
+if (sousThemeError.value || !sousThemeResponse.value?.data) {
+  throw createError({ statusCode: 404, statusMessage: 'Rubrique introuvable' })
 }
 
-const histoire = response.value.data
+const sousTheme = sousThemeResponse.value.data
+const histoireRef = sousTheme.histoires[0]?.ref ?? null
 
-useHead({ title: histoire.titre })
+// Deuxieme appel seulement si le sous-theme a deja une histoire rattachee :
+// sinon la page affiche un placeholder, sans graphe a charger.
+let histoire: HistoireApi | null = null
 
-// Meme couleur par defaut que les pages contact et ressources.
+if (histoireRef) {
+  const { data: histoireResponse } = await useFetch<{ data: HistoireApi }>(
+    `${apiBase}/api/histoires/${histoireRef}`,
+    { key: `histoire-page:histoire:${histoireRef}` },
+  )
+  histoire = histoireResponse.value?.data ?? null
+}
+
+const state: HistoirePageState = histoire
+  ? { status: 'ready', histoire, scenesParId: new Map(histoire.scenes.map(scene => [scene.id, scene])) }
+  : { status: 'placeholder' }
+
+useHead({ title: state.status === 'ready' ? state.histoire.titre : sousTheme.libelle })
+
 const color = '#4260e6'
 
 // Page d'ou l'on vient (?retour=/contact/...). Chemin interne uniquement,
@@ -34,14 +51,14 @@ const retour = computed(() => {
   return typeof chemin === 'string' && chemin.startsWith('/') && !chemin.startsWith('//') ? chemin : '/'
 })
 
-// Le graphe est entier dans la reponse : on navigue localement, sans nouvel appel.
-const scenesParId = new Map(histoire.scenes.map(scene => [scene.id, scene]))
-
-const sceneId = ref<number | null>(histoire.scene_initiale_id)
+const sceneId = ref<number | null>(state.status === 'ready' ? state.histoire.scene_initiale_id : null)
 const choixFinal = ref<ChoixApi | null>(null)
 const expandedContactRef = ref<string | null>(null)
 
-const scene = computed(() => (sceneId.value === null ? null : scenesParId.get(sceneId.value) ?? null))
+const scene = computed(() => {
+  if (state.status !== 'ready' || sceneId.value === null) return null
+  return state.scenesParId.get(sceneId.value) ?? null
+})
 const contacts = computed(() => toDisplayContacts(choixFinal.value?.contacts ?? []))
 
 const finLabels = {
@@ -55,7 +72,9 @@ const finLabel = computed(() => {
 })
 
 function choisir(choix: ChoixApi) {
-  const suivante = choix.next_scene_id === null ? null : scenesParId.get(choix.next_scene_id)
+  if (state.status !== 'ready') return
+
+  const suivante = choix.next_scene_id === null ? null : state.scenesParId.get(choix.next_scene_id)
 
   if (suivante) {
     sceneId.value = suivante.id
@@ -67,7 +86,7 @@ function choisir(choix: ChoixApi) {
 }
 
 function recommencer() {
-  sceneId.value = histoire.scene_initiale_id
+  sceneId.value = state.status === 'ready' ? state.histoire.scene_initiale_id : null
   choixFinal.value = null
   expandedContactRef.value = null
 }
@@ -80,12 +99,18 @@ function toggleExpandedContact(contactRef: string) {
 <template>
   <div class="cp-page histoire">
     <section class="cp-hero">
-      <span class="cp-tag">Histoire</span>
-      <h1 class="cp-title">{{ histoire.titre }}</h1>
+      <span class="cp-tag">{{ sousTheme.theme.libelle_court }}</span>
+      <h1 class="cp-title">{{ state.status === 'ready' ? state.histoire.titre : sousTheme.libelle }}</h1>
     </section>
 
     <div class="histoire__content">
-      <div class="histoire__stage" aria-live="polite">
+      <!-- Aucune histoire rattachee a ce sous-theme pour l'instant. -->
+      <article v-if="state.status === 'placeholder'" class="histoire__card">
+        <p class="histoire__note">Cette histoire n'est pas encore disponible.</p>
+        <p class="histoire__note">Reviens bientôt.</p>
+      </article>
+
+      <div v-else class="histoire__stage" aria-live="polite">
         <article v-if="scene" :key="scene.id" class="histoire__card">
           <img
             v-if="scene.media?.url"

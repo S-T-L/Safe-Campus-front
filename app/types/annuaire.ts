@@ -36,6 +36,7 @@ export interface SousThemeSummaryApi {
   libelle: string
   resume: string | null
   ordre: number
+  histoire_ref: string | null
 }
 
 export interface ThemeApi {
@@ -101,6 +102,7 @@ export interface ThemeItemView {
   hook: string | null
   ninja: string | undefined
   subtitle: string
+  histoireRef: string | null
 }
 
 export interface ThemeView {
