@@ -75,6 +75,11 @@ function openPage(path: 'contact' | 'ressources' | 'histoire') {
 function scrollToIntro() {
   scrollToSection('.home-intro')
 }
+
+function goToLegal(path: '/mentions-legales' | '/cgu') {
+  close()
+  navigateTo(path)
+}
 </script>
 
 <template>
@@ -128,6 +133,14 @@ function scrollToIntro() {
               <ul class="drawer-list">
                 <li class="drawer-item drawer-item--secondary" @click="scrollToIntro">
                   <span class="item-label">À propos de Safe Campus</span>
+                  <IconChevronRight class="item-chevron" width="16" height="16" />
+                </li>
+                <li class="drawer-item drawer-item--secondary" @click="goToLegal('/mentions-legales')">
+                  <span class="item-label">Mentions légales</span>
+                  <IconChevronRight class="item-chevron" width="16" height="16" />
+                </li>
+                <li class="drawer-item drawer-item--secondary" @click="goToLegal('/cgu')">
+                  <span class="item-label">CGU</span>
                   <IconChevronRight class="item-chevron" width="16" height="16" />
                 </li>
               </ul>

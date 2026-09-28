@@ -18,3 +18,20 @@
   font-size: var(--fs-caption);
   color: var(--color-muted);
 }
+
+.home-footer__links {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 6px;
+}
+
+.home-footer__links a {
+  font-size: var(--fs-caption);
+  color: var(--color-muted);
+  text-decoration: underline;
+}
+
+.home-footer__links a:hover {
+  color: var(--color-text);
+}
