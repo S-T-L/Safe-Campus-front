@@ -112,6 +112,11 @@ function goToAbout() {
   goToSection('#about')
 }
 
+function goToLegal(path: '/mentions-legales' | '/cgu') {
+  closeAll()
+  navigateTo(path)
+}
+
 function goToPage(kind: 'contact' | 'ressources' | 'histoire', themeId: string, item: ThemeItemView) {
   closeAll()
   navigateTo(`/${kind}/${themeId}/${item.slug}`)
@@ -271,6 +276,18 @@ onBeforeUnmount(() => {
               <button type="button" class="sidenav__rowmain sidenav__rowmain--solo" @click="goToAbout">
                 <IconInformationCircle width="16" height="16" />
                 <span class="sidenav__rowlabel">À propos de Safe Campus</span>
+              </button>
+            </li>
+            <li class="sidenav__node">
+              <button type="button" class="sidenav__rowmain sidenav__rowmain--solo" @click="goToLegal('/mentions-legales')">
+                <IconInformationCircle width="16" height="16" />
+                <span class="sidenav__rowlabel">Mentions légales</span>
+              </button>
+            </li>
+            <li class="sidenav__node">
+              <button type="button" class="sidenav__rowmain sidenav__rowmain--solo" @click="goToLegal('/cgu')">
+                <IconInformationCircle width="16" height="16" />
+                <span class="sidenav__rowlabel">CGU</span>
               </button>
             </li>
           </ul>
