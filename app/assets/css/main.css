@@ -46,8 +46,8 @@
   --color-muted: #6B7A99;
 
   --font-display: 'Almost Textual', 'Bebas Neue', sans-serif;
-  --font-heading: 'Syne', sans-serif;
-  --font-body: 'Syne', sans-serif;
+  --font-heading: 'Cabin', sans-serif;
+  --font-body: 'Cabin', sans-serif;
 
   /* Echelle typographique unique (mobile-first). Racine a 17px.
      Plancher a ~12.75px pour tout texte lisible ; les micro-labels
