@@ -66,7 +66,7 @@ function scrollToTheme(themeId: string) {
   scrollToSection(`#theme-${themeId}`)
 }
 
-function openPage(path: string) {
+function openPage(path: 'contact' | 'ressources' | 'histoire') {
   if (!activeTheme.value || !activeItem.value) return
   navigateTo(`/${path}/${activeTheme.value.id}/${activeItem.value.slug}`)
   close()
@@ -173,6 +173,10 @@ function scrollToIntro() {
                 </li>
                 <li class="drawer-item drawer-item--sub" @click="openPage('ressources')">
                   <span class="item-label">Ressources</span>
+                  <IconChevronRight class="item-chevron" width="16" height="16" />
+                </li>
+                <li v-if="activeItem.histoireRef" class="drawer-item drawer-item--sub" @click="openPage('histoire')">
+                  <span class="item-label">Histoire</span>
                   <IconChevronRight class="item-chevron" width="16" height="16" />
                 </li>
               </ul>

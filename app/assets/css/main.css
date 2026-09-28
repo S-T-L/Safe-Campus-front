@@ -750,6 +750,19 @@ button {
   background: rgba(255, 255, 255, 0.28);
 }
 
+.card-actions-histoire {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 8px;
+}
+
+.card-actions__btn--histoire {
+  flex: none;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
 @media (min-width: 768px) {
   .card-item {
     width: auto;

@@ -112,7 +112,7 @@ function goToAbout() {
   goToSection('#about')
 }
 
-function goToPage(kind: 'contact' | 'ressources', themeId: string, item: ThemeItemView) {
+function goToPage(kind: 'contact' | 'ressources' | 'histoire', themeId: string, item: ThemeItemView) {
   closeAll()
   navigateTo(`/${kind}/${themeId}/${item.slug}`)
 }
@@ -248,6 +248,14 @@ onBeforeUnmount(() => {
                         </button>
                         <button type="button" class="sidenav__leaflink" @click="goToPage('ressources', theme.id, item)">
                           Ressources
+                        </button>
+                        <button
+                          v-if="item.histoireRef"
+                          type="button"
+                          class="sidenav__leaflink"
+                          @click="goToPage('histoire', theme.id, item)"
+                        >
+                          Histoire
                         </button>
                       </div>
                     </Transition>
