@@ -23,10 +23,5 @@ defineProps<{
         Ressources
       </NuxtLink>
     </div>
-    <div v-if="item.histoireRef" class="card-actions-histoire">
-      <NuxtLink :to="`/histoire/${themeId}/${item.slug}`" class="card-actions__btn card-actions__btn--histoire">
-        Histoire
-      </NuxtLink>
-    </div>
   </div>
 </template>
